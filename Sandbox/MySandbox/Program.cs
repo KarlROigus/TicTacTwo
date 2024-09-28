@@ -1,11 +1,10 @@
-﻿
-using System.Threading.Channels;
-using GameBrain;
+﻿// See https://aka.ms/new-console-template for more information
+
+
 using MenuSystem;
 
-var gameInstance = new TicTacTwoBrain();
 
-var deepMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO DEEP", new Dictionary<string, MenuItem>
+var deepMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TOE DEEP", new Dictionary<string, MenuItem>
 {
     {"Y", new MenuItem()
     {
@@ -16,7 +15,7 @@ var deepMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO DEEP", new Dictionary<stri
 });
 
 
-var optionsMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO OPTIONS", new Dictionary<string, MenuItem>
+var optionsMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TOE OPTIONS", new Dictionary<string, MenuItem>
 {
     {"X", new MenuItem()
     {
@@ -34,7 +33,7 @@ var optionsMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO OPTIONS", new Dict
 
 
 
-var mainMenu = new Menu(EMenuLevel.Main, "TIC-TAC-TWO", new Dictionary<string, MenuItem>
+var mainMenu = new Menu(EMenuLevel.Main, "TIC-TAC-TOE", new Dictionary<string, MenuItem>
 {
     {"O", new MenuItem()
     {
@@ -46,7 +45,7 @@ var mainMenu = new Menu(EMenuLevel.Main, "TIC-TAC-TWO", new Dictionary<string, M
     {
         Title = "New game",
         Shortcut = "N",
-        MenuItemAction = NewGame
+        MenuItemAction = null
     }}
 });
 
@@ -56,17 +55,4 @@ return;
 
 
 // ==================================
-
-string NewGame()
-{
-    
-
-    ConsoleUI.Visualizer.DrawBoard(gameInstance);
-
-    return "Hi";
-}
-
-
-
-
 

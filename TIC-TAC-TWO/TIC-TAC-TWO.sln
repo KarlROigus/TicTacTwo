@@ -2,6 +2,17 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{17B5F4EC-9672-4F3B-A0DB-D97C3814C12D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuSystem", "MenuSystem\MenuSystem.csproj", "{48CACBBA-5E2D-4256-AEEE-51C6CF11027A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!SolutionItems", "!SolutionItems", "{CBC340F4-8294-4371-9605-FBB8A47AD3AE}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBrain", "GameBrain\GameBrain.csproj", "{0E6ED33D-8490-4D06-929B-817B1288E6EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleUI", "ConsoleUI\ConsoleUI.csproj", "{955300C8-4AA4-49E4-9CCE-186C48241703}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +23,17 @@ Global
 		{17B5F4EC-9672-4F3B-A0DB-D97C3814C12D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17B5F4EC-9672-4F3B-A0DB-D97C3814C12D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17B5F4EC-9672-4F3B-A0DB-D97C3814C12D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48CACBBA-5E2D-4256-AEEE-51C6CF11027A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48CACBBA-5E2D-4256-AEEE-51C6CF11027A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48CACBBA-5E2D-4256-AEEE-51C6CF11027A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48CACBBA-5E2D-4256-AEEE-51C6CF11027A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E6ED33D-8490-4D06-929B-817B1288E6EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E6ED33D-8490-4D06-929B-817B1288E6EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E6ED33D-8490-4D06-929B-817B1288E6EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E6ED33D-8490-4D06-929B-817B1288E6EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{955300C8-4AA4-49E4-9CCE-186C48241703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{955300C8-4AA4-49E4-9CCE-186C48241703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{955300C8-4AA4-49E4-9CCE-186C48241703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{955300C8-4AA4-49E4-9CCE-186C48241703}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

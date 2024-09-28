@@ -1,63 +1,51 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System;
 
-
-using MenuSystem;
-
-var mainMenu = new Menu("TIC-TAC-TOE", new List<MenuItem>()
+class Program
 {
-     new MenuItem()
-     {
-         Shortcut = "O",
-         Title = "Options"
-     },
-     
-     new MenuItem() {
-         
-         Shortcut = "N",
-         Title = "New game", 
-     },
-     
+    static void Main()
+    {
+        int cursorX = 0;
+        int cursorY = 0;
+        bool enterPressed = false;
 
-});
+        Console.Clear();
+        Console.WriteLine("Use arrow keys to move around. Press Enter to select a location.");
 
-mainMenu.Run();
+        // A grid representation or positions you want to allow movement in.
+        Console.SetCursorPosition(0, 2);
+        Console.WriteLine("X  X  X  X");
+        Console.SetCursorPosition(0, 3);
+        Console.WriteLine("X  X  X  X");
+        Console.SetCursorPosition(0, 4);
+        Console.WriteLine("X  X  X  X");
 
+        while (!enterPressed)
+        {
+            Console.SetCursorPosition(cursorX, cursorY + 2); // Start from line 2 to avoid overwriting instructions
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);  // true to intercept key and not show it in console
 
-return;
+            switch (keyInfo.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    if (cursorY > 0) cursorY--;
+                    break;
+                case ConsoleKey.DownArrow:
+                    if (cursorY < 2) cursorY++;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (cursorX > 0) cursorX -= 3; // Move by 3 columns to avoid spaces
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (cursorX < 9) cursorX += 3; // Move by 3 columns to avoid spaces
+                    break;
+                case ConsoleKey.Enter:
+                    enterPressed = true;
+                    break;
+            }
+        }
 
-// =====================
-
-static void MenuMain()
-{
-    MenuStart();
-    Console.WriteLine("O) OPTIONS");
-    Console.WriteLine("N) NEW GAME");
-    Console.WriteLine("L) LOAD GAME");
-    Console.WriteLine("E) EXIT");
-    Console.WriteLine(">");
-    MenuEnd();
+        // Handle the position where Enter was pressed
+        Console.Clear();
+        Console.WriteLine($"You selected position: ({cursorX}, {cursorY})");
+    }
 }
-
-static void MenuEnd()
-{
-    Console.WriteLine();
-    Console.WriteLine(">");
-}
-
-static void MenuOptions()
-{
-    Console.Clear();
-    MenuStart();
-    Console.WriteLine("Choose symbol for player one (X)");
-    Console.WriteLine("Choose symbol for player one (O)");
-    MenuEnd();
-}
-
-static void MenuStart()
-{
-    Console.WriteLine("TIC-TAC-TOE");
-    Console.WriteLine("===========");
-}
-
-
-

@@ -9,15 +9,15 @@ public class MenuItem
         get;
         set;
     }
-    
+
     public string Title
     {
         get => _title;
         set
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ApplicationException("Cannot be null or empty");
+                throw new ArgumentException("Title cannot be empty");
             }
 
             _title = value;
@@ -29,11 +29,10 @@ public class MenuItem
         get => _shortcut;
         set
         {
-            if (string.IsNullOrEmpty(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ApplicationException("Cannot be null or empty");
+                throw new ArgumentException("Shortcut cannot be empty");
             }
-
             _shortcut = value;
         }
     }

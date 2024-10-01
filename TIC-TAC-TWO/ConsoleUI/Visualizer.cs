@@ -12,7 +12,7 @@ public static class  Visualizer
         {
             for (var x = 0; x < gameInstance.DimX; x++)
             {
-                Console.Write(" " + DrawGamePiece(gameInstance.GameBoard[x, y]) + " ");
+                Console.Write(" " + DrawGamePiece(gameInstance.GameBoard[x, y].GetSpotValue()) + " ");
                 if (x != gameInstance.DimX - 1)
                 {
                     Console.Write("|");
@@ -56,7 +56,7 @@ public static class  Visualizer
             Console.SetCursorPosition(left, top);
             for (var x = 0; x < 3; x++)
             {
-                Console.Write(" " + DrawGamePiece(gameInstance.GameBoard[x, y]) + " ");
+                Console.Write(" " + DrawGamePiece(gameInstance.GameBoard[x, y].GetSpotValue()) + " ");
                 if (x != 2)
                 {
                     Console.Write("|");
@@ -101,4 +101,17 @@ public static class  Visualizer
             EGamePiece.O => "O",
             _ => " "
         };
+
+    private static string DrawGamePiecee(SpotOnTheBoard spot)
+    {
+
+        
+        return spot.GetSpotValue() switch
+        {
+            EGamePiece.O => "O",
+            EGamePiece.X => "X",
+            _ => " "
+        };
+    }
+
 }

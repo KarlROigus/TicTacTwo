@@ -3,7 +3,12 @@ using System.Threading.Channels;
 using GameBrain;
 using MenuSystem;
 
-var gameInstance = new TicTacTwoBrain(11);
+var gameInstance = new TicTacTwoBrain(9);
+var piece = new SpotOnTheBoard(EGamePiece.X, true);
+
+// Console.WriteLine(gameInstance.GameBoard[0, 0]);
+
+
 
 var deepMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO DEEP", new Dictionary<string, MenuItem>
 {

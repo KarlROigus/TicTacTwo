@@ -28,4 +28,13 @@ public class SpotOnTheBoard
         return true;
     }
 
+    public override string ToString()
+    {
+        return _piece.ToString() + ", " + _isPartOfGrid;
+    }
+
+    public bool GetIsPartOfGrid()
+    {
+        return IsPartOfGrid;
+    }
 }

@@ -2,7 +2,7 @@
 
 public class TicTacTwoBrain
 {
-    private Grid _grid = new Grid();
+    private Grid _grid;
     private SpotOnTheBoard[,] _gameBoard;
     private bool _isGameOver = false;
     private EGamePiece _nextMoveBy { get; set; } = EGamePiece.X;
@@ -15,14 +15,21 @@ public class TicTacTwoBrain
 
     private TicTacTwoBrain(int boardX, int boardY)
     {
+        _grid = new Grid(boardX, boardX / 2, boardY / 2);
+        
         _gameBoard = new SpotOnTheBoard[boardX, boardY];
         for (int x = 0; x < boardX; x++)
         {
             for (int y = 0; y < boardY; y++)
             {
-                _gameBoard[x, y] = new SpotOnTheBoard(EGamePiece.Empty, true);
+                _gameBoard[x, y] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y));
             }
         }
+    }
+
+    private bool CheckIfSpotIsPartOfGrid(int x, int y)
+    {
+        return _grid.BooleanAt(x, y);
     }
 
     public TicTacTwoBrain() : this(5, 5) {}
@@ -79,5 +86,30 @@ public class TicTacTwoBrain
         
         _nextMoveBy = EGamePiece.X;
         _isGameOver = false;
+    }
+
+    public Grid GetGrid()
+    {
+        return _grid;
+    }
+
+    public string ChangeGridSize()
+    {
+        Console.Clear();
+        
+        Console.WriteLine("Please enter the new grid WIDTH: ");
+        var width = Console.ReadLine();
+        
+        Console.WriteLine("Please enter the new grid HEIGHT: ");
+        var height = Console.ReadLine();
+        
+        
+        Console.WriteLine(_grid);
+        
+        _grid.ChangeHeightAndWidth(int.Parse(height), int.Parse(width));
+
+        Console.WriteLine(_grid);
+        
+        return "hi";
     }
 }

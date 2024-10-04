@@ -32,9 +32,5 @@ public class SpotOnTheBoard
     {
         return _piece.ToString() + ", " + _isPartOfGrid;
     }
-
-    public bool GetIsPartOfGrid()
-    {
-        return IsPartOfGrid;
-    }
+    
 }

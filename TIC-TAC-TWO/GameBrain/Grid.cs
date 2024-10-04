@@ -2,26 +2,25 @@ namespace GameBrain;
 
 public class Grid
 {
-    private int _middlePointX;
-    private int _middlePointY;
     private bool[,]? _grid;
 
-    private int _height;
-    private int _width;
+    private int _middlePointX;
+    private int _middlePointY;
+    private int _bigBoardSize;
+    private int _gridLength;
     
 
-    public Grid(int boardSize, int middlePointX, int middlePointY)
+    public Grid(int boardSize, int middlePointX, int middlePointY, int gridLength)
     {
-
         _grid = new bool[boardSize, boardSize];
         _middlePointX = middlePointX;
         _middlePointY = middlePointY;
-        _height = boardSize;
-        _width = boardSize;
+        _bigBoardSize = boardSize;
+        _gridLength = gridLength;
         
-        for (int y = 0; y < _width; y++)
+        for (int y = 0; y < _bigBoardSize; y++)
         {
-            for (int x = 0; x < _height; x++)
+            for (int x = 0; x < _bigBoardSize; x++)
             {
                 _grid[x, y] = GiveSpotABooleanValue(x, y);
             }
@@ -48,31 +47,9 @@ public class Grid
 
     private bool GiveSpotABooleanValue(int x, int y)
     {
-        if (x + 1 == _middlePointX && y + 1 == _middlePointY)
-        {
-            return true;
-        } if (x == _middlePointX && y + 1 == _middlePointY)
-        {
-            return true;
-        } if (x - 1 == _middlePointX && y + 1 == _middlePointY)
-        {
-            return true;
-        } if (x + 1 == _middlePointX && y == _middlePointY)
-        {
-            return true;
-        } if (x == _middlePointX && y == _middlePointY)
-        {
-            return true;
-        } if (x - 1 == _middlePointX && y == _middlePointY)
-        {
-            return true;
-        } if (x + 1 == _middlePointX && y - 1 == _middlePointY)
-        {
-            return true;
-        } if (x == _middlePointX && y - 1 == _middlePointY)
-        {
-            return true;
-        } if (x - 1 == _middlePointX && y - 1 == _middlePointY)
+
+        var dispersion = (_gridLength - 1) / 2;
+        if (Math.Abs(_middlePointX - x) <= dispersion && Math.Abs(_middlePointY - y) <= dispersion)
         {
             return true;
         }
@@ -85,20 +62,28 @@ public class Grid
     }
 
 
-    public void ChangeHeightAndWidth(int height, int width)
+    public void ChangeHeightAndWidth(int height)
     {
-        _height = height;
-        _width = width;
+
+        _gridLength = height;
         Console.WriteLine("here");
+        Console.WriteLine(_middlePointX);
+        Console.WriteLine(_middlePointY);
         
-        for (int y = 0; y < _width; y++)
+        for (int y = 0; y < _bigBoardSize; y++)
         {
-            for (int x = 0; x < _height; x++)
+            for (int x = 0; x < _bigBoardSize; x++)
             {
                 if (_grid != null) _grid[x, y] = GiveSpotABooleanValue(x, y);
             }
         }
         
     }
+
+    public int GetLength()
+    {
+        return _gridLength;
+    }
+    
     
 }

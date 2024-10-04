@@ -6,74 +6,65 @@ public static class  Visualizer
 {
     public static void DrawBoard(TicTacTwoBrain gameInstance)
     {
+        
         Console.Clear();
-    
-        for (var y = 0; y < gameInstance.DimY; y++)
+
+        var gridLength  = gameInstance.GetGrid().GetLength();
+        
+
+
+        for (int y = 0; y < gameInstance.DimY; y++)
         {
-            for (var x = 0; x < gameInstance.DimX; x++)
+            for (int x = 0; x < gameInstance.DimX; x++)
             {
-                SpotOnTheBoard currentSpot = gameInstance.GameBoard[x, y];
+                var currentSpot = gameInstance.GameBoard[x, y];
+                var nextSpotXValue = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
+                var prevSpotXValue = x - 1 < 0 ? 0 : x - 1;
+                var nextSpot = gameInstance.GameBoard[nextSpotXValue, y];
+                var prevSpot = gameInstance.GameBoard[prevSpotXValue, y];
                 
-
-                var nextValueForX = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
-
-                SpotOnTheBoard nextSpot = gameInstance.GameBoard[nextValueForX, y];
-
                 if (IsPartOfGrid(currentSpot) && IsPartOfGrid(nextSpot))
                 {
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                }
-                else
+                } else if (IsPartOfGrid(currentSpot) && IsPartOfGrid(prevSpot))
                 {
-                    Console.ForegroundColor = ConsoleColor.Black;
-                }
-                
-                Console.Write(" " + DrawGamePiece(gameInstance.GameBoard[x, y].GetSpotValue()) + " ");
-
-                if (x == gameInstance.DimX - 2)
-                {
-                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                 }
                 
-                if (x != gameInstance.DimX - 1)
+                Console.Write(" ");
+                Console.Write(" ");
+                Console.Write(" ");
+                if (x < gameInstance.DimX - 1)
                 {
+                    if (!IsPartOfGrid(nextSpot))
+                    {
+                        Console.ResetColor();
+                    }
                     Console.Write("|");
                 }
                 Console.ResetColor();
             }
-
-            if (y != gameInstance.DimY - 1)
+            Console.WriteLine();
+            if (y < gameInstance.DimY - 1)
             {
-                
-                
-                Console.WriteLine();
-                for (var x = 0; x < gameInstance.DimX; x++)
+                for (int x = 0; x < gameInstance.DimX; x++)
                 {
                     SpotOnTheBoard currentSpot = gameInstance.GameBoard[x, y];
-
-                    var spotBelowYValue = y + 1 > gameInstance.DimY - 1 ? gameInstance.DimY - 1 : y + 1;
+                    var nextSpotXValue = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
+                    var prevSpotXValue = x - 1 < 0 ? 0 : x - 1;
+                    SpotOnTheBoard nextSpot = gameInstance.GameBoard[nextSpotXValue, y];
+                    var prevSpot = gameInstance.GameBoard[prevSpotXValue, y];
+                    var nextRowYValue = y + 1 > gameInstance.DimY - 1 ? gameInstance.DimY - 1 : y + 1;
+                    SpotOnTheBoard nextRowSpot = gameInstance.GameBoard[x, nextRowYValue];
                     
-                    SpotOnTheBoard spotBelow = gameInstance.GameBoard[x, spotBelowYValue];
-
-                    if (IsPartOfGrid(currentSpot) && IsPartOfGrid(spotBelow))
+                    if (IsPartOfGrid(currentSpot) && IsPartOfGrid(nextSpot) && IsPartOfGrid(nextRowSpot)) 
                     {
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                     }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Black;
-                    }
-                    Console.Write("---");
-
-                    if (x == gameInstance.DimX - 2)
-                    {
-                        Console.ResetColor();
-                    }
                     
-                    if (x != gameInstance.DimX - 1)
+                    Console.Write("---");
+                    if (x < gameInstance.DimX - 1)
                     {
-                        var nextValueForX = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
-                        SpotOnTheBoard nextSpot = gameInstance.GameBoard[nextValueForX, y];
                         if (!IsPartOfGrid(nextSpot))
                         {
                             Console.ResetColor();
@@ -81,21 +72,18 @@ public static class  Visualizer
                         Console.Write("+");
                     }
                 }
-            }
-            else
-            {
                 Console.WriteLine();
             }
-
-            Console.WriteLine();
+            
         }
+
+        Console.WriteLine();
     }
 
     private static bool IsPartOfGrid(SpotOnTheBoard currentSpot)
     {
         return currentSpot.IsPartOfGrid;
     }
-    
     
     private static string DrawGamePiece(EGamePiece piece) =>
         piece switch

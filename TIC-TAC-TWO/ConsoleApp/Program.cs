@@ -1,3 +1,3 @@
 ﻿using ConsoleApp;
 
-GameController.RunGame();        
+GameController.RunGame();

@@ -7,20 +7,23 @@ public class TicTacTwoBrain
     private bool _isGameOver = false;
     private EGamePiece _nextMoveBy { get; set; } = EGamePiece.X;
 
-    public bool isGameOver
+    private GameConfiguration _gameConfiguration;
+
+    public bool IsGameOver
     {
         get => _isGameOver;
         private set => _isGameOver = value;
     }
 
-    private TicTacTwoBrain(int boardX, int boardY)
+    public TicTacTwoBrain( GameConfiguration gameConfiguration)
     {
-        _grid = new Grid(boardX, boardX / 2, boardY / 2, 3);
+        _gameConfiguration = gameConfiguration;
+        _grid = new Grid(gameConfiguration.BoardWidth, gameConfiguration.GridMiddlePointXValue, gameConfiguration.GridMiddlePointYValue, gameConfiguration.GridWidth);
         
-        _gameBoard = new SpotOnTheBoard[boardX, boardY];
-        for (int y = 0; y < boardY; y++)
+        _gameBoard = new SpotOnTheBoard[gameConfiguration.BoardWidth, gameConfiguration.BoardHeight];
+        for (int y = 0; y < gameConfiguration.BoardHeight; y++)
         {
-            for (int x = 0; x < boardX; x++)
+            for (int x = 0; x < gameConfiguration.BoardWidth; x++)
             {
                 _gameBoard[x, y] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y));
             }
@@ -31,9 +34,6 @@ public class TicTacTwoBrain
     {
         return _grid.BooleanAt(x, y);
     }
-
-    public TicTacTwoBrain() : this(5, 5) {}
-    public TicTacTwoBrain(int boardSize) : this(boardSize, boardSize) { }
     
 
     public SpotOnTheBoard[,] GameBoard
@@ -93,6 +93,11 @@ public class TicTacTwoBrain
         return _grid;
     }
 
+    public EGamePiece GetNextOneToMove()
+    {
+        return _nextMoveBy;
+    }
+
     public string ChangeGridSize()
     {
         Console.Clear();
@@ -101,12 +106,8 @@ public class TicTacTwoBrain
         var height = Console.ReadLine();
         
         
-        Console.WriteLine(_grid);
-        
         _grid.ChangeHeightAndWidth(int.Parse(height));
         
-
-        Console.WriteLine(_grid);
         
         for (int y = 0; y < _gameBoard.GetLength(0); y++)
         {

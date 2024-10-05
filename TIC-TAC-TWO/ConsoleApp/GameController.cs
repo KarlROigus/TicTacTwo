@@ -1,3 +1,4 @@
+using DAL;
 using GameBrain;
 using MenuSystem;
 
@@ -5,9 +6,38 @@ namespace ConsoleApp;
 
 public class GameController
 {
-    public static void RunGame()
+    public static string RunGame()
     {
-        var gameInstance = new TicTacTwoBrain(7);
+
+        var configRepository = new ConfigRepository();
+
+        var configMenuItems = new Dictionary<string, MenuItem>();
+
+        for (int i = 0; i < configRepository.GetConfigurationNames().Count; i++)
+        {
+            var returnValue = (1 + i).ToString();
+            configMenuItems.Add(i.ToString(), new MenuItem()
+            {
+                Title = configRepository.GetConfigurationNames()[i],
+                Shortcut = (i + 1).ToString(),
+                MenuItemAction = () => returnValue
+            });
+        }
+
+        var configMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO Choose config", configMenuItems);
+        var chosenConfigShortcut = configMenu.Run();
+
+        if (!int.TryParse(chosenConfigShortcut, out var configNo))
+        {
+            return chosenConfigShortcut;
+        }
+
+        var chosenConfig =
+            configRepository.GetConfigurationByName(
+                configRepository.GetConfigurationNames()[configNo]);
+        
+        var gameInstance = new TicTacTwoBrain(chosenConfig);
+        
 
         var changeGameRulesMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO Change rules", new Dictionary<string, MenuItem>                       
         {                                                                                                                                      
@@ -52,24 +82,77 @@ public class GameController
                 Shortcut = "O",
                 MenuItemAction = optionsMenu.Run
             }},
-            {"N", new MenuItem()
+            {"P", new MenuItem()
             {
-                Title = "New game",
-                Shortcut = "N",
+                Title = "Play new game",
+                Shortcut = "P",
                 MenuItemAction = NewGame
-            }}
+            }},
+            {"L", new MenuItem()
+            {
+                Title = "Load game",
+                Shortcut = "L",
+                MenuItemAction = null
+            }},
         });
         
         mainMenu.Run();
 
-        return;
+        return "hi";
 
         // ==================================
 
         string NewGame()
         {
             
-            ConsoleUI.Visualizer.DrawBoard(gameInstance);
+            //Todo: implement exit method for the game.
+            
+            do
+            {
+                ConsoleUI.Visualizer.DrawBoard(gameInstance);
+                Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
+                Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
+
+                int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
+                int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+
+                int cursorX = 1;
+                int cursorY = 0;
+                bool enterHasBeenPressed = false;
+            
+                while (!enterHasBeenPressed)
+                {
+                    Console.SetCursorPosition(cursorX, cursorY);
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+                    if (keyInfo.Key == ConsoleKey.UpArrow)
+                    {
+                        if (cursorY > 0) cursorY -= 2;
+                    }
+                    else if (keyInfo.Key == ConsoleKey.DownArrow)
+                    {
+                        if (cursorY < boardHeight) cursorY += 2;
+                    }
+                    else if (keyInfo.Key == ConsoleKey.LeftArrow)
+                    {
+                        if (cursorX > 1) cursorX -= 4;
+                    }
+                    else if (keyInfo.Key == ConsoleKey.RightArrow)
+                    {
+                        if (cursorX < boardWidth) cursorX += 4;
+                    }
+                    else if (keyInfo.Key == ConsoleKey.Enter)
+                    {
+                        enterHasBeenPressed = true;
+                    } 
+                
+                }
+                
+                Console.Clear();
+                int indexForX = cursorX / 4;
+                int indexForY = cursorY / 2;
+                gameInstance.MakeAMove(indexForX, indexForY);
+                
+            } while (true);
             
             return "Hi";
         }

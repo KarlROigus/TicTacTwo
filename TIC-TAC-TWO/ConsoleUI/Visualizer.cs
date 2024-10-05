@@ -8,11 +8,7 @@ public static class  Visualizer
     {
         
         Console.Clear();
-
-        var gridLength  = gameInstance.GetGrid().GetLength();
         
-
-
         for (int y = 0; y < gameInstance.DimY; y++)
         {
             for (int x = 0; x < gameInstance.DimX; x++)
@@ -32,7 +28,7 @@ public static class  Visualizer
                 }
                 
                 Console.Write(" ");
-                Console.Write(" ");
+                Console.Write(DrawGamePiece(gameInstance.GameBoard[x, y].GetSpotValue()));
                 Console.Write(" ");
                 if (x < gameInstance.DimX - 1)
                 {

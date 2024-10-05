@@ -86,6 +86,11 @@ public class Menu
             {
                 return _menuItemReturnMain.Shortcut;
             }
+
+            if (!string.IsNullOrWhiteSpace(menuReturnValue))
+            {
+                return menuReturnValue;
+            }
         } while (true);
     }
 

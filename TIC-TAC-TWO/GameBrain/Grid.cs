@@ -66,9 +66,6 @@ public class Grid
     {
 
         _gridLength = height;
-        Console.WriteLine("here");
-        Console.WriteLine(_middlePointX);
-        Console.WriteLine(_middlePointY);
         
         for (int y = 0; y < _bigBoardSize; y++)
         {

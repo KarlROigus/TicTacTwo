@@ -12,29 +12,34 @@ public class GameController
         var configRepository = new ConfigRepository();
 
         var configMenuItems = new Dictionary<string, MenuItem>();
+        
+        EAlphabet[] alphabetArray = (EAlphabet[])Enum.GetValues(typeof(EAlphabet));
 
         for (int i = 0; i < configRepository.GetConfigurationNames().Count; i++)
         {
-            var returnValue = (1 + i).ToString();
-            configMenuItems.Add(i.ToString(), new MenuItem()
+            var newAlphabetLetter = alphabetArray[i].ToString();
+            
+            configMenuItems.Add(newAlphabetLetter, new MenuItem()
             {
                 Title = configRepository.GetConfigurationNames()[i],
-                Shortcut = (i + 1).ToString(),
-                MenuItemAction = () => returnValue
+                Shortcut = newAlphabetLetter,
+                MenuItemAction = () => newAlphabetLetter
             });
         }
+        
 
         var configMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO Choose config", configMenuItems);
         var chosenConfigShortcut = configMenu.Run();
 
-        if (!int.TryParse(chosenConfigShortcut, out var configNo))
+        if (!Enum.TryParse(chosenConfigShortcut, out EAlphabet chosenShortcutEnum))
         {
             return chosenConfigShortcut;
         }
 
-        var chosenConfig =
-            configRepository.GetConfigurationByName(
-                configRepository.GetConfigurationNames()[configNo]);
+        var chosenShortcutIndex = (int)chosenShortcutEnum;
+
+        var chosenConfig = configRepository.GetConfigurationByIndex(chosenShortcutIndex);
+        
         
         var gameInstance = new TicTacTwoBrain(chosenConfig);
         

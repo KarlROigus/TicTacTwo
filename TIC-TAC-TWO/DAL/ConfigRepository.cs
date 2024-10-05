@@ -31,8 +31,8 @@ public class ConfigRepository
             .ToList();
     }
 
-    public GameConfiguration GetConfigurationByName(string name)
+    public GameConfiguration GetConfigurationByIndex(int index)
     {
-        return _gameConfigurations.Single(config => config.Name == name);
+        return _gameConfigurations[index];
     }
 }

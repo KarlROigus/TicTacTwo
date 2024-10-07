@@ -35,4 +35,9 @@ public class ConfigRepository
     {
         return _gameConfigurations[index];
     }
+
+    public GameConfiguration GetDefaultConfiguration()
+    {
+        return _gameConfigurations[1];
+    }
 }

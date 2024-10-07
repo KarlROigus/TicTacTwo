@@ -120,4 +120,15 @@ public class TicTacTwoBrain
         
         return "hi";
     }
+
+    public bool SomebodyHasWon()
+    {
+        if (_isGameOver)
+        {
+            return true;
+        }
+
+        _isGameOver = !_isGameOver;
+        return false;
+    }
 }

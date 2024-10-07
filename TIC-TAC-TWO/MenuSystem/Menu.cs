@@ -72,6 +72,11 @@ public class Menu
                 menuReturnValue = menuItem.MenuItemAction();
             }
 
+            // if (menuItem.CanChangeConfig)
+            // {
+            //     //menuitem.changeConfig(menuReturnValue);
+            // }
+
             if (menuItem.Shortcut == _menuItemReturn.Shortcut)
             {
                 return _menuItemReturn.Shortcut;
@@ -86,11 +91,9 @@ public class Menu
             {
                 return _menuItemReturnMain.Shortcut;
             }
-
-            if (!string.IsNullOrWhiteSpace(menuReturnValue))
-            {
-                return menuReturnValue;
-            }
+            
+            
+            
         } while (true);
     }
 
@@ -130,6 +133,7 @@ public class Menu
     
     private void DrawMenu()
     {
+        
         Console.WriteLine(MenuHeader);
         Console.WriteLine(_menuDivider);
 

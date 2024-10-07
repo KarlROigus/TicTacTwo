@@ -1,3 +1,4 @@
 ﻿using ConsoleApp;
 
-GameController.RunGame();
+var game = new Game();
+game.Run();

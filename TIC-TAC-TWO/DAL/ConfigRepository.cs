@@ -15,7 +15,9 @@ public class ConfigRepository
             GridWidth = 3,
             GridHeight = 3,
             WinCondition = 3,
-            MovePieceAfterNMoves = 0
+            HowManyMovesTillAdvancedGameMoves = 0,
+            Grid = new Grid(3, 1, 1, 3)
+            
         },
         new GameConfiguration()
         {

@@ -9,6 +9,11 @@ public class MenuItem
         get;
         set;
     }
+    
+    public Func<string, string>? ChangeConfigAction {
+        get;
+        set;
+    }
 
     public string Title
     {

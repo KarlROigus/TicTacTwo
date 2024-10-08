@@ -1,4 +1,6 @@
-﻿namespace MenuSystem;
+﻿using System.IO.Enumeration;
+
+namespace MenuSystem;
 
 public class Menu
 {
@@ -70,6 +72,11 @@ public class Menu
             if (menuItem.MenuItemAction != null)
             {
                 menuReturnValue = menuItem.MenuItemAction();
+            }
+
+            if (menuItem.ChangeConfigAction != null)
+            {
+                menuReturnValue = menuItem.ChangeConfigAction(menuReturnValue);
             }
 
             // if (menuItem.CanChangeConfig)

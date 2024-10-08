@@ -14,12 +14,13 @@ public record struct GameConfiguration()
     public int GridMiddlePointYValue { get; set; } = 5 / 2;
 
     public int WinCondition { get; set; } = 3;
-    public int MovePieceAfterNMoves { get; set; } = 2;
-    
+    public int HowManyMovesTillAdvancedGameMoves { get; set; } = 2;
 
+    public Grid Grid { get; set; } = new Grid(5, 2, 2, 3);
+    
     public override string ToString()
     { 
         return
-            $"Board {BoardWidth}x{BoardHeight}, to win: {WinCondition}, can move piece after {MovePieceAfterNMoves}.";
+            $"Board {BoardWidth}x{BoardHeight}, to win: {WinCondition}, can move piece after {HowManyMovesTillAdvancedGameMoves}.";
     }
 }

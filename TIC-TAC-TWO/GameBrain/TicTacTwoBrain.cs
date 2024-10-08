@@ -18,9 +18,9 @@ public class TicTacTwoBrain
     public TicTacTwoBrain( GameConfiguration gameConfiguration)
     {
         _gameConfiguration = gameConfiguration;
-        _grid = new Grid(gameConfiguration.BoardWidth, gameConfiguration.GridMiddlePointXValue, gameConfiguration.GridMiddlePointYValue, gameConfiguration.GridWidth);
-        
+        _grid = gameConfiguration.Grid;
         _gameBoard = new SpotOnTheBoard[gameConfiguration.BoardWidth, gameConfiguration.BoardHeight];
+        
         for (int y = 0; y < gameConfiguration.BoardHeight; y++)
         {
             for (int x = 0; x < gameConfiguration.BoardWidth; x++)

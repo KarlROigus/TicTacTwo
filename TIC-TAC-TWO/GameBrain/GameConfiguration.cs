@@ -2,7 +2,7 @@ namespace GameBrain;
 
 public record struct GameConfiguration()
 {
-    public string Name { get; set; } = default!;
+    public string? Name { get; set; } = default!;
     
     public int BoardWidth { get; set; } = 5;
     public int BoardHeight { get; set; } = 5;

@@ -9,8 +9,6 @@ public class MenuController
     private GameController  _gameController = new GameController();
     public Menu GetMainMenu()
     {
-
-        
         
         var mainMenu =  new Menu(EMenuLevel.Main, "TIC-TAC-TWO", new Dictionary<string, MenuItem>
         {
@@ -49,10 +47,10 @@ public class MenuController
                 }
                 
             },
-            {"M", new MenuItem()
+            {"N", new MenuItem()
                 {
-                    Title = "Make new game configuration",
-                    Shortcut = "M",
+                    Title = "New game configuration",
+                    Shortcut = "N",
                     MenuItemAction = _gameController.MakeNewGameConfigurationMenu
                 }
                 

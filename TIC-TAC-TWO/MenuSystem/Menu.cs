@@ -76,7 +76,7 @@ public class Menu
 
             if (menuItem.ChangeConfigAction != null)
             {
-                menuReturnValue = menuItem.ChangeConfigAction(menuReturnValue);
+                menuItem.ChangeConfigAction(menuReturnValue);
             }
 
             if (menuItem.Shortcut == _menuItemReturn.Shortcut)

@@ -5,8 +5,8 @@ namespace DAL;
 public class ConfigRepository
 {
 
-    private List<GameConfiguration> _gameConfigurations = new List<GameConfiguration>()
-    {
+    private List<GameConfiguration> _gameConfigurations =
+    [
         new GameConfiguration()
         {
             Name = "Classical TIC-TAC-TOE",
@@ -17,16 +17,18 @@ public class ConfigRepository
             WinCondition = 3,
             HowManyMovesTillAdvancedGameMoves = 0,
             Grid = new Grid(3, 1, 1, 3)
-            
+
         },
+
         new GameConfiguration()
         {
-            Name = "Default TIC-TAC-TWO" 
-        },
+            Name = "Default TIC-TAC-TWO"
+        }
 
-    };
 
-    public List<string> GetConfigurationNames()
+    ];
+
+    public List<string?> GetConfigurationNames()
     {
         return _gameConfigurations.Select
             (config => config.Name)
@@ -35,6 +37,7 @@ public class ConfigRepository
 
     public GameConfiguration GetConfigurationByIndex(int index)
     {
+
         return _gameConfigurations[index];
     }
 
@@ -42,4 +45,16 @@ public class ConfigRepository
     {
         return _gameConfigurations[1];
     }
+
+    public bool AddNewConfiguration(GameConfiguration newConfig)
+    {
+        _gameConfigurations.Add(newConfig);
+        foreach (var config in _gameConfigurations)
+        {
+            Console.WriteLine(config);
+        }
+        return true;
+    }
+
+
 }

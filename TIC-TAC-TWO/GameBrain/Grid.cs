@@ -61,26 +61,17 @@ public class Grid
         return _grid != null && _grid[x, y];
     }
 
-
-    public void ChangeHeightAndWidth(int height)
+    public int GetGridMiddleXValue()
     {
-
-        _gridLength = height;
-        
-        for (int y = 0; y < _bigBoardSize; y++)
-        {
-            for (int x = 0; x < _bigBoardSize; x++)
-            {
-                if (_grid != null) _grid[x, y] = GiveSpotABooleanValue(x, y);
-            }
-        }
-        
+        return _middlePointX;
     }
 
-    public int GetLength()
+    public int GetGridMiddleYValue()
     {
-        return _gridLength;
+        return _middlePointY;
     }
+    
+    
     
     
 }

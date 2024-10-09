@@ -102,19 +102,7 @@ public class TicTacTwoBrain
 
     public bool SomebodyHasWon()
     {
-
-        if (GameWinThroughARow())
-        {
-            return true;
-        } 
-        if (GameWinThroughAColumn())
-        {
-            return true;
-        }
-
-        return false;
-        
-
+        return GameWinThroughARow() || GameWinThroughAColumn() || GameWinThroughADiagonal();
     }
 
     private bool GameWinThroughARow()
@@ -166,6 +154,15 @@ public class TicTacTwoBrain
         }
         
 
+        return false;
+    }
+
+
+    private bool GameWinThroughADiagonal()
+    {
+        Console.WriteLine(_grid.GetGridMiddleXValue());
+        Console.WriteLine(_grid.GetGridMiddleYValue());
+        
         return false;
     }
 }

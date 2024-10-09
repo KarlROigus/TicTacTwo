@@ -10,7 +10,7 @@ public class MenuItem
         set;
     }
     
-    public Func<string, string>? ChangeConfigAction {
+    public Action<string>? ChangeConfigAction {
         get;
         set;
     }

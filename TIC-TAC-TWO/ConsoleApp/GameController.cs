@@ -7,11 +7,13 @@ namespace ConsoleApp;
 public class GameController
 {
 
+    private readonly ConfigRepository _configRepository;
     private GameConfiguration _currentGameConfiguration;
 
     public GameController()
     {
-        _currentGameConfiguration = new ConfigRepository().GetDefaultConfiguration();
+        _configRepository = new ConfigRepository();
+        _currentGameConfiguration = _configRepository.GetDefaultConfiguration();
     }
 
     
@@ -58,41 +60,43 @@ public class GameController
                 
             }
             
-            Console.Clear();
+            
             var indexForX = cursorX / 4;
             var indexForY = cursorY / 2;
             gameInstance.MakeAMove(indexForX, indexForY);
 
             if (gameInstance.SomebodyHasWon())
             {
+                Console.Clear();
+                ConsoleUI.Visualizer.DrawBoard(gameInstance);
                 Console.WriteLine();
                 Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
-                Console.WriteLine("Press any key to return to the main menu");
+                Console.WriteLine("Press any key to return to the main menu!");
                 Console.ReadLine();
+                Console.Clear();
                 
                 break;
             }
             
         } while (true);
-        
-        return "hi";
+
+        return "finished";
     }
 
     public string ChooseCurrentGameConfigurationMenu()
     {
-        var configRepository = new ConfigRepository();
 
         var configMenuItems = new Dictionary<string, MenuItem>();
 
         EAlphabet[] alphabetArray = (EAlphabet[])Enum.GetValues(typeof(EAlphabet));
 
-        for (int i = 0; i < configRepository.GetConfigurationNames().Count; i++)
+        for (int i = 0; i < _configRepository.GetConfigurationNames().Count; i++)
         {
             var newAlphabetLetter = alphabetArray[i].ToString();
 
             configMenuItems.Add(newAlphabetLetter, new MenuItem()
             {
-                Title = configRepository.GetConfigurationNames()[i],
+                Title = _configRepository.GetConfigurationNames()[i] ?? "",
                 Shortcut = newAlphabetLetter,
                 MenuItemAction = () => newAlphabetLetter,
                 ChangeConfigAction = ChangeGameConfiguration
@@ -116,58 +120,72 @@ public class GameController
         var chosenShortcutIndex = (int)chosenShortcutEnum;
         
 
-        var chosenConfig = configRepository.GetConfigurationByIndex(chosenShortcutIndex);
+        var chosenConfig = _configRepository.GetConfigurationByIndex(chosenShortcutIndex);
 
         _currentGameConfiguration = chosenConfig;
-        
-        
-        return "hi";
+
+
+        return chosenConfigShortcut;
     }
 
-    public string ChangeGameConfiguration(string shortcut)
+    private void ChangeGameConfiguration(string shortcut)
     {
-        var configRepository = new ConfigRepository();
         
         if (shortcut is "E" or "M" or "R")
         {
-            return shortcut;
+            return;
         }
         
         if (!Enum.TryParse(shortcut, out EAlphabet chosenShortcutEnum))
         {
-            return shortcut;
+            return;
         }
 
         var chosenShortcutIndex = (int)chosenShortcutEnum;
         
-        var chosenConfig = configRepository.GetConfigurationByIndex(chosenShortcutIndex);
+        
+        var chosenConfig = _configRepository.GetConfigurationByIndex(chosenShortcutIndex);
 
         _currentGameConfiguration = chosenConfig;
+        
 
         Console.WriteLine();
         Console.WriteLine("Game configuration changed succesfully!");
         Console.WriteLine();
 
-        return "r";
+        return;
     }
 
 
     public string MakeNewGameConfigurationMenu()
     {
+        
         Console.Clear();
         Console.WriteLine();
-
+        var name = GetNewConfigName();
         var boardWidth = GetNewBoardWidth();
         var boardHeight = GetNewBoardHeight();
         var gridWidth = GetNewGridWidth(boardWidth);
+        var winCondition = GetWinCondition();
+        var howManyMovesTillAdvancedMoves = GetMovesNeededTillAdvancedMoves();
         
-        
-        Console.Write("Please insert how many same symbols in a row needed to win: ");
-        var winCondition = Console.ReadLine();
-        
-        Console.Write("Please insert after how many moves advanced moving options apply: ");
-        var howManyMovesTillAdvancedMoves = Console.ReadLine();
+        var newGameConfiguration = new GameConfiguration()
+        {
+            Name = name,
+            BoardWidth = boardWidth,
+            BoardHeight = boardHeight,
+            GridHeight = gridWidth,
+            GridWidth = gridWidth,
+            WinCondition = winCondition,
+            HowManyMovesTillAdvancedGameMoves = howManyMovesTillAdvancedMoves,
+            Grid = new Grid(boardWidth, boardWidth / 2, boardWidth / 2, gridWidth)
 
+        };
+
+        _configRepository.AddNewConfiguration(newGameConfiguration);
+
+        Console.WriteLine();
+        Console.WriteLine("HELLO WORLD!");
         return "hi";
     }
 
@@ -195,6 +213,25 @@ public class GameController
             
         } while (true);
         
+    }
+
+    private string GetNewConfigName()
+    {
+
+        do
+        {
+            Console.Write("Please give a name for new configuration: ");
+            var name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("You must insert something!");
+            }
+            else
+            {
+                return name;
+            }
+            
+        } while (true);
     }
     
     private int GetNewBoardHeight()
@@ -247,6 +284,20 @@ public class GameController
             }
         } while (true);
         
+    }
+
+    private int GetWinCondition()
+    {
+        Console.Write("Please insert how many same symbols in a row needed to win: ");
+        var winCondition = Console.ReadLine();
+        return int.Parse(winCondition);
+    }
+
+    private int GetMovesNeededTillAdvancedMoves()
+    {
+        Console.Write("Please insert after how many moves advanced moving options apply: ");
+        var howManyMovesTillAdvancedMoves = Console.ReadLine();
+        return int.Parse(howManyMovesTillAdvancedMoves);
     }
     
     

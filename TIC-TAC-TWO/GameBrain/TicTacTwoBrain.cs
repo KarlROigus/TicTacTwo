@@ -88,47 +88,84 @@ public class TicTacTwoBrain
         _isGameOver = false;
     }
 
-    public Grid GetGrid()
-    {
-        return _grid;
-    }
-
     public EGamePiece GetNextOneToMove()
     {
         return _nextMoveBy;
     }
-
-    public string ChangeGridSize()
+    
+    
+    public EGamePiece GetPreviousMover()
     {
-        Console.Clear();
-        
-        Console.WriteLine("Please enter the new grid HEIGHT: ");
-        var height = Console.ReadLine();
-        
-        
-        _grid.ChangeHeightAndWidth(int.Parse(height));
-        
-        
-        for (int y = 0; y < _gameBoard.GetLength(0); y++)
-        {
-            for (int x = 0; x < _gameBoard.GetLength(1); x++)
-            {
-                _gameBoard[x, y] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y));
-            }
-        }
-        
-        
-        return "hi";
+        return _nextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
     }
+    
 
     public bool SomebodyHasWon()
     {
-        if (_isGameOver)
+
+        if (GameWinThroughARow())
+        {
+            return true;
+        } 
+        if (GameWinThroughAColumn())
         {
             return true;
         }
 
-        _isGameOver = !_isGameOver;
+        return false;
+        
+
+    }
+
+    private bool GameWinThroughARow()
+    {
+        for (int y = 0; y < _gameConfiguration.BoardHeight; y++)
+        {
+            var sumOfRow = 0;
+            for (int x = 0; x < _gameConfiguration.BoardWidth; x++)
+            {
+                var currentPiece = _gameBoard[x, y];
+                if (currentPiece.IsPartOfGrid)
+                {
+                    sumOfRow += currentPiece.GetSpotValue() == EGamePiece.X ? 1 :
+                        currentPiece.GetSpotValue() == EGamePiece.Empty ? 0 :
+                        -1;
+                }
+
+            }
+            if (Math.Abs(sumOfRow) == _gameConfiguration.WinCondition)
+            {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+
+    private bool GameWinThroughAColumn()
+    {
+
+        for (int x = 0; x < _gameConfiguration.BoardWidth; x++)
+        {
+            var sumOfColumn = 0;
+            for (int y = 0; y < _gameConfiguration.BoardHeight; y++)
+            {
+                var currentPiece = _gameBoard[x, y];
+                if (currentPiece.IsPartOfGrid)
+                {
+                    sumOfColumn += currentPiece.GetSpotValue() == EGamePiece.X ? 1 :
+                        currentPiece.GetSpotValue() == EGamePiece.Empty ? 0 :
+                        -1;
+                }
+            }
+            if (Math.Abs(sumOfColumn) == _gameConfiguration.WinCondition)
+            {
+                return true;
+            }
+        }
+        
+
         return false;
     }
 }

@@ -65,6 +65,11 @@ public class GameController
 
             if (gameInstance.SomebodyHasWon())
             {
+                Console.WriteLine();
+                Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
+                Console.WriteLine("Press any key to return to the main menu");
+                Console.ReadLine();
+                
                 break;
             }
             
@@ -143,7 +148,7 @@ public class GameController
         Console.WriteLine("Game configuration changed succesfully!");
         Console.WriteLine();
 
-        return shortcut;
+        return "r";
     }
 
 

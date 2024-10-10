@@ -8,6 +8,7 @@ public class Game
 {
     public void Run()
     {
+        
         var mainMenu = new MenuController().GetMainMenu();
         mainMenu.Run();
     }

@@ -15,7 +15,7 @@ public class ConfigRepository
             GridWidth = 3,
             GridHeight = 3,
             WinCondition = 3,
-            HowManyMovesTillAdvancedGameMoves = 0,
+            HowManyMovesTillAdvancedGameMoves = -1, // Cannot exist in the classical game
             Grid = new Grid(3, 1, 1, 3)
 
         },

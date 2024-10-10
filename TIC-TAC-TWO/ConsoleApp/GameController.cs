@@ -20,67 +20,155 @@ public class GameController
     public string PlayNewGame()
     {
         var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
+
         do
         {
             ConsoleUI.Visualizer.DrawBoard(gameInstance);
             Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
             Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
-
-            int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
-            int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
-
-            int cursorX = 1;
-            int cursorY = 0;
-            bool enterHasBeenPressed = false;
+            MakeANormalMoveWithoutAdditionalOptions(gameInstance);
             
-            while (!enterHasBeenPressed)
-            {
-                Console.SetCursorPosition(cursorX, cursorY);
-                ConsoleKeyInfo keyInfo = Console.ReadKey(true);
-                if (keyInfo.Key == ConsoleKey.UpArrow)
-                {
-                    if (cursorY > 0) cursorY -= 2;
-                }
-                else if (keyInfo.Key == ConsoleKey.DownArrow)
-                {
-                    if (cursorY < boardHeight) cursorY += 2;
-                }
-                else if (keyInfo.Key == ConsoleKey.LeftArrow)
-                {
-                    if (cursorX > 1) cursorX -= 4;
-                }
-                else if (keyInfo.Key == ConsoleKey.RightArrow)
-                {
-                    if (cursorX < boardWidth) cursorX += 4;
-                }
-                else if (keyInfo.Key == ConsoleKey.Enter)
-                {
-                    enterHasBeenPressed = true;
-                } 
-                
-            }
-            
-            
-            var indexForX = cursorX / 4;
-            var indexForY = cursorY / 2;
-            gameInstance.MakeAMove(indexForX, indexForY);
-
             if (gameInstance.SomebodyHasWon())
             {
-                Console.Clear();
-                ConsoleUI.Visualizer.DrawBoard(gameInstance);
-                Console.WriteLine();
-                Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
-                Console.WriteLine("Press any key to return to the main menu!");
-                Console.ReadLine();
-                Console.Clear();
-                
+                AnnounceWinnerAndStopTheGame(gameInstance);
                 break;
             }
-            
-        } while (true);
 
+        } while (gameInstance.GetMovesMade() <
+                   _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
+                   _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
+
+        if (_currentGameConfiguration.HowManyMovesTillAdvancedGameMoves != -1)
+        {
+            do
+            {
+                var advancedGameOptionsMenu = new MenuController().GetAdvancedGameOptionsMenu();
+                var chosenShortcut = advancedGameOptionsMenu.Run();
+                if (chosenShortcut == "M") 
+                {
+                    MoveAPieceOnTheBoard(gameInstance);
+                
+                } else if (chosenShortcut == "C")
+                {
+                    // Let them choose a new centre spot for the grid
+                    // If allowed, all good
+                } else if (chosenShortcut == "A")
+                {
+                    //Continue with normal gameplay
+                }
+                if (gameInstance.SomebodyHasWon())
+                {
+                    Console.Clear();
+                    ConsoleUI.Visualizer.DrawBoard(gameInstance);
+                    Console.WriteLine();
+                    Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
+                    Console.WriteLine("Press any key to return to the main menu!");
+                    Console.ReadLine();
+                    Console.Clear();
+                
+                    break;
+                }
+            
+            } while (true);
+        }
+        
         return "finished";
+    }
+
+    private void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)
+    {
+        Console.Clear();
+        ConsoleUI.Visualizer.DrawBoard(gameInstance);
+        Console.WriteLine();
+        Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
+        Console.WriteLine("Press any key to return to the main menu!");
+        Console.ReadLine();
+        Console.Clear();
+    }
+
+
+    private void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
+    {
+        int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
+        int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+
+        int cursorX = 1;
+        int cursorY = 0;
+        bool enterHasBeenPressed = false;
+
+        while (!enterHasBeenPressed)
+        {
+            Console.SetCursorPosition(cursorX, cursorY);
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            if (keyInfo.Key == ConsoleKey.UpArrow)
+            {
+                if (cursorY > 0) cursorY -= 2;
+            }
+            else if (keyInfo.Key == ConsoleKey.DownArrow)
+            {
+                if (cursorY < boardHeight) cursorY += 2;
+            }
+            else if (keyInfo.Key == ConsoleKey.LeftArrow)
+            {
+                if (cursorX > 1) cursorX -= 4;
+            }
+            else if (keyInfo.Key == ConsoleKey.RightArrow)
+            {
+                if (cursorX < boardWidth) cursorX += 4;
+            }
+            else if (keyInfo.Key == ConsoleKey.Enter)
+            {
+                enterHasBeenPressed = true;
+            }
+
+
+        }
+
+        var indexForX = cursorX / 4;
+        var indexForY = cursorY / 2;
+        gameInstance.MakeAMove(indexForX, indexForY);
+    }
+
+    private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
+    {
+        ConsoleUI.Visualizer.DrawBoard(gameInstance);
+
+        Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a piece to move: ");
+                
+        int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
+        int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+                
+        bool enterHasBeenPressed = false;
+        int cursorX = 1;
+        int cursorY = 0;
+            
+        while (!enterHasBeenPressed)
+        {
+            Console.SetCursorPosition(cursorX, cursorY);
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            if (keyInfo.Key == ConsoleKey.UpArrow)
+            {
+                if (cursorY > 0) cursorY -= 2;
+            }
+            else if (keyInfo.Key == ConsoleKey.DownArrow)
+            {
+                if (cursorY < boardHeight) cursorY += 2;
+            }
+            else if (keyInfo.Key == ConsoleKey.LeftArrow)
+            {
+                if (cursorX > 1) cursorX -= 4;
+            }
+            else if (keyInfo.Key == ConsoleKey.RightArrow)
+            {
+                if (cursorX < boardWidth) cursorX += 4;
+            }
+            else if (keyInfo.Key == ConsoleKey.Enter)
+            {
+                enterHasBeenPressed = true;
+            }
+                
+
+        }
     }
 
     public string ChooseCurrentGameConfigurationMenu()

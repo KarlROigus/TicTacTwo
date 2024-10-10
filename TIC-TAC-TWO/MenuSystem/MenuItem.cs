@@ -15,6 +15,8 @@ public class MenuItem
         set;
     }
 
+    public bool ShouldReturnByItself { get; set; } = false;
+
     public string Title
     {
         get => _title;

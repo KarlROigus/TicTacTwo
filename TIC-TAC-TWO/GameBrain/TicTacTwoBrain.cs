@@ -5,6 +5,7 @@ public class TicTacTwoBrain
     private Grid _grid;
     private SpotOnTheBoard[,] _gameBoard;
     private bool _isGameOver = false;
+    private int _movesMade = 0;
     private EGamePiece _nextMoveBy { get; set; } = EGamePiece.X;
 
     private GameConfiguration _gameConfiguration;
@@ -67,9 +68,15 @@ public class TicTacTwoBrain
         }
 
         _gameBoard[x, y].SetSpotValue(_nextMoveBy);
-        _nextMoveBy = _nextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X; 
+        _nextMoveBy = _nextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        _movesMade++;
         
         return true;
+    }
+
+    public int GetMovesMade()
+    {
+        return _movesMade;
     }
 
     public void ResetGame()
@@ -164,5 +171,12 @@ public class TicTacTwoBrain
         Console.WriteLine(_grid.GetGridMiddleYValue());
         
         return false;
+    }
+
+
+    private bool MoveAPieceOnTheBoard(EGamePiece piece, int newSpotXCoordinate, int newSpotYCoordinate)
+    {
+        
+        return true;
     }
 }

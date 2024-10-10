@@ -6,7 +6,7 @@ namespace ConsoleApp;
 public class MenuController
 {
     
-    private GameController  _gameController = new GameController();
+    private readonly GameController _gameController = new();
     public Menu GetMainMenu()
     {
         
@@ -30,6 +30,12 @@ public class MenuController
                 Shortcut = "L",
                 MenuItemAction = null
             }},
+            {"S", new MenuItem()
+            {
+                Title = "Rules & Description",
+                Shortcut = "S",
+                MenuItemAction = ShowRulesAndDescriptionText
+            }},
         });
 
         return mainMenu;
@@ -43,7 +49,7 @@ public class MenuController
                 {
                     Title = "Choose current game configuration",
                     Shortcut = "C",
-                    MenuItemAction = _gameController.ChooseCurrentGameConfigurationMenu //GetConfigMenu.Run
+                    MenuItemAction = _gameController.ChooseCurrentGameConfigurationMenu
                 }
                 
             },
@@ -58,6 +64,51 @@ public class MenuController
         });
 
         return optionsMenu;
+    }
+
+    private string ShowRulesAndDescriptionText()
+    {
+        
+        Console.Clear();
+        Console.WriteLine("This is TIC-TAC-TWO, a game derived from a famous game tic-tac-toe");
+        Console.WriteLine("We hope you enjoyed it");
+
+
+        Console.WriteLine("Press any key to return to the main menu");
+        Console.ReadLine();
+        
+        return "text shown";
+    }
+
+    public Menu GetAdvancedGameOptionsMenu()
+    {
+        
+        var advancedGameOptionsMenu = new Menu(EMenuLevel.InTheGame, "TIC-TAC-TWO Choose turn option",
+            new Dictionary<string, MenuItem>()
+            {
+                {"A", new MenuItem()
+                {
+                    Title = "Add new piece",
+                    Shortcut = "A",
+                    MenuItemAction = null,
+                    ShouldReturnByItself = true
+                }},
+                {"M", new MenuItem()
+                {
+                    Title = "Move current piece",
+                    Shortcut = "M",
+                    MenuItemAction = null,
+                    ShouldReturnByItself = true,
+                }},
+                {"C", new MenuItem()
+                {
+                    Title = "Change grid position",
+                    Shortcut = "C",
+                    MenuItemAction = null,
+                    ShouldReturnByItself = true
+                }}
+            });
+        return advancedGameOptionsMenu;
     }
     
 }

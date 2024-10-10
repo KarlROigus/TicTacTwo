@@ -4,5 +4,7 @@ public enum EMenuLevel
 {
     Main,
     Secondary,
-    Deep
+    Deep,
+    InTheGame
+    
 }

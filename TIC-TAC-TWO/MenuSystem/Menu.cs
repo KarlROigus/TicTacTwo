@@ -45,7 +45,7 @@ public class Menu
         _menuLevel = menuLevel;
         
         
-        if (_menuLevel != EMenuLevel.Main)
+        if (_menuLevel != EMenuLevel.Main && _menuLevel != EMenuLevel.InTheGame)
         {
             DictMenuItems.Add("R", _menuItemReturn);
         }
@@ -93,7 +93,11 @@ public class Menu
             {
                 return _menuItemReturnMain.Shortcut;
             }
-            
+
+            if (menuItem.ShouldReturnByItself)
+            {
+                return menuItem.Shortcut;
+            }
             
             
         } while (true);

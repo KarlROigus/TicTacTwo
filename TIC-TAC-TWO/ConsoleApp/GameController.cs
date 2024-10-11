@@ -20,6 +20,7 @@ public class GameController
     public string PlayNewGame()
     {
         var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
+        
 
         do
         {
@@ -120,8 +121,7 @@ public class GameController
             {
                 enterHasBeenPressed = true;
             }
-
-
+            
         }
 
         var indexForX = cursorX / 4;
@@ -132,7 +132,7 @@ public class GameController
     private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
     {
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
-
+        
         Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a piece to move: ");
                 
         int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
@@ -164,11 +164,57 @@ public class GameController
             }
             else if (keyInfo.Key == ConsoleKey.Enter)
             {
-                enterHasBeenPressed = true;
-            }
+                var anotherEnterPressed = false;
+                var oldSpotY = cursorY / 2;
+                var oldSpotX = cursorX / 4;
+                var oldSpotPicked = gameInstance.GameBoard[oldSpotX, oldSpotY];
+                if (oldSpotPicked.GetSpotValue() == gameInstance.GetNextOneToMove())
+                {
+                    oldSpotPicked.SetSpotValue(EGamePiece.Empty);
+                    
+                    ConsoleUI.Visualizer.DrawBoard(gameInstance);
+                    
+                    Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a new spot: ");
+                    while (!anotherEnterPressed)
+                    {
+                        Console.SetCursorPosition(cursorX, cursorY);
+                        ConsoleKeyInfo anotherKeyInfo = Console.ReadKey(true);
+                        if (anotherKeyInfo.Key == ConsoleKey.UpArrow)
+                        {
+                            if (cursorY > 0) cursorY -= 2;
+                        }
+                        else if (anotherKeyInfo.Key == ConsoleKey.DownArrow)
+                        {
+                            if (cursorY < boardHeight) cursorY += 2;
+                        }
+                        else if (anotherKeyInfo.Key == ConsoleKey.LeftArrow)
+                        {
+                            if (cursorX > 1) cursorX -= 4;
+                        }
+                        else if (anotherKeyInfo.Key == ConsoleKey.RightArrow)
+                        {
+                            if (cursorX < boardWidth) cursorX += 4;
+                        }
+                        else if (anotherKeyInfo.Key == ConsoleKey.Enter)
+                        {
+                            var newSpotY = cursorY / 2;
+                            var newSpotX = cursorX / 4;
+                            var newSpotPicked = gameInstance.GameBoard[newSpotX, newSpotY];
+                            if (newSpotPicked.GetSpotValue() == EGamePiece.Empty)
+                            {
+                                gameInstance.MakeAMove(newSpotX, newSpotY);
+                                anotherEnterPressed = true;
+                            }
+                            
+                        }
+                    }
+                    
+                    enterHasBeenPressed = true;
+                }
                 
-
+            }
         }
+        
     }
 
     public string ChooseCurrentGameConfigurationMenu()

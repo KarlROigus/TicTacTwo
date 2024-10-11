@@ -9,6 +9,7 @@ public class GameController
 
     private readonly ConfigRepository _configRepository;
     private GameConfiguration _currentGameConfiguration;
+    private bool gameIsTerminated = false;
 
     public GameController()
     {
@@ -20,14 +21,16 @@ public class GameController
     public string PlayNewGame()
     {
         var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
+        gameIsTerminated = false;
         
-
         do
         {
-            ConsoleUI.Visualizer.DrawBoard(gameInstance);
-            Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
-            Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
             MakeANormalMoveWithoutAdditionalOptions(gameInstance);
+
+            if (gameIsTerminated)
+            {
+                break;
+            }
             
             if (gameInstance.SomebodyHasWon())
             {
@@ -39,6 +42,12 @@ public class GameController
                    _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
                    _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
 
+        if (gameIsTerminated)
+        {
+            Console.Clear();
+            return "r";
+        }
+
         if (_currentGameConfiguration.HowManyMovesTillAdvancedGameMoves != -1)
         {
             do
@@ -48,24 +57,21 @@ public class GameController
                 if (chosenShortcut == "M") 
                 {
                     MoveAPieceOnTheBoard(gameInstance);
-                
                 } else if (chosenShortcut == "C")
                 {
-                    // Let them choose a new centre spot for the grid
-                    // If allowed, all good
+                    MoveTheGrid(gameInstance);
+                    
                 } else if (chosenShortcut == "A")
                 {
-                    //Continue with normal gameplay
+                    MakeANormalMoveWithoutAdditionalOptions(gameInstance);
+                }
+                else if (chosenShortcut == "E")
+                {
+                    break;
                 }
                 if (gameInstance.SomebodyHasWon())
                 {
-                    Console.Clear();
-                    ConsoleUI.Visualizer.DrawBoard(gameInstance);
-                    Console.WriteLine();
-                    Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
-                    Console.WriteLine("Press any key to return to the main menu!");
-                    Console.ReadLine();
-                    Console.Clear();
+                    AnnounceWinnerAndStopTheGame(gameInstance);
                 
                     break;
                 }
@@ -90,17 +96,30 @@ public class GameController
 
     private void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
     {
+        ConsoleUI.Visualizer.DrawBoard(gameInstance);
+        Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
+        Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
+        Console.WriteLine();
+        Console.WriteLine("Press Q to QUIT.");
         int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
         int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
 
         int cursorX = 1;
         int cursorY = 0;
         bool enterHasBeenPressed = false;
+        
 
         while (!enterHasBeenPressed)
         {
             Console.SetCursorPosition(cursorX, cursorY);
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+
+            if (keyInfo.Key == ConsoleKey.Q)
+            {
+                gameIsTerminated = true;
+                break;
+            }
+            
             if (keyInfo.Key == ConsoleKey.UpArrow)
             {
                 if (cursorY > 0) cursorY -= 2;
@@ -124,9 +143,21 @@ public class GameController
             
         }
 
+        if (gameIsTerminated)
+        {
+            return;
+        }
+
         var indexForX = cursorX / 4;
         var indexForY = cursorY / 2;
         gameInstance.MakeAMove(indexForX, indexForY);
+    }
+
+    private void MoveTheGrid(TicTacTwoBrain gameInstance)
+    {
+        
+        
+        
     }
 
     private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)

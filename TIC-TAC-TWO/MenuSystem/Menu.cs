@@ -45,7 +45,7 @@ public class Menu
         _menuLevel = menuLevel;
         
         
-        if (_menuLevel != EMenuLevel.Main && _menuLevel != EMenuLevel.InTheGame)
+        if (_menuLevel != EMenuLevel.Main)
         {
             DictMenuItems.Add("R", _menuItemReturn);
         }

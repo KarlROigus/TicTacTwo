@@ -23,4 +23,5 @@ public record struct GameConfiguration()
         return
             $"Board {BoardWidth}x{BoardHeight}, to win: {WinCondition}, can move piece after {HowManyMovesTillAdvancedGameMoves}.";
     }
+    
 }

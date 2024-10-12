@@ -45,7 +45,7 @@ public class Grid
         return answer;
     }
 
-    private bool GiveSpotABooleanValue(int x, int y)
+    public bool GiveSpotABooleanValue(int x, int y)
     {
 
         var dispersion = (_gridLength - 1) / 2;
@@ -69,6 +69,11 @@ public class Grid
     public int GetGridMiddleYValue()
     {
         return _middlePointY;
+    }
+
+    public int GetGridLength()
+    {
+        return _gridLength;
     }
     
     

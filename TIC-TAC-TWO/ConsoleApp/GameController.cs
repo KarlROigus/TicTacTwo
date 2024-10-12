@@ -67,6 +67,7 @@ public class GameController
                 }
                 else if (chosenShortcut == "E")
                 {
+                    
                     break;
                 }
                 if (gameInstance.SomebodyHasWon())
@@ -155,9 +156,74 @@ public class GameController
 
     private void MoveTheGrid(TicTacTwoBrain gameInstance)
     {
+        ConsoleUI.Visualizer.DrawBoard(gameInstance);
+        
+        Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a new center spot for the grid: ");
+        int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
+        int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+                
+        bool enterHasBeenPressed = false;
+        int cursorX = 1;
+        int cursorY = 0;
+            
+        while (!enterHasBeenPressed)
+        {
+            Console.SetCursorPosition(cursorX, cursorY);
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            if (keyInfo.Key == ConsoleKey.UpArrow)
+            {
+                if (cursorY > 0) cursorY -= 2;
+            }
+            else if (keyInfo.Key == ConsoleKey.DownArrow)
+            {
+                if (cursorY < boardHeight) cursorY += 2;
+            }
+            else if (keyInfo.Key == ConsoleKey.LeftArrow)
+            {
+                if (cursorX > 1) cursorX -= 4;
+            }
+            else if (keyInfo.Key == ConsoleKey.RightArrow)
+            {
+                if (cursorX < boardWidth) cursorX += 4;
+            }
+            else if (keyInfo.Key == ConsoleKey.Enter)
+            {
+                var newCenterSpotX = cursorX / 4;
+                var newCenterSpotY = cursorY / 2;
+
+                if (NewCenterSpotIsValid(newCenterSpotX, newCenterSpotY, gameInstance))
+                {
+                    Console.Clear();
+                    Console.WriteLine("You have picked a valid spot!");
+                    gameInstance.MoveTheGrid(newCenterSpotX, newCenterSpotY);
+                    enterHasBeenPressed = true;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("You have picked an invalid spot!");
+                }
+                
+                Console.ReadLine();
+                enterHasBeenPressed = true;
+
+            }
+        }
         
         
         
+    }
+
+    private bool NewCenterSpotIsValid(int newGridMiddleSpotX, int newGridMiddleSpotY, TicTacTwoBrain gameInstance)
+    {
+        Console.Clear();
+
+        var freeSpaceLeftToMove = (gameInstance.DimX - gameInstance.GetGrid().GetGridLength()) / 2;
+        var currentGridMiddleSpotX = gameInstance.GetGrid().GetGridMiddleXValue();
+        var currentGridMiddleSpotY = gameInstance.GetGrid().GetGridMiddleYValue();
+
+        return Math.Abs(newGridMiddleSpotX - currentGridMiddleSpotX) <= freeSpaceLeftToMove &&
+               Math.Abs(newGridMiddleSpotY - currentGridMiddleSpotY) <= freeSpaceLeftToMove;
     }
 
     private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)

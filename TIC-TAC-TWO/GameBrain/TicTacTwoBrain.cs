@@ -35,6 +35,11 @@ public class TicTacTwoBrain
     {
         return _grid.BooleanAt(x, y);
     }
+
+    public Grid GetGrid()
+    {
+        return _grid;
+    }
     
 
     public SpotOnTheBoard[,] GameBoard
@@ -59,6 +64,27 @@ public class TicTacTwoBrain
         return copyOfBoard;
 
     }
+
+    public bool MoveTheGrid(int centerX, int centerY)
+    {
+        
+        var newGrid = new Grid(DimY, centerX, centerY, _grid.GetGridLength());
+
+        Console.WriteLine(newGrid);
+        Console.ReadLine();
+
+        for (int y = 0; y < DimY; y++)
+        {
+            for (int x = 0; x < DimX; x++)
+            {
+                var currentSpot = _gameBoard[x, y];
+                currentSpot.SetSpotBoolean(newGrid.BooleanAt(x, y));
+            }
+        }
+        
+        return true;
+    }
+    
 
     public bool MakeAMove(int x, int y)
     {
@@ -173,10 +199,5 @@ public class TicTacTwoBrain
         return false;
     }
 
-
-    private bool MoveAPieceOnTheBoard(EGamePiece piece, int newSpotXCoordinate, int newSpotYCoordinate)
-    {
-        
-        return true;
-    }
+    
 }

@@ -1,4 +1,6 @@
-﻿using System.IO.Enumeration;
+﻿
+using DAL;
+
 
 namespace MenuSystem;
 
@@ -11,20 +13,20 @@ public class Menu
 
     private MenuItem _menuItemExit = new MenuItem()
     {
-        Shortcut = "E",
+        Shortcut = MenuConstants.ExitShortcut,
         Title = "Exit"
     };
     private MenuItem _menuItemReturn = new MenuItem()
     {
-        Shortcut = "R",
+        Shortcut = MenuConstants.ReturnShortcut,
         Title = "Return"
     };
     private MenuItem _menuItemReturnMain = new MenuItem()
     {
-        Shortcut = "M",
+        Shortcut = MenuConstants.ReturnToMainMenuShortcut,
         Title = "Return to Main menu"
     };
-    private EMenuLevel _menuLevel { get; set; }
+    private EMenuLevel MenuLevel { get; set; }
 
     public Menu(EMenuLevel menuLevel, string menuHeader, Dictionary<string, MenuItem> dictMenuItems)
     {
@@ -42,20 +44,20 @@ public class Menu
         MenuHeader = menuHeader;
         
         
-        _menuLevel = menuLevel;
+        MenuLevel = menuLevel;
         
         
-        if (_menuLevel != EMenuLevel.Main)
+        if (MenuLevel != EMenuLevel.Main)
         {
-            DictMenuItems.Add("R", _menuItemReturn);
+            DictMenuItems.Add(MenuConstants.ReturnShortcut, _menuItemReturn);
         }
         
-        if (_menuLevel == EMenuLevel.Deep)
+        if (MenuLevel == EMenuLevel.Deep)
         {
-            DictMenuItems.Add("M", _menuItemReturnMain);
+            DictMenuItems.Add(MenuConstants.ReturnToMainMenuShortcut, _menuItemReturnMain);
         }
         
-        DictMenuItems.Add("E", _menuItemExit);
+        DictMenuItems.Add(MenuConstants.ExitShortcut, _menuItemExit);
 
     }
 
@@ -89,7 +91,7 @@ public class Menu
                 return _menuItemExit.Shortcut;
             }
             
-            if ((menuItem.Shortcut == _menuItemReturnMain.Shortcut || menuReturnValue == _menuItemReturnMain.Shortcut) && _menuLevel != EMenuLevel.Main)
+            if ((menuItem.Shortcut == _menuItemReturnMain.Shortcut || menuReturnValue == _menuItemReturnMain.Shortcut) && MenuLevel != EMenuLevel.Main)
             {
                 return _menuItemReturnMain.Shortcut;
             }
@@ -98,7 +100,6 @@ public class Menu
             {
                 return menuItem.Shortcut;
             }
-            
             
         } while (true);
     }
@@ -135,7 +136,6 @@ public class Menu
             
         } while (true);
     }
-    
     
     private void DrawMenu()
     {

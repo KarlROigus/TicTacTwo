@@ -1,33 +1,34 @@
 using DAL;
 using GameBrain;
 using MenuSystem;
+using Microsoft.VisualBasic;
 
 namespace ConsoleApp;
 
-public class GameController
+public static class GameController
 {
 
-    private readonly ConfigRepository _configRepository;
-    private GameConfiguration _currentGameConfiguration;
-    private bool gameIsTerminated = false;
+    private static readonly ConfigRepository ConfigRepository;
+    private static GameConfiguration _currentGameConfiguration;
+    private static bool _gameIsTerminated;
 
-    public GameController()
+    static GameController()
     {
-        _configRepository = new ConfigRepository();
-        _currentGameConfiguration = _configRepository.GetDefaultConfiguration();
+        ConfigRepository = new ConfigRepository(); 
+        _currentGameConfiguration = ConfigRepository.GetDefaultConfiguration();
     }
 
     
-    public string PlayNewGame()
+    public static string PlayNewGame()
     {
         var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
-        gameIsTerminated = false;
+        _gameIsTerminated = false;
         
         do
         {
             MakeANormalMoveWithoutAdditionalOptions(gameInstance);
 
-            if (gameIsTerminated)
+            if (_gameIsTerminated)
             {
                 break;
             }
@@ -42,7 +43,7 @@ public class GameController
                    _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
                    _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
 
-        if (gameIsTerminated)
+        if (_gameIsTerminated)
         {
             Console.Clear();
             return "r";
@@ -52,22 +53,22 @@ public class GameController
         {
             do
             {
-                var advancedGameOptionsMenu = new MenuController().GetAdvancedGameOptionsMenu();
+                var advancedGameOptionsMenu = MenuController.GetAdvancedGameOptionsMenu();
                 var chosenShortcut = advancedGameOptionsMenu.Run();
-                if (chosenShortcut == "M") 
+                
+                if (chosenShortcut == MenuConstants.MoveAPieceOnTheBoardShortcut) 
                 {
                     MoveAPieceOnTheBoard(gameInstance);
-                } else if (chosenShortcut == "C")
+                } else if (chosenShortcut == MenuConstants.ChangeGridPositionShortcut)
                 {
                     MoveTheGrid(gameInstance);
                     
-                } else if (chosenShortcut == "A")
+                } else if (chosenShortcut == MenuConstants.AddANewPieceShortcut)
                 {
                     MakeANormalMoveWithoutAdditionalOptions(gameInstance);
                 }
-                else if (chosenShortcut == "E")
+                else if (chosenShortcut == MenuConstants.ExitShortcut)
                 {
-                    
                     break;
                 }
                 if (gameInstance.SomebodyHasWon())
@@ -83,7 +84,7 @@ public class GameController
         return "finished";
     }
 
-    private void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)
+    private static void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)
     {
         Console.Clear();
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
@@ -95,7 +96,7 @@ public class GameController
     }
 
 
-    private void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
+    private static void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
     {
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
         Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
@@ -117,7 +118,7 @@ public class GameController
 
             if (keyInfo.Key == ConsoleKey.Q)
             {
-                gameIsTerminated = true;
+                _gameIsTerminated = true;
                 break;
             }
             
@@ -141,10 +142,9 @@ public class GameController
             {
                 enterHasBeenPressed = true;
             }
-            
         }
 
-        if (gameIsTerminated)
+        if (_gameIsTerminated)
         {
             return;
         }
@@ -154,20 +154,21 @@ public class GameController
         gameInstance.MakeAMove(indexForX, indexForY);
     }
 
-    private void MoveTheGrid(TicTacTwoBrain gameInstance)
+    private static void MoveTheGrid(TicTacTwoBrain gameInstance)
     {
-        ConsoleUI.Visualizer.DrawBoard(gameInstance);
         
-        Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a new center spot for the grid: ");
-        int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
-        int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+        var boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
+        var boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
                 
-        bool enterHasBeenPressed = false;
-        int cursorX = 1;
-        int cursorY = 0;
+        var enterHasBeenPressed = false;
+        var cursorX = 1;
+        var cursorY = 0;
             
         while (!enterHasBeenPressed)
         {
+            ConsoleUI.Visualizer.DrawBoard(gameInstance);
+            Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a new center spot for the grid: ");
+            
             Console.SetCursorPosition(cursorX, cursorY);
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             if (keyInfo.Key == ConsoleKey.UpArrow)
@@ -193,28 +194,23 @@ public class GameController
 
                 if (NewCenterSpotIsValid(newCenterSpotX, newCenterSpotY, gameInstance))
                 {
-                    Console.Clear();
-                    Console.WriteLine("You have picked a valid spot!");
+                    
                     gameInstance.MoveTheGrid(newCenterSpotX, newCenterSpotY);
                     enterHasBeenPressed = true;
                 }
                 else
                 {
                     Console.Clear();
-                    Console.WriteLine("You have picked an invalid spot!");
+                    Console.WriteLine("You have picked an invalid spot, press Enter to pick again!");
+                    Console.ReadLine();
                 }
                 
-                Console.ReadLine();
-                enterHasBeenPressed = true;
-
             }
         }
         
-        
-        
     }
 
-    private bool NewCenterSpotIsValid(int newGridMiddleSpotX, int newGridMiddleSpotY, TicTacTwoBrain gameInstance)
+    private static bool NewCenterSpotIsValid(int newGridMiddleSpotX, int newGridMiddleSpotY, TicTacTwoBrain gameInstance)
     {
         Console.Clear();
 
@@ -226,7 +222,7 @@ public class GameController
                Math.Abs(newGridMiddleSpotY - currentGridMiddleSpotY) <= freeSpaceLeftToMove;
     }
 
-    private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
+    private static void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
     {
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
         
@@ -314,20 +310,20 @@ public class GameController
         
     }
 
-    public string ChooseCurrentGameConfigurationMenu()
+    public static string ChooseCurrentGameConfigurationMenu()
     {
 
         var configMenuItems = new Dictionary<string, MenuItem>();
 
         EAlphabet[] alphabetArray = (EAlphabet[])Enum.GetValues(typeof(EAlphabet));
 
-        for (int i = 0; i < _configRepository.GetConfigurationNames().Count; i++)
+        for (int i = 0; i < ConfigRepository.GetConfigurationNames().Count; i++)
         {
             var newAlphabetLetter = alphabetArray[i].ToString();
 
             configMenuItems.Add(newAlphabetLetter, new MenuItem()
             {
-                Title = _configRepository.GetConfigurationNames()[i] ?? "",
+                Title = ConfigRepository.GetConfigurationNames()[i] ?? "",
                 Shortcut = newAlphabetLetter,
                 MenuItemAction = () => newAlphabetLetter,
                 ChangeConfigAction = ChangeGameConfiguration
@@ -351,7 +347,7 @@ public class GameController
         var chosenShortcutIndex = (int)chosenShortcutEnum;
         
 
-        var chosenConfig = _configRepository.GetConfigurationByIndex(chosenShortcutIndex);
+        var chosenConfig = ConfigRepository.GetConfigurationByIndex(chosenShortcutIndex);
 
         _currentGameConfiguration = chosenConfig;
 
@@ -359,7 +355,7 @@ public class GameController
         return chosenConfigShortcut;
     }
 
-    private void ChangeGameConfiguration(string shortcut)
+    private static void ChangeGameConfiguration(string shortcut)
     {
         
         if (shortcut is "E" or "M" or "R")
@@ -375,7 +371,7 @@ public class GameController
         var chosenShortcutIndex = (int)chosenShortcutEnum;
         
         
-        var chosenConfig = _configRepository.GetConfigurationByIndex(chosenShortcutIndex);
+        var chosenConfig = ConfigRepository.GetConfigurationByIndex(chosenShortcutIndex);
 
         _currentGameConfiguration = chosenConfig;
         
@@ -388,7 +384,7 @@ public class GameController
     }
 
 
-    public string MakeNewGameConfigurationMenu()
+    public static string MakeNewGameConfigurationMenu()
     {
         
         Console.Clear();
@@ -413,14 +409,16 @@ public class GameController
 
         };
 
-        _configRepository.AddNewConfiguration(newGameConfiguration);
-
+        ConfigRepository.AddNewConfiguration(newGameConfiguration);
+        
+        Console.Clear();
         Console.WriteLine();
-        Console.WriteLine("HELLO WORLD!");
+        Console.WriteLine("New configuration added successfully! Now go on and choose your configuration!");
+        Console.WriteLine();
         return "hi";
     }
 
-    private int GetNewBoardWidth()
+    private static int GetNewBoardWidth()
     {
         do
         {
@@ -446,7 +444,7 @@ public class GameController
         
     }
 
-    private string GetNewConfigName()
+    private static string GetNewConfigName()
     {
 
         do
@@ -465,7 +463,7 @@ public class GameController
         } while (true);
     }
     
-    private int GetNewBoardHeight()
+    private static int GetNewBoardHeight()
     {
         do
         {
@@ -490,7 +488,7 @@ public class GameController
         
     }
     
-    private int GetNewGridWidth(int boardWidth)
+    private static int GetNewGridWidth(int boardWidth)
     {
         do
         {
@@ -506,9 +504,12 @@ public class GameController
             } else if (boardHeightInteger % 2 == 0) 
             {
                 Console.WriteLine("Please insert an odd number for the game to make sense! ");
-            } else if (boardHeightInteger >= boardWidth)
+            } else if (boardHeightInteger > boardWidth)
             {
                 Console.WriteLine("Grid cannot be wider than the main board! ");
+            } else if (boardHeightInteger < 3)
+            {
+                Console.WriteLine("Please insert a number that is greater than 2 for the game to make sense! ");
             } else
             {
                 return boardHeightInteger;
@@ -517,14 +518,14 @@ public class GameController
         
     }
 
-    private int GetWinCondition()
+    private static int GetWinCondition()
     {
         Console.Write("Please insert how many same symbols in a row needed to win: ");
         var winCondition = Console.ReadLine();
         return int.Parse(winCondition);
     }
 
-    private int GetMovesNeededTillAdvancedMoves()
+    private static int GetMovesNeededTillAdvancedMoves()
     {
         Console.Write("Please insert after how many moves advanced moving options apply: ");
         var howManyMovesTillAdvancedMoves = Console.ReadLine();

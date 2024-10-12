@@ -2,21 +2,15 @@
 
 public class TicTacTwoBrain
 {
-    private Grid _grid;
+    private readonly Grid _grid;
     private SpotOnTheBoard[,] _gameBoard;
-    private bool _isGameOver = false;
     private int _movesMade = 0;
-    private EGamePiece _nextMoveBy { get; set; } = EGamePiece.X;
+    private EGamePiece NextMoveBy { get; set; } = EGamePiece.X;
 
-    private GameConfiguration _gameConfiguration;
+    private readonly GameConfiguration _gameConfiguration;
+    
 
-    public bool IsGameOver
-    {
-        get => _isGameOver;
-        private set => _isGameOver = value;
-    }
-
-    public TicTacTwoBrain( GameConfiguration gameConfiguration)
+    public TicTacTwoBrain(GameConfiguration gameConfiguration)
     {
         _gameConfiguration = gameConfiguration;
         _grid = gameConfiguration.Grid;
@@ -69,10 +63,7 @@ public class TicTacTwoBrain
     {
         
         var newGrid = new Grid(DimY, centerX, centerY, _grid.GetGridLength());
-
-        Console.WriteLine(newGrid);
-        Console.ReadLine();
-
+        
         for (int y = 0; y < DimY; y++)
         {
             for (int x = 0; x < DimX; x++)
@@ -81,6 +72,9 @@ public class TicTacTwoBrain
                 currentSpot.SetSpotBoolean(newGrid.BooleanAt(x, y));
             }
         }
+        NextMoveBy = NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        Console.WriteLine("Grid location changed successfully! Press Enter to continue.");
+        Console.ReadLine();
         
         return true;
     }
@@ -93,8 +87,8 @@ public class TicTacTwoBrain
             return false;
         }
 
-        _gameBoard[x, y].SetSpotValue(_nextMoveBy);
-        _nextMoveBy = _nextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        _gameBoard[x, y].SetSpotValue(NextMoveBy);
+        NextMoveBy = NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
         _movesMade++;
         
         return true;
@@ -117,19 +111,18 @@ public class TicTacTwoBrain
             }
         }
         
-        _nextMoveBy = EGamePiece.X;
-        _isGameOver = false;
+        NextMoveBy = EGamePiece.X;
     }
 
     public EGamePiece GetNextOneToMove()
     {
-        return _nextMoveBy;
+        return NextMoveBy;
     }
     
     
     public EGamePiece GetPreviousMover()
     {
-        return _nextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        return NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
     }
     
 
@@ -186,7 +179,6 @@ public class TicTacTwoBrain
             }
         }
         
-
         return false;
     }
 

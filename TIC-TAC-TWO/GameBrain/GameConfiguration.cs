@@ -10,8 +10,6 @@ public record struct GameConfiguration()
     public int GridHeight { get; set; } = 3;
     public int GridWidth { get; set; } = 3;
 
-    public int GridMiddlePointXValue { get; set; } = 5 / 2;
-    public int GridMiddlePointYValue { get; set; } = 5 / 2;
 
     public int WinCondition { get; set; } = 3;
     public int HowManyMovesTillAdvancedGameMoves { get; set; } = 2;

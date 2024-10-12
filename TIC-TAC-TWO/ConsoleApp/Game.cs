@@ -9,7 +9,7 @@ public class Game
     public void Run()
     {
         
-        var mainMenu = new MenuController().GetMainMenu();
+        var mainMenu = MenuController.GetMainMenu();
         mainMenu.Run();
     }
 }

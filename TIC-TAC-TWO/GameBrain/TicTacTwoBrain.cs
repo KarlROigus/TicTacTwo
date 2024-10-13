@@ -2,7 +2,7 @@
 
 public class TicTacTwoBrain
 {
-    private readonly Grid _grid;
+    private Grid _grid;
     private SpotOnTheBoard[,] _gameBoard;
     private int _movesMade = 0;
     private EGamePiece NextMoveBy { get; set; } = EGamePiece.X;
@@ -73,6 +73,7 @@ public class TicTacTwoBrain
             }
         }
         NextMoveBy = NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        _grid = newGrid;
         Console.WriteLine("Grid location changed successfully! Press Enter to continue.");
         Console.ReadLine();
         
@@ -165,11 +166,11 @@ public class TicTacTwoBrain
             var sumOfColumn = 0;
             for (int y = 0; y < _gameConfiguration.BoardHeight; y++)
             {
-                var currentPiece = _gameBoard[x, y];
-                if (currentPiece.IsPartOfGrid)
+                var currentSpot = _gameBoard[x, y];
+                if (currentSpot.IsPartOfGrid)
                 {
-                    sumOfColumn += currentPiece.GetSpotValue() == EGamePiece.X ? 1 :
-                        currentPiece.GetSpotValue() == EGamePiece.Empty ? 0 :
+                    sumOfColumn += currentSpot.GetSpotValue() == EGamePiece.X ? 1 :
+                        currentSpot.GetSpotValue() == EGamePiece.Empty ? 0 :
                         -1;
                 }
             }
@@ -185,11 +186,38 @@ public class TicTacTwoBrain
 
     private bool GameWinThroughADiagonal()
     {
-        Console.WriteLine(_grid.GetGridMiddleXValue());
-        Console.WriteLine(_grid.GetGridMiddleYValue());
-        
-        return false;
+        return GameWinThroughLeftDiagonal() || GameWinThroughRightDiagonal();
+
+
     }
 
+    private bool GameWinThroughLeftDiagonal()
+    {
+        var sumOfDiagonal = 0;
+        var leftDiagonalStartIndexY = _grid.GetGridMiddleYValue() - (_grid.GetGridLength() - 1) / 2;
+        var leftDiagonalEndIndexY = _grid.GetGridMiddleYValue() + (_grid.GetGridLength() - 1) / 2;
+
+        var leftDiagonalStartIndexX = _grid.GetGridMiddleXValue() - (_grid.GetGridLength() - 1) / 2;
+
+        for (int y = leftDiagonalStartIndexY; y <= leftDiagonalEndIndexY; y++)
+        {
+            var currentSpot = _gameBoard[leftDiagonalStartIndexX, y];
+            if (currentSpot.IsPartOfGrid)
+            {
+                sumOfDiagonal += currentSpot.GetSpotValue() == EGamePiece.X ? 1 :
+                    currentSpot.GetSpotValue() == EGamePiece.Empty ? 0 :
+                    -1;
+            }
+
+            leftDiagonalStartIndexX++;
+
+        }
+        return Math.Abs(sumOfDiagonal) == _gameConfiguration.WinCondition;
+    }
+
+    private bool GameWinThroughRightDiagonal()
+    {
+        return false;
+    }
     
 }

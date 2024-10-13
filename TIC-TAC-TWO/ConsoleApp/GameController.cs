@@ -32,16 +32,14 @@ public static class GameController
             {
                 break;
             }
-            
-            if (gameInstance.SomebodyHasWon())
-            {
-                AnnounceWinnerAndStopTheGame(gameInstance);
-                break;
-            }
+
+            if (!gameInstance.SomebodyHasWon()) continue;
+            AnnounceWinnerAndStopTheGame(gameInstance);
+            break;
 
         } while (gameInstance.GetMovesMade() <
-                   _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
-                   _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
+                 _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
+                 _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
 
         if (_gameIsTerminated)
         {
@@ -310,6 +308,7 @@ public static class GameController
         
     }
 
+
     public static string ChooseCurrentGameConfigurationMenu()
     {
 
@@ -531,6 +530,7 @@ public static class GameController
         var howManyMovesTillAdvancedMoves = Console.ReadLine();
         return int.Parse(howManyMovesTillAdvancedMoves);
     }
+    
     
     
     // =========================================================

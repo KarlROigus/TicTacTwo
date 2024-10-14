@@ -51,6 +51,10 @@ public static class GameController
         {
             do
             {
+                if (_gameIsTerminated)
+                {
+                    break;
+                }
                 var advancedGameOptionsMenu = MenuController.GetAdvancedGameOptionsMenu();
                 var chosenShortcut = advancedGameOptionsMenu.Run();
                 
@@ -325,7 +329,8 @@ public static class GameController
                 Title = ConfigRepository.GetConfigurationNames()[i] ?? "",
                 Shortcut = newAlphabetLetter,
                 MenuItemAction = () => newAlphabetLetter,
-                ChangeConfigAction = ChangeGameConfiguration
+                ChangeOrAddConfigAction = ChangeGameConfiguration,
+                ShouldReturnByItself = true
             });
         }
         
@@ -359,12 +364,12 @@ public static class GameController
         
         if (shortcut is "E" or "M" or "R")
         {
-            return;
+            return ;
         }
         
         if (!Enum.TryParse(shortcut, out EAlphabet chosenShortcutEnum))
         {
-            return;
+            return ;
         }
 
         var chosenShortcutIndex = (int)chosenShortcutEnum;
@@ -376,7 +381,8 @@ public static class GameController
         
 
         Console.WriteLine();
-        Console.WriteLine("Game configuration changed succesfully!");
+        Console.WriteLine("Game configuration changed succesfully! Press Enter to continue.");
+        Console.ReadLine();
         Console.WriteLine();
 
         return;
@@ -410,11 +416,12 @@ public static class GameController
 
         ConfigRepository.AddNewConfiguration(newGameConfiguration);
         
-        Console.Clear();
         Console.WriteLine();
-        Console.WriteLine("New configuration added successfully! Now go on and choose your configuration!");
+        Console.WriteLine("New configuration added successfully! Now go on and choose your configuration!" +
+                          "Press Enter to continue.");
+        Console.ReadLine();
         Console.WriteLine();
-        return "hi";
+        return "r";
     }
 
     private static int GetNewBoardWidth()

@@ -76,9 +76,9 @@ public class Menu
                 menuReturnValue = menuItem.MenuItemAction();
             }
 
-            if (menuItem.ChangeConfigAction != null)
+            if (menuItem.ChangeOrAddConfigAction != null)
             {
-                menuItem.ChangeConfigAction(menuReturnValue);
+                menuItem.ChangeOrAddConfigAction(menuReturnValue);
             }
 
             if (menuItem.Shortcut == _menuItemReturn.Shortcut)
@@ -139,7 +139,7 @@ public class Menu
     
     private void DrawMenu()
     {
-        
+        Console.Clear();
         Console.WriteLine(MenuHeader);
         Console.WriteLine(_menuDivider);
 

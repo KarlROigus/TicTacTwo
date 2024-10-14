@@ -187,8 +187,7 @@ public class TicTacTwoBrain
     private bool GameWinThroughADiagonal()
     {
         return GameWinThroughLeftDiagonal() || GameWinThroughRightDiagonal();
-
-
+        
     }
 
     private bool GameWinThroughLeftDiagonal()
@@ -217,7 +216,29 @@ public class TicTacTwoBrain
 
     private bool GameWinThroughRightDiagonal()
     {
-        return false;
+
+        var sumOfDiagonal = 0;
+        var rightDiagonalStartIndexY = _grid.GetGridMiddleYValue() - (_grid.GetGridLength() - 1) / 2;
+        var rightDiagonalEndIndexY = _grid.GetGridMiddleYValue() + (_grid.GetGridLength() - 1) / 2;
+        
+        var rightDiagonalStartIndexX = _grid.GetGridMiddleXValue() + (_grid.GetGridLength() - 1) / 2;
+        
+        for (int y = rightDiagonalStartIndexY; y <= rightDiagonalEndIndexY; y++)
+        {
+            var currentSpot = _gameBoard[rightDiagonalStartIndexX, y];
+            if (currentSpot.IsPartOfGrid)
+            {
+                sumOfDiagonal += currentSpot.GetSpotValue() == EGamePiece.X ? 1 :
+                    currentSpot.GetSpotValue() == EGamePiece.Empty ? 0 :
+                    -1;
+            }
+
+            rightDiagonalStartIndexX--;
+
+        }
+        
+        return Math.Abs(sumOfDiagonal) == _gameConfiguration.WinCondition;
+
     }
     
 }

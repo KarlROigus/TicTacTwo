@@ -2,9 +2,9 @@
 
 namespace DAL;
 
-public class ConfigRepository
+public class ConfigRepositoryHardCoded : IConfigRepository
 {
-
+ 
     private List<GameConfiguration> _gameConfigurations =
     [
         new GameConfiguration()
@@ -28,11 +28,11 @@ public class ConfigRepository
 
     ];
 
-    public List<string?> GetConfigurationNames()
+    public List<string> GetConfigurationNames()
     {
         return _gameConfigurations.Select
-            (config => config.Name)
-            .ToList();
+                (config => config.Name)
+            .ToList()!; 
     }
 
     public GameConfiguration GetConfigurationByIndex(int index)
@@ -46,14 +46,9 @@ public class ConfigRepository
         return _gameConfigurations[1];
     }
 
-    public bool AddNewConfiguration(GameConfiguration newConfig)
+    public void AddNewConfiguration(GameConfiguration newConfig)
     {
         _gameConfigurations.Add(newConfig);
-        foreach (var config in _gameConfigurations)
-        {
-            Console.WriteLine(config);
-        }
-        return true;
     }
 
 

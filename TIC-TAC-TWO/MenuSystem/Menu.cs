@@ -76,9 +76,9 @@ public class Menu
                 menuReturnValue = menuItem.MenuItemAction();
             }
 
-            if (menuItem.ChangeOrAddConfigAction != null)
+            if (menuItem.ChangeConfigAction != null)
             {
-                menuItem.ChangeOrAddConfigAction(menuReturnValue);
+                menuItem.ChangeConfigAction(menuReturnValue);
             }
 
             if (menuItem.Shortcut == _menuItemReturn.Shortcut)
@@ -120,8 +120,16 @@ public class Menu
             }
             else
             {
-                userInput = userInput.ToUpper();
-
+                
+                if (int.TryParse(userInput, out int gameConfigurationIndex))
+                {
+                    userInput = (gameConfigurationIndex - 1).ToString();
+                }
+                else
+                {
+                    userInput = userInput.ToUpper();
+                }
+                
                 foreach (var dictMenuItem in DictMenuItems)
                 {
                     if (dictMenuItem.Key.ToUpper() == userInput)
@@ -139,7 +147,6 @@ public class Menu
     
     private void DrawMenu()
     {
-        Console.Clear();
         Console.WriteLine(MenuHeader);
         Console.WriteLine(_menuDivider);
 

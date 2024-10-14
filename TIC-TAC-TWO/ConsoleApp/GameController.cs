@@ -1,20 +1,18 @@
 using DAL;
 using GameBrain;
 using MenuSystem;
-using Microsoft.VisualBasic;
 
 namespace ConsoleApp;
 
 public static class GameController
 {
 
-    private static readonly ConfigRepository ConfigRepository;
+    private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryJson();
     private static GameConfiguration _currentGameConfiguration;
     private static bool _gameIsTerminated;
 
     static GameController()
     {
-        ConfigRepository = new ConfigRepository(); 
         _currentGameConfiguration = ConfigRepository.GetDefaultConfiguration();
     }
 
@@ -317,63 +315,39 @@ public static class GameController
     {
 
         var configMenuItems = new Dictionary<string, MenuItem>();
-
-        EAlphabet[] alphabetArray = (EAlphabet[])Enum.GetValues(typeof(EAlphabet));
-
-        for (int i = 0; i < ConfigRepository.GetConfigurationNames().Count; i++)
+        
+        for (var i = 0; i < ConfigRepository.GetConfigurationNames().Count; i++)
         {
-            var newAlphabetLetter = alphabetArray[i].ToString();
-
-            configMenuItems.Add(newAlphabetLetter, new MenuItem()
+            var returnValue = i.ToString();
+            configMenuItems.Add(returnValue, new MenuItem()
             {
-                Title = ConfigRepository.GetConfigurationNames()[i] ?? "",
-                Shortcut = newAlphabetLetter,
-                MenuItemAction = () => newAlphabetLetter,
-                ChangeOrAddConfigAction = ChangeGameConfiguration,
-                ShouldReturnByItself = true
+                Title = ConfigRepository.GetConfigurationNames()[i]!,
+                Shortcut = (i + 1).ToString(),
+                MenuItemAction = () => returnValue,
+                ShouldReturnByItself = true,
+                ChangeConfigAction = ChangeGameConfiguration
             });
         }
-        
+
         var configMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO Choose config", configMenuItems);
 
-        var chosenConfigShortcut = configMenu.Run();
+        return configMenu.Run();
 
-        if (chosenConfigShortcut == "E" || chosenConfigShortcut == "M" || chosenConfigShortcut == "R")
-        {
-            return chosenConfigShortcut;
-        }
-        
-        if (!Enum.TryParse(chosenConfigShortcut, out EAlphabet chosenShortcutEnum))
-        {
-            return chosenConfigShortcut;
-        }
-
-        var chosenShortcutIndex = (int)chosenShortcutEnum;
-        
-
-        var chosenConfig = ConfigRepository.GetConfigurationByIndex(chosenShortcutIndex);
-
-        _currentGameConfiguration = chosenConfig;
-
-
-        return chosenConfigShortcut;
     }
 
     private static void ChangeGameConfiguration(string shortcut)
     {
         
-        if (shortcut is "E" or "M" or "R")
+        if (shortcut == MenuConstants.ExitShortcut ||  shortcut == MenuConstants.ExitShortcut || shortcut ==  MenuConstants.ReturnShortcut)
         {
-            return ;
-        }
-        
-        if (!Enum.TryParse(shortcut, out EAlphabet chosenShortcutEnum))
-        {
-            return ;
+            return;
         }
 
-        var chosenShortcutIndex = (int)chosenShortcutEnum;
-        
+
+        if (!int.TryParse(shortcut, out var chosenShortcutIndex))
+        {
+            return;
+        }
         
         var chosenConfig = ConfigRepository.GetConfigurationByIndex(chosenShortcutIndex);
 

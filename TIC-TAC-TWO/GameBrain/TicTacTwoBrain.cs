@@ -63,7 +63,7 @@ public class TicTacTwoBrain
     public bool MoveTheGrid(int centerX, int centerY)
     {
         
-        var newGrid = new Grid(DimY, centerX, centerY, _grid.GetGridLength());
+        var newGrid = new Grid(centerX, centerY, DimY, _grid.GetGridLength());
         
         for (int y = 0; y < DimY; y++)
         {

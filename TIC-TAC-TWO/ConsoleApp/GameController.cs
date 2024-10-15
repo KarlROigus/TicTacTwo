@@ -384,7 +384,7 @@ public static class GameController
             GridWidth = gridWidth,
             WinCondition = winCondition,
             HowManyMovesTillAdvancedGameMoves = howManyMovesTillAdvancedMoves,
-            Grid = new Grid(boardWidth, boardWidth / 2, boardWidth / 2, gridWidth)
+            Grid = new Grid(boardWidth / 2, boardWidth / 2, boardWidth, gridWidth)
 
         };
 

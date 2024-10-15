@@ -14,8 +14,17 @@ public class ConfigRepositoryJson : IConfigRepository
     {
 
         CheckAndCreateInitialConfig();
-        
-        return Directory.GetFiles(_basePath, "*.config.json").ToList();
+
+        var result = new List<string>();
+
+        foreach (var fullFileName in Directory.GetFiles(_basePath, "*.config.json").ToList())
+        {
+            var twoParts = Path.GetFileNameWithoutExtension(fullFileName);
+            var mainFileName = Path.GetFileNameWithoutExtension(twoParts);
+            result.Add(mainFileName);
+        }
+
+        return result;
 
 
     }
@@ -26,9 +35,9 @@ public class ConfigRepositoryJson : IConfigRepository
 
 
         var allConfigNames = GetConfigurationNames();
-        var correctConfig = allConfigNames[index];
+        var correctConfigName = allConfigNames[index];
         
-        var configJsonStr = File.ReadAllText(correctConfig);
+        var configJsonStr = File.ReadAllText(_basePath + correctConfigName + ".config.json");
         var config = JsonSerializer.Deserialize<GameConfiguration>(configJsonStr);
         
         return config;
@@ -41,7 +50,13 @@ public class ConfigRepositoryJson : IConfigRepository
 
     public void AddNewConfiguration(GameConfiguration newConfig)
     {
-        throw new NotImplementedException();
+        if (!Directory.Exists(_basePath))
+        {
+            Directory.CreateDirectory(_basePath);
+        }
+
+        var gameOptionJson = JsonSerializer.Serialize(newConfig);
+        File.WriteAllText(_basePath + newConfig.Name + ".config.json", gameOptionJson);
     }
 
     private void CheckAndCreateInitialConfig()

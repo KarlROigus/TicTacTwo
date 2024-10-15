@@ -46,9 +46,3 @@ game.Run();
 //     Console.WriteLine(gameConfig2);
 //     Console.WriteLine(gameConfig2.Grid); 
 
-
-// Todo: Win check for diagonals in all different sizes of boards.
-
-// Todo: Fix the shortcut problem with every menuitem
-
-// Todo: Which type of game config can the user make? is it okay?

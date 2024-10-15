@@ -22,7 +22,16 @@ public class ConfigRepositoryJson : IConfigRepository
 
     public GameConfiguration GetConfigurationByIndex(int index)
     {
-        throw new NotImplementedException();
+        // return new GameConfiguration();
+
+
+        var allConfigNames = GetConfigurationNames();
+        var correctConfig = allConfigNames[index];
+        
+        var configJsonStr = File.ReadAllText(correctConfig);
+        var config = JsonSerializer.Deserialize<GameConfiguration>(configJsonStr);
+        
+        return config;
     }
 
     public GameConfiguration GetDefaultConfiguration()

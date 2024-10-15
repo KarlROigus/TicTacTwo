@@ -15,6 +15,7 @@ public class TicTacTwoBrain
         _gameConfiguration = gameConfiguration;
         _grid = gameConfiguration.Grid;
         _gameBoard = new SpotOnTheBoard[gameConfiguration.BoardWidth, gameConfiguration.BoardHeight];
+        Console.WriteLine(_grid);
         
         for (int y = 0; y < gameConfiguration.BoardHeight; y++)
         {

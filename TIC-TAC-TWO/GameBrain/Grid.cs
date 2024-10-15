@@ -11,15 +11,16 @@ namespace GameBrain
         public int BigBoardSize { get; set; }
         public int GridLength { get; set; }
 
-        // Constructor
-        public Grid(int boardSize, int middlePointX, int middlePointY, int gridLength)
+        // JsonConstructor for deserialization
+        [JsonConstructor]
+        public Grid(int middlePointX, int middlePointY, int bigBoardSize, int gridLength) // Change parameter to bigBoardSize
         {
-            _grid = new bool[boardSize][]; // Initialize the outer array (rows)
-
             MiddlePointX = middlePointX;
             MiddlePointY = middlePointY;
-            BigBoardSize = boardSize;
             GridLength = gridLength;
+            BigBoardSize = bigBoardSize; // Assign parameter to property
+
+            _grid = new bool[BigBoardSize][]; // Initialize the outer array (rows)
 
             // Initialize each row (inner array)
             for (int y = 0; y < BigBoardSize; y++)

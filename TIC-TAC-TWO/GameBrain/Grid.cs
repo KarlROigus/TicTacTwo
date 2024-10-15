@@ -1,82 +1,86 @@
-namespace GameBrain;
+using System.Text.Json.Serialization;
 
-public class Grid
+namespace GameBrain
 {
-    private bool[,]? _grid;
-
-    private int _middlePointX;
-    private int _middlePointY;
-    private int _bigBoardSize;
-    private int _gridLength;
-    
-
-    public Grid(int boardSize, int middlePointX, int middlePointY, int gridLength)
+    public class Grid
     {
-        _grid = new bool[boardSize, boardSize];
-        _middlePointX = middlePointX;
-        _middlePointY = middlePointY;
-        _bigBoardSize = boardSize;
-        _gridLength = gridLength;
-        
-        for (int y = 0; y < _bigBoardSize; y++)
+        public bool[][]? _grid;
+
+        public int MiddlePointX { get; set; }
+        public int MiddlePointY { get; set; }
+        public int BigBoardSize { get; set; }
+        public int GridLength { get; set; }
+
+        // Constructor
+        public Grid(int boardSize, int middlePointX, int middlePointY, int gridLength)
         {
-            for (int x = 0; x < _bigBoardSize; x++)
+            _grid = new bool[boardSize][]; // Initialize the outer array (rows)
+
+            MiddlePointX = middlePointX;
+            MiddlePointY = middlePointY;
+            BigBoardSize = boardSize;
+            GridLength = gridLength;
+
+            // Initialize each row (inner array)
+            for (int y = 0; y < BigBoardSize; y++)
             {
-                _grid[x, y] = GiveSpotABooleanValue(x, y);
+                _grid[y] = new bool[BigBoardSize]; // Initialize each row (columns)
+                for (int x = 0; x < BigBoardSize; x++)
+                {
+                    _grid[y][x] = GiveSpotABooleanValue(x, y); // Populate the grid
+                }
             }
         }
-    }
 
-    public override string ToString()
-    {
-        var answer = "";
-
-        if (_grid == null) return answer;
-        for (int y = 0; y < _grid.GetLength(0); y++)
+        // Override ToString for printing the grid
+        public override string ToString()
         {
-            for (int x = 0; x < _grid.GetLength(1); x++)
+            var answer = "";
+
+            if (_grid == null) return answer;
+
+            for (int y = 0; y < _grid.Length; y++) // Use Length for jagged arrays
             {
-                answer += _grid[x, y] + ", ";
+                for (int x = 0; x < _grid[y].Length; x++) // Use Length for jagged arrays
+                {
+                    answer += _grid[y][x] + ", "; // Access grid as [y][x]
+                }
+                answer += "\n";
             }
 
-            answer += "\n";
+            return answer;
         }
 
-        return answer;
-    }
-
-    public bool GiveSpotABooleanValue(int x, int y)
-    {
-
-        var dispersion = (_gridLength - 1) / 2;
-        if (Math.Abs(_middlePointX - x) <= dispersion && Math.Abs(_middlePointY - y) <= dispersion)
+        // Method to determine boolean value at a spot
+        public bool GiveSpotABooleanValue(int x, int y)
         {
-            return true;
+            var dispersion = (GridLength - 1) / 2;
+            if (Math.Abs(MiddlePointX - x) <= dispersion && Math.Abs(MiddlePointY - y) <= dispersion)
+            {
+                return true;
+            }
+            return false;
         }
-        return false;
-    }
 
-    public bool BooleanAt(int x, int y)
-    {
-        return _grid != null && _grid[x, y];
-    }
+        // Access a specific boolean at position (x, y)
+        public bool BooleanAt(int x, int y)
+        {
+            return _grid != null && _grid[y][x]; // Access as [y][x]
+        }
 
-    public int GetGridMiddleXValue()
-    {
-        return _middlePointX;
-    }
+        public int GetGridMiddleXValue()
+        {
+            return MiddlePointX;
+        }
 
-    public int GetGridMiddleYValue()
-    {
-        return _middlePointY;
-    }
+        public int GetGridMiddleYValue()
+        {
+            return MiddlePointY;
+        }
 
-    public int GetGridLength()
-    {
-        return _gridLength;
+        public int GetGridLength()
+        {
+            return GridLength;
+        }
     }
-    
-    
-    
-    
 }

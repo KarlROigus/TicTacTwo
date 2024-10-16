@@ -2,11 +2,11 @@ namespace GameBrain;
 
 public class GameState
 {
-    public Grid Grid;
-    public SpotOnTheBoard[][] GameBoard;
+    public Grid Grid { get; set; }
+    public SpotOnTheBoard[][] GameBoard { get; set; }
     public EGamePiece NextMoveBy { get; set; } = EGamePiece.X;
 
-    public readonly GameConfiguration GameConfiguration;
+    public GameConfiguration GameConfiguration { get; set; }
 
     public int MovesMade;
 
@@ -38,5 +38,10 @@ public class GameState
     private bool CheckIfSpotIsPartOfGrid(int x, int y)
     {
         return Grid.BooleanAt(x, y);
+    }
+
+    public override string ToString()
+    {
+        return System.Text.Json.JsonSerializer.Serialize(this);
     }
 }

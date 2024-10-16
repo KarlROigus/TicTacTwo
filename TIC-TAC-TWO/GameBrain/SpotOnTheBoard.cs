@@ -10,6 +10,12 @@ public class SpotOnTheBoard
         get => _isPartOfGrid;
         private set => _isPartOfGrid = value;
     }
+    
+    public EGamePiece Piece
+    {
+        get => _piece;
+        private set => _piece = value; 
+    }
 
     public SpotOnTheBoard(EGamePiece piece, bool isPartOfGrid)
     {

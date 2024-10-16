@@ -8,6 +8,7 @@ public static class GameController
 {
 
     private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryJson();
+    private static readonly IGameRepository GameRepository = new GameRepositoryJson();
     private static GameConfiguration _currentGameConfiguration;
     private static bool _gameIsTerminated;
 
@@ -56,18 +57,18 @@ public static class GameController
                 var advancedGameOptionsMenu = MenuController.GetAdvancedGameOptionsMenu();
                 var chosenShortcut = advancedGameOptionsMenu.Run();
                 
-                if (chosenShortcut == MenuConstants.MoveAPieceOnTheBoardShortcut) 
+                if (chosenShortcut == ConstantlyUsed.MoveAPieceOnTheBoardShortcut) 
                 {
                     MoveAPieceOnTheBoard(gameInstance);
-                } else if (chosenShortcut == MenuConstants.ChangeGridPositionShortcut)
+                } else if (chosenShortcut == ConstantlyUsed.ChangeGridPositionShortcut)
                 {
                     MoveTheGrid(gameInstance);
                     
-                } else if (chosenShortcut == MenuConstants.AddANewPieceShortcut)
+                } else if (chosenShortcut == ConstantlyUsed.AddANewPieceShortcut)
                 {
                     MakeANormalMoveWithoutAdditionalOptions(gameInstance);
                 }
-                else if (chosenShortcut == MenuConstants.ExitShortcut)
+                else if (chosenShortcut == ConstantlyUsed.ExitShortcut)
                 {
                     break;
                 }
@@ -102,6 +103,7 @@ public static class GameController
         Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
         Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
         Console.WriteLine();
+        Console.WriteLine("Press S to SAVE GAME.");
         Console.WriteLine("Press Q to QUIT.");
         int boardWidth = (gameInstance.DimX - 1) * 4 + 1;
         int boardHeight = (gameInstance.DimY - 1) * 2;
@@ -120,6 +122,13 @@ public static class GameController
             {
                 _gameIsTerminated = true;
                 break;
+            }
+
+            if (keyInfo.Key == ConsoleKey.S)
+            {
+                GameRepository.SaveGame(gameInstance.GetGameStateJson(), gameInstance.GetGameConfigName());
+                Console.WriteLine("Game saved successfully! Press Enter to continue!");
+                Console.ReadLine();
             }
             
             if (keyInfo.Key == ConsoleKey.UpArrow)
@@ -338,7 +347,7 @@ public static class GameController
     private static void ChangeGameConfiguration(string shortcut)
     {
         
-        if (shortcut == MenuConstants.ExitShortcut ||  shortcut == MenuConstants.ExitShortcut || shortcut ==  MenuConstants.ReturnShortcut)
+        if (shortcut == ConstantlyUsed.ExitShortcut ||  shortcut == ConstantlyUsed.ExitShortcut || shortcut ==  ConstantlyUsed.ReturnShortcut)
         {
             return;
         }

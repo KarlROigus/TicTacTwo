@@ -2,7 +2,7 @@
 
 public class TicTacTwoBrain
 {
-    private GameState _gameState;
+    private readonly GameState _gameState;
     
 
     public TicTacTwoBrain(GameConfiguration gameConfiguration)
@@ -11,7 +11,16 @@ public class TicTacTwoBrain
         _gameState = new GameState(gameConfiguration.Grid, gameConfiguration, 0);
         
     }
-    
+
+    public string GetGameStateJson()
+    {
+        return _gameState.ToString();
+    }
+
+    public string GetGameConfigName()
+    {
+        return _gameState.GameConfiguration.Name;
+    }
     public Grid GetGrid()
     {
         return _gameState.Grid;

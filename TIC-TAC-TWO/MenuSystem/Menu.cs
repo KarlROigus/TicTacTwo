@@ -13,17 +13,17 @@ public class Menu
 
     private MenuItem _menuItemExit = new MenuItem()
     {
-        Shortcut = MenuConstants.ExitShortcut,
+        Shortcut = ConstantlyUsed.ExitShortcut,
         Title = "Exit"
     };
     private MenuItem _menuItemReturn = new MenuItem()
     {
-        Shortcut = MenuConstants.ReturnShortcut,
+        Shortcut = ConstantlyUsed.ReturnShortcut,
         Title = "Return"
     };
     private MenuItem _menuItemReturnMain = new MenuItem()
     {
-        Shortcut = MenuConstants.ReturnToMainMenuShortcut,
+        Shortcut = ConstantlyUsed.ReturnToMainMenuShortcut,
         Title = "Return to Main menu"
     };
     private EMenuLevel MenuLevel { get; set; }
@@ -49,15 +49,15 @@ public class Menu
         
         if (MenuLevel != EMenuLevel.Main)
         {
-            DictMenuItems.Add(MenuConstants.ReturnShortcut, _menuItemReturn);
+            DictMenuItems.Add(ConstantlyUsed.ReturnShortcut, _menuItemReturn);
         }
         
         if (MenuLevel == EMenuLevel.Deep)
         {
-            DictMenuItems.Add(MenuConstants.ReturnToMainMenuShortcut, _menuItemReturnMain);
+            DictMenuItems.Add(ConstantlyUsed.ReturnToMainMenuShortcut, _menuItemReturnMain);
         }
         
-        DictMenuItems.Add(MenuConstants.ExitShortcut, _menuItemExit);
+        DictMenuItems.Add(ConstantlyUsed.ExitShortcut, _menuItemExit);
 
     }
 

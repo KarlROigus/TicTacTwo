@@ -10,41 +10,39 @@ namespace GameBrain
         public int MiddlePointY { get; set; }
         public int BigBoardSize { get; set; }
         public int GridLength { get; set; }
-
-        // JsonConstructor for deserialization
+        
         [JsonConstructor]
-        public Grid(int middlePointX, int middlePointY, int bigBoardSize, int gridLength) // Change parameter to bigBoardSize
+        public Grid(int middlePointX, int middlePointY, int bigBoardSize, int gridLength) 
         {
             MiddlePointX = middlePointX;
             MiddlePointY = middlePointY;
             GridLength = gridLength;
-            BigBoardSize = bigBoardSize; // Assign parameter to property
+            BigBoardSize = bigBoardSize; 
 
-            _grid = new bool[BigBoardSize][]; // Initialize the outer array (rows)
+            _grid = new bool[BigBoardSize][]; 
 
-            // Initialize each row (inner array)
             for (int y = 0; y < BigBoardSize; y++)
             {
-                _grid[y] = new bool[BigBoardSize]; // Initialize each row (columns)
+                _grid[y] = new bool[BigBoardSize];
                 for (int x = 0; x < BigBoardSize; x++)
                 {
-                    _grid[y][x] = GiveSpotABooleanValue(x, y); // Populate the grid
+                    _grid[y][x] = GiveSpotABooleanValue(x, y);
                 }
             }
         }
 
-        // Override ToString for printing the grid
+
         public override string ToString()
         {
             var answer = "";
 
             if (_grid == null) return answer;
 
-            for (int y = 0; y < _grid.Length; y++) // Use Length for jagged arrays
+            for (int y = 0; y < _grid.Length; y++) 
             {
-                for (int x = 0; x < _grid[y].Length; x++) // Use Length for jagged arrays
+                for (int x = 0; x < _grid[y].Length; x++) 
                 {
-                    answer += _grid[y][x] + ", "; // Access grid as [y][x]
+                    answer += _grid[y][x] + ", "; 
                 }
                 answer += "\n";
             }
@@ -52,7 +50,7 @@ namespace GameBrain
             return answer;
         }
 
-        // Method to determine boolean value at a spot
+
         public bool GiveSpotABooleanValue(int x, int y)
         {
             var dispersion = (GridLength - 1) / 2;
@@ -63,10 +61,10 @@ namespace GameBrain
             return false;
         }
 
-        // Access a specific boolean at position (x, y)
+
         public bool BooleanAt(int x, int y)
         {
-            return _grid != null && _grid[y][x]; // Access as [y][x]
+            return _grid != null && _grid[y][x]; 
         }
 
         public int GetGridMiddleXValue()

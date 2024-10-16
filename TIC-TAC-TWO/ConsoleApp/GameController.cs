@@ -21,6 +21,11 @@ public static class GameController
     {
         var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
         _gameIsTerminated = false;
+
+        Console.WriteLine(gameInstance.GameBoard.Length);
+        Console.WriteLine(gameInstance.GameBoard[0].Length);
+        
+        Console.ReadLine();
         
         do
         {
@@ -103,8 +108,8 @@ public static class GameController
         Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
         Console.WriteLine();
         Console.WriteLine("Press Q to QUIT.");
-        int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
-        int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+        int boardWidth = (gameInstance.DimX - 1) * 4 + 1;
+        int boardHeight = (gameInstance.DimY - 1) * 2;
 
         int cursorX = 1;
         int cursorY = 0;
@@ -157,8 +162,8 @@ public static class GameController
     private static void MoveTheGrid(TicTacTwoBrain gameInstance)
     {
         
-        var boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
-        var boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+        var boardWidth = (gameInstance.DimX - 1) * 4 + 1;
+        var boardHeight = (gameInstance.DimY - 1) * 2;
                 
         var enterHasBeenPressed = false;
         var cursorX = 1;
@@ -228,8 +233,8 @@ public static class GameController
         
         Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a piece to move: ");
                 
-        int boardWidth = (gameInstance.GameBoard.GetLength(0) - 1) * 4 + 1;
-        int boardHeight = (gameInstance.GameBoard.GetLength(1) - 1) * 2;
+        int boardWidth = (gameInstance.DimX - 1) * 4 + 1;
+        int boardHeight = (gameInstance.DimY - 1) * 2;
                 
         bool enterHasBeenPressed = false;
         int cursorX = 1;
@@ -260,7 +265,7 @@ public static class GameController
                 var anotherEnterPressed = false;
                 var oldSpotY = cursorY / 2;
                 var oldSpotX = cursorX / 4;
-                var oldSpotPicked = gameInstance.GameBoard[oldSpotX, oldSpotY];
+                var oldSpotPicked = gameInstance.GameBoard[oldSpotY][oldSpotX];
                 if (oldSpotPicked.GetSpotValue() == gameInstance.GetNextOneToMove())
                 {
                     oldSpotPicked.SetSpotValue(EGamePiece.Empty);
@@ -292,7 +297,7 @@ public static class GameController
                         {
                             var newSpotY = cursorY / 2;
                             var newSpotX = cursorX / 4;
-                            var newSpotPicked = gameInstance.GameBoard[newSpotX, newSpotY];
+                            var newSpotPicked = gameInstance.GameBoard[newSpotY][newSpotX];
                             if (newSpotPicked.GetSpotValue() == EGamePiece.Empty)
                             {
                                 gameInstance.MakeAMove(newSpotX, newSpotY);

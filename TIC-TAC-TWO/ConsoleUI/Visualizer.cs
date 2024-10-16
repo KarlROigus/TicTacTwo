@@ -13,11 +13,11 @@ public static class  Visualizer
         {
             for (int x = 0; x < gameInstance.DimX; x++)
             {
-                var currentSpot = gameInstance.GameBoard[x, y];
+                var currentSpot = gameInstance.GameBoard[y][x];
                 var nextSpotXValue = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
                 var prevSpotXValue = x - 1 < 0 ? 0 : x - 1;
-                var nextSpot = gameInstance.GameBoard[nextSpotXValue, y];
-                var prevSpot = gameInstance.GameBoard[prevSpotXValue, y];
+                var nextSpot = gameInstance.GameBoard[y][nextSpotXValue];
+                var prevSpot = gameInstance.GameBoard[y][prevSpotXValue];
                 
                 if (IsPartOfGrid(currentSpot) && IsPartOfGrid(nextSpot))
                 {
@@ -28,7 +28,7 @@ public static class  Visualizer
                 }
                 
                 Console.Write(" ");
-                Console.Write(DrawGamePiece(gameInstance.GameBoard[x, y].GetSpotValue()));
+                Console.Write(DrawGamePiece(gameInstance.GameBoard[y][x].GetSpotValue()));
                 Console.Write(" ");
                 if (x < gameInstance.DimX - 1)
                 {
@@ -45,13 +45,13 @@ public static class  Visualizer
             {
                 for (int x = 0; x < gameInstance.DimX; x++)
                 {
-                    SpotOnTheBoard currentSpot = gameInstance.GameBoard[x, y];
+                    SpotOnTheBoard currentSpot = gameInstance.GameBoard[y][x];
                     var nextSpotXValue = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
                     var prevSpotXValue = x - 1 < 0 ? 0 : x - 1;
-                    SpotOnTheBoard nextSpot = gameInstance.GameBoard[nextSpotXValue, y];
-                    var prevSpot = gameInstance.GameBoard[prevSpotXValue, y];
+                    SpotOnTheBoard nextSpot = gameInstance.GameBoard[y][nextSpotXValue];
+                    var prevSpot = gameInstance.GameBoard[y][prevSpotXValue];
                     var nextRowYValue = y + 1 > gameInstance.DimY - 1 ? gameInstance.DimY - 1 : y + 1;
-                    SpotOnTheBoard nextRowSpot = gameInstance.GameBoard[x, nextRowYValue];
+                    SpotOnTheBoard nextRowSpot = gameInstance.GameBoard[nextRowYValue][x];
                     
                     if (IsPartOfGrid(currentSpot) && IsPartOfGrid(nextSpot) && IsPartOfGrid(nextRowSpot)) 
                     {

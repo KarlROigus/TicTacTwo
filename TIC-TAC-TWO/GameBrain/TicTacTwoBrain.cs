@@ -2,52 +2,35 @@
 
 public class TicTacTwoBrain
 {
-    private Grid _grid;
-    private SpotOnTheBoard[][] _gameBoard;
-    private int _movesMade = 0;
-    private EGamePiece NextMoveBy { get; set; } = EGamePiece.X;
-
-    private readonly GameConfiguration _gameConfiguration;
+    private GameState _gameState;
     
 
     public TicTacTwoBrain(GameConfiguration gameConfiguration)
     {
-        _gameConfiguration = gameConfiguration;
-        _grid = gameConfiguration.Grid;
+
+        _gameState = new GameState(gameConfiguration.Grid, gameConfiguration, 0);
         
-        _gameBoard = new SpotOnTheBoard[gameConfiguration.BoardHeight][];
-        
-        for (int y = 0; y < gameConfiguration.BoardHeight; y++)
-        {
-            _gameBoard[y] = new SpotOnTheBoard[gameConfiguration.BoardWidth];
-
-            for (int x = 0; x < gameConfiguration.BoardWidth; x++)
-            {
-                _gameBoard[y][x] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y));
-            }
-        }
     }
-
-
-    private bool CheckIfSpotIsPartOfGrid(int x, int y)
-    {
-        return _grid.BooleanAt(x, y);
-    }
-
+    
     public Grid GetGrid()
     {
-        return _grid;
+        return _gameState.Grid;
+    }
+
+    public int GetMovesMade()
+    {
+        return _gameState.MovesMade;
     }
     
 
     public SpotOnTheBoard[][] GameBoard
     {
         get => GetBoard();
-        private set => _gameBoard = value;
+        private set => _gameState.GameBoard = value;
     }
 
-    public int DimX => _gameBoard[0].Length;
-    public int DimY => _gameBoard.Length;
+    public int DimX => _gameState.GameBoard[0].Length;
+    public int DimY => _gameState.GameBoard.Length;
     
     private SpotOnTheBoard[][] GetBoard()
     {
@@ -58,7 +41,7 @@ public class TicTacTwoBrain
             
             for (var x = 0; x < DimX; x++)
             {
-                copyOfBoard[y][x] = _gameBoard[y][x];
+                copyOfBoard[y][x] =  _gameState.GameBoard[y][x];
             }
         }
     
@@ -69,18 +52,18 @@ public class TicTacTwoBrain
     public bool MoveTheGrid(int centerX, int centerY)
     {
         
-        var newGrid = new Grid(centerX, centerY, DimY, _grid.GetGridLength());
+        var newGrid = new Grid(centerX, centerY, DimY, _gameState.Grid.GetGridLength());
         
         for (int y = 0; y < DimY; y++)
         {
             for (int x = 0; x < DimX; x++)
             {
-                var currentSpot = _gameBoard[y][x];
+                var currentSpot = _gameState.GameBoard[y][x];
                 currentSpot.SetSpotBoolean(newGrid.BooleanAt(x, y));
             }
         }
-        NextMoveBy = NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
-        _grid = newGrid;
+        _gameState.NextMoveBy = _gameState.NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        _gameState.Grid = newGrid;
         Console.WriteLine("Grid location changed successfully! Press Enter to continue.");
         Console.ReadLine();
         
@@ -90,33 +73,28 @@ public class TicTacTwoBrain
 
     public bool MakeAMove(int x, int y)
     {
-        if (_gameBoard[y][x].GetSpotValue() != EGamePiece.Empty)
+        if (_gameState.GameBoard[y][x].GetSpotValue() != EGamePiece.Empty)
         {
             return false;
         }
 
-        _gameBoard[y][x].SetSpotValue(NextMoveBy);
-        NextMoveBy = NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
-        _movesMade++;
+        _gameState.GameBoard[y][x].SetSpotValue(_gameState.NextMoveBy);
+        _gameState.NextMoveBy = _gameState.NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        _gameState.MovesMade++;
         
         return true;
-    }
-
-    public int GetMovesMade()
-    {
-        return _movesMade;
     }
     
 
     public EGamePiece GetNextOneToMove()
     {
-        return NextMoveBy;
+        return _gameState.NextMoveBy;
     }
     
     
     public EGamePiece GetPreviousMover()
     {
-        return NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
+        return _gameState.NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
     }
     
 
@@ -127,12 +105,12 @@ public class TicTacTwoBrain
 
     private bool GameWinThroughARow()
     {
-        for (int y = 0; y < _gameConfiguration.BoardHeight; y++)
+        for (int y = 0; y < _gameState.GameConfiguration.BoardHeight; y++)
         {
             var sumOfRow = 0;
-            for (int x = 0; x < _gameConfiguration.BoardWidth; x++)
+            for (int x = 0; x < _gameState.GameConfiguration.BoardWidth; x++)
             {
-                var currentPiece = _gameBoard[y][x];
+                var currentPiece = _gameState.GameBoard[y][x];
                 if (currentPiece.IsPartOfGrid)
                 {
                     sumOfRow += currentPiece.GetSpotValue() == EGamePiece.X ? 1 :
@@ -141,7 +119,7 @@ public class TicTacTwoBrain
                 }
 
             }
-            if (Math.Abs(sumOfRow) == _gameConfiguration.WinCondition)
+            if (Math.Abs(sumOfRow) == _gameState.GameConfiguration.WinCondition)
             {
                 return true;
             }
@@ -154,12 +132,12 @@ public class TicTacTwoBrain
     private bool GameWinThroughAColumn()
     {
 
-        for (int x = 0; x < _gameConfiguration.BoardWidth; x++)
+        for (int x = 0; x < _gameState.GameConfiguration.BoardWidth; x++)
         {
             var sumOfColumn = 0;
-            for (int y = 0; y < _gameConfiguration.BoardHeight; y++)
+            for (int y = 0; y < _gameState.GameConfiguration.BoardHeight; y++)
             {
-                var currentSpot = _gameBoard[y][x];
+                var currentSpot = _gameState.GameBoard[y][x];
                 if (currentSpot.IsPartOfGrid)
                 {
                     sumOfColumn += currentSpot.GetSpotValue() == EGamePiece.X ? 1 :
@@ -167,7 +145,7 @@ public class TicTacTwoBrain
                         -1;
                 }
             }
-            if (Math.Abs(sumOfColumn) == _gameConfiguration.WinCondition)
+            if (Math.Abs(sumOfColumn) == _gameState.GameConfiguration.WinCondition)
             {
                 return true;
             }
@@ -186,14 +164,14 @@ public class TicTacTwoBrain
     private bool GameWinThroughLeftDiagonal()
     {
         var sumOfDiagonal = 0;
-        var leftDiagonalStartIndexY = _grid.GetGridMiddleYValue() - (_grid.GetGridLength() - 1) / 2;
-        var leftDiagonalEndIndexY = _grid.GetGridMiddleYValue() + (_grid.GetGridLength() - 1) / 2;
+        var leftDiagonalStartIndexY = _gameState.Grid.GetGridMiddleYValue() - (_gameState.Grid.GetGridLength() - 1) / 2;
+        var leftDiagonalEndIndexY = _gameState.Grid.GetGridMiddleYValue() + (_gameState.Grid.GetGridLength() - 1) / 2;
 
-        var leftDiagonalStartIndexX = _grid.GetGridMiddleXValue() - (_grid.GetGridLength() - 1) / 2;
+        var leftDiagonalStartIndexX = _gameState.Grid.GetGridMiddleXValue() - (_gameState.Grid.GetGridLength() - 1) / 2;
 
         for (int y = leftDiagonalStartIndexY; y <= leftDiagonalEndIndexY; y++)
         {
-            var currentSpot = _gameBoard[y][leftDiagonalStartIndexX];
+            var currentSpot = _gameState.GameBoard[y][leftDiagonalStartIndexX];
             if (currentSpot.IsPartOfGrid)
             {
                 sumOfDiagonal += currentSpot.GetSpotValue() == EGamePiece.X ? 1 :
@@ -204,21 +182,21 @@ public class TicTacTwoBrain
             leftDiagonalStartIndexX++;
 
         }
-        return Math.Abs(sumOfDiagonal) == _gameConfiguration.WinCondition;
+        return Math.Abs(sumOfDiagonal) == _gameState.GameConfiguration.WinCondition;
     }
 
     private bool GameWinThroughRightDiagonal()
     {
 
         var sumOfDiagonal = 0;
-        var rightDiagonalStartIndexY = _grid.GetGridMiddleYValue() - (_grid.GetGridLength() - 1) / 2;
-        var rightDiagonalEndIndexY = _grid.GetGridMiddleYValue() + (_grid.GetGridLength() - 1) / 2;
+        var rightDiagonalStartIndexY = _gameState.Grid.GetGridMiddleYValue() - (_gameState.Grid.GetGridLength() - 1) / 2;
+        var rightDiagonalEndIndexY = _gameState.Grid.GetGridMiddleYValue() + (_gameState.Grid.GetGridLength() - 1) / 2;
         
-        var rightDiagonalStartIndexX = _grid.GetGridMiddleXValue() + (_grid.GetGridLength() - 1) / 2;
+        var rightDiagonalStartIndexX = _gameState.Grid.GetGridMiddleXValue() + (_gameState.Grid.GetGridLength() - 1) / 2;
         
         for (int y = rightDiagonalStartIndexY; y <= rightDiagonalEndIndexY; y++)
         {
-            var currentSpot = _gameBoard[y][rightDiagonalStartIndexX];
+            var currentSpot = _gameState.GameBoard[y][rightDiagonalStartIndexX];
             if (currentSpot.IsPartOfGrid)
             {
                 sumOfDiagonal += currentSpot.GetSpotValue() == EGamePiece.X ? 1 :
@@ -230,7 +208,7 @@ public class TicTacTwoBrain
 
         }
         
-        return Math.Abs(sumOfDiagonal) == _gameConfiguration.WinCondition;
+        return Math.Abs(sumOfDiagonal) == _gameState.GameConfiguration.WinCondition;
 
     }
     

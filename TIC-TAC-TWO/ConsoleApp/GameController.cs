@@ -21,11 +21,6 @@ public static class GameController
     {
         var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
         _gameIsTerminated = false;
-
-        Console.WriteLine(gameInstance.GameBoard.Length);
-        Console.WriteLine(gameInstance.GameBoard[0].Length);
-        
-        Console.ReadLine();
         
         do
         {

@@ -16,6 +16,7 @@ public record struct GameConfiguration()
 
     public Grid Grid { get; set; } = new Grid(2, 2, 5, 3);
     
+    
     public override string ToString()
     { 
         return

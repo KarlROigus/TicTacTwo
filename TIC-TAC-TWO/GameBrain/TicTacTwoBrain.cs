@@ -5,7 +5,7 @@ public class TicTacTwoBrain
     private readonly GameState _gameState;
     
 
-    public TicTacTwoBrain(GameConfiguration gameConfiguration, GameState gameState)
+    public TicTacTwoBrain(GameState gameState)
     {
 
         _gameState = new GameState(gameState.Grid, 

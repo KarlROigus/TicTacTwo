@@ -10,13 +10,8 @@ public class GameController
 
     private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryJson();
     private static readonly IGameRepository GameRepository = new GameRepositoryJson();
-    private static GameConfiguration _currentGameConfiguration;
+    private static GameConfiguration _currentGameConfiguration = new GameConfiguration();
     private static bool _gameIsTerminated;
-
-    static GameController()
-    {
-        _currentGameConfiguration = ConfigRepository.GetDefaultConfiguration();
-    }
 
 
     public string PlayLoadedGame()
@@ -86,9 +81,16 @@ public class GameController
               ""MovesMade"": 4
             }";
 
-        GameState state = JsonSerializer.Deserialize<GameState>(jsonString)!;
+        var state = JsonSerializer.Deserialize<GameState>(jsonString);
 
-        var loadedGameInstance = new TicTacTwoBrain(state.GameConfiguration, state);
+        if (state == null)
+        {
+            throw new Exception("Should not be here!");
+        }
+        
+
+        var loadedGameInstance = new TicTacTwoBrain(state);
+        
         
         CommonGameLoop(loadedGameInstance);
 
@@ -98,8 +100,7 @@ public class GameController
     
     public string PlayNewGame()
     {
-        var gameInstance = new TicTacTwoBrain(_currentGameConfiguration, GetFreshGameState(_currentGameConfiguration));
-        _gameIsTerminated = false;
+        var gameInstance = new TicTacTwoBrain(GetFreshGameState(_currentGameConfiguration));
         
         CommonGameLoop(gameInstance);
         
@@ -136,6 +137,8 @@ public class GameController
 
     private void CommonGameLoop(TicTacTwoBrain gameInstance)
     {
+        _gameIsTerminated = false;
+        
         do
         {
             MakeANormalMoveWithoutAdditionalOptions(gameInstance);

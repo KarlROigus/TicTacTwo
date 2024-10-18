@@ -5,10 +5,14 @@ public class TicTacTwoBrain
     private readonly GameState _gameState;
     
 
-    public TicTacTwoBrain(GameConfiguration gameConfiguration)
+    public TicTacTwoBrain(GameConfiguration gameConfiguration, GameState gameState)
     {
 
-        _gameState = new GameState(gameConfiguration.Grid, gameConfiguration, 0);
+        _gameState = new GameState(gameState.Grid, 
+            gameState.GameBoard, 
+            gameState.GameConfiguration, 
+            gameState.MovesMade,
+            gameState.NextMoveBy);
         
     }
 
@@ -219,6 +223,12 @@ public class TicTacTwoBrain
         
         return Math.Abs(sumOfDiagonal) == _gameState.GameConfiguration.WinCondition;
 
+    }
+
+
+    public void SetGameStateFromSavedFile()
+    {
+        
     }
     
 }

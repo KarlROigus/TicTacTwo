@@ -12,7 +12,7 @@ namespace GameBrain
         public int GridLength { get; set; }
         
         [JsonConstructor]
-        public Grid(int middlePointX, int middlePointY, int bigBoardSize, int gridLength) 
+        public Grid(int middlePointX = 2, int middlePointY = 2, int bigBoardSize = 5, int gridLength = 3) 
         {
             MiddlePointX = middlePointX;
             MiddlePointY = middlePointY;

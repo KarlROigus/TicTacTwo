@@ -8,37 +8,18 @@ public class GameState
 
     public GameConfiguration GameConfiguration { get; set; }
 
-    public int MovesMade;
+    public int MovesMade { get; set; }
 
-    public GameState(Grid grid, GameConfiguration gameConfiguration, int movesMade)
+    public GameState(Grid grid, SpotOnTheBoard[][] gameBoard, GameConfiguration gameConfiguration, int movesMade, EGamePiece nextMoveBy)
     {
         Grid = grid;
+        GameBoard = gameBoard;
         GameConfiguration = gameConfiguration;
         MovesMade = movesMade;
-        GameBoard = MakeGameBoard(gameConfiguration);
-
+        NextMoveBy = nextMoveBy;
     }
     
-    private SpotOnTheBoard[][] MakeGameBoard(GameConfiguration gameConfiguration)
-    {
-        var gameBoard = new SpotOnTheBoard[gameConfiguration.BoardHeight][];
-        for (int y = 0; y < gameConfiguration.BoardHeight; y++)
-        {
-            gameBoard[y] = new SpotOnTheBoard[gameConfiguration.BoardWidth];
-
-            for (int x = 0; x < gameConfiguration.BoardWidth; x++)
-            {
-                gameBoard[y][x] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y));
-            }
-        }
-
-        return gameBoard;
-    }
     
-    private bool CheckIfSpotIsPartOfGrid(int x, int y)
-    {
-        return Grid.BooleanAt(x, y);
-    }
 
     public override string ToString()
     {

@@ -3,11 +3,13 @@ using MenuSystem;
 
 namespace ConsoleApp;
 
-public static class MenuController
+public class MenuController
 {
+
+    private GameController _gameController = new GameController();
     
     
-    public static Menu GetMainMenu()
+    public Menu GetMainMenu()
     {
         
         var mainMenu =  new Menu(EMenuLevel.Main, "TIC-TAC-TWO", new Dictionary<string, MenuItem>
@@ -22,13 +24,13 @@ public static class MenuController
             {
                 Title = "Play new game",
                 Shortcut = "P",
-                MenuItemAction = GameController.PlayNewGame
+                MenuItemAction = _gameController.PlayNewGame
             }},
             {"L", new MenuItem()
             {
                 Title = "Load game",
                 Shortcut = "L",
-                MenuItemAction = null
+                MenuItemAction = _gameController.PlayLoadedGame
             }},
             {"S", new MenuItem()
             {
@@ -41,7 +43,7 @@ public static class MenuController
         return mainMenu;
     }
 
-    private static Menu GetOptionsMenu()
+    private Menu GetOptionsMenu()
     {
         var optionsMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO OPTIONS", new Dictionary<string, MenuItem>
         {
@@ -49,7 +51,7 @@ public static class MenuController
                 {
                     Title = "Choose current game configuration",
                     Shortcut = "C",
-                    MenuItemAction = GameController.ChooseCurrentGameConfigurationMenu
+                    MenuItemAction = _gameController.ChooseCurrentGameConfigurationMenu
                 }
                 
             },
@@ -57,7 +59,7 @@ public static class MenuController
                 {
                     Title = "New game configuration",
                     Shortcut = "N",
-                    MenuItemAction = GameController.MakeNewGameConfigurationMenu
+                    MenuItemAction = _gameController.MakeNewGameConfigurationMenu
                 }
                 
             }
@@ -66,7 +68,7 @@ public static class MenuController
         return optionsMenu;
     }
 
-    private static string ShowRulesAndDescriptionText()
+    private string ShowRulesAndDescriptionText()
     {
         
         Console.Clear();
@@ -81,7 +83,7 @@ public static class MenuController
     }
 
 
-    public static Menu GetAdvancedGameOptionsMenu()
+    public Menu GetAdvancedGameOptionsMenu()
     {
         
         var advancedGameOptionsMenu = new Menu(EMenuLevel.InTheGame, "TIC-TAC-TWO Choose turn option",

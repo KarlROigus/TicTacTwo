@@ -1,10 +1,11 @@
+using System.Text.Json;
 using DAL;
 using GameBrain;
 using MenuSystem;
 
 namespace ConsoleApp;
 
-public static class GameController
+public class GameController
 {
 
     private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryJson();
@@ -17,12 +18,124 @@ public static class GameController
         _currentGameConfiguration = ConfigRepository.GetDefaultConfiguration();
     }
 
-    
-    public static string PlayNewGame()
+
+    public string PlayLoadedGame()
     {
-        var gameInstance = new TicTacTwoBrain(_currentGameConfiguration);
+        
+        string jsonString = @"
+            {
+              ""Grid"": {
+                ""MiddlePointX"": 2,
+                ""MiddlePointY"": 2,
+                ""BigBoardSize"": 5,
+                ""GridLength"": 3
+              },
+              ""GameBoard"": [
+                [
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
+                ],
+                [
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 1 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 2 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
+                ],
+                [
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 1 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 2 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
+                ],
+                [
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
+                ],
+                [
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
+                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
+                ]
+              ],
+              ""NextMoveBy"": 1,
+              ""GameConfiguration"": {
+                ""Name"": ""Default TIC-TAC-TWO"",
+                ""BoardWidth"": 5,
+                ""BoardHeight"": 5,
+                ""GridHeight"": 3,
+                ""GridWidth"": 3,
+                ""WinCondition"": 3,
+                ""HowManyMovesTillAdvancedGameMoves"": 2,
+                ""Grid"": {
+                  ""MiddlePointX"": 2,
+                  ""MiddlePointY"": 2,
+                  ""BigBoardSize"": 5,
+                  ""GridLength"": 3
+                }
+              },
+              ""MovesMade"": 4
+            }";
+
+        GameState state = JsonSerializer.Deserialize<GameState>(jsonString)!;
+
+        var loadedGameInstance = new TicTacTwoBrain(state.GameConfiguration, state);
+        
+        CommonGameLoop(loadedGameInstance);
+
+        return "hi";
+    }
+
+    
+    public string PlayNewGame()
+    {
+        var gameInstance = new TicTacTwoBrain(_currentGameConfiguration, GetFreshGameState(_currentGameConfiguration));
         _gameIsTerminated = false;
         
+        CommonGameLoop(gameInstance);
+        
+        return "finished";
+    }
+
+    public GameState GetFreshGameState(GameConfiguration currentConfig)
+    {
+        var grid = currentConfig.Grid;
+        
+        var gameBoard = new SpotOnTheBoard[currentConfig.BoardHeight][];
+        for (int y = 0; y < currentConfig.BoardHeight; y++)
+        {
+            gameBoard[y] = new SpotOnTheBoard[currentConfig.BoardWidth];
+
+            for (int x = 0; x < currentConfig.BoardWidth; x++)
+            {
+                gameBoard[y][x] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y, grid));
+            }
+        }
+        
+        return new GameState(grid,
+            gameBoard,
+            currentConfig,
+            0,
+            EGamePiece.X);
+    }
+    
+    private bool CheckIfSpotIsPartOfGrid(int x, int y, Grid grid)
+    {
+        return grid.BooleanAt(x, y);
+    }
+
+
+    private void CommonGameLoop(TicTacTwoBrain gameInstance)
+    {
         do
         {
             MakeANormalMoveWithoutAdditionalOptions(gameInstance);
@@ -34,6 +147,7 @@ public static class GameController
 
             if (!gameInstance.SomebodyHasWon()) continue;
             AnnounceWinnerAndStopTheGame(gameInstance);
+            _gameIsTerminated = true;
             break;
 
         } while (gameInstance.GetMovesMade() <
@@ -43,7 +157,7 @@ public static class GameController
         if (_gameIsTerminated)
         {
             Console.Clear();
-            return "r";
+            return;
         }
 
         if (_currentGameConfiguration.HowManyMovesTillAdvancedGameMoves != -1)
@@ -54,7 +168,7 @@ public static class GameController
                 {
                     break;
                 }
-                var advancedGameOptionsMenu = MenuController.GetAdvancedGameOptionsMenu();
+                var advancedGameOptionsMenu = new MenuController().GetAdvancedGameOptionsMenu();
                 var chosenShortcut = advancedGameOptionsMenu.Run();
                 
                 if (chosenShortcut == ConstantlyUsed.MoveAPieceOnTheBoardShortcut) 
@@ -82,10 +196,9 @@ public static class GameController
             } while (true);
         }
         
-        return "finished";
     }
 
-    private static void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)
+    private void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)
     {
         Console.Clear();
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
@@ -97,7 +210,7 @@ public static class GameController
     }
 
 
-    private static void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
+    private void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
     {
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
         Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
@@ -163,7 +276,7 @@ public static class GameController
         gameInstance.MakeAMove(indexForX, indexForY);
     }
 
-    private static void MoveTheGrid(TicTacTwoBrain gameInstance)
+    private void MoveTheGrid(TicTacTwoBrain gameInstance)
     {
         
         var boardWidth = (gameInstance.DimX - 1) * 4 + 1;
@@ -219,7 +332,7 @@ public static class GameController
         
     }
 
-    private static bool NewCenterSpotIsValid(int newGridMiddleSpotX, int newGridMiddleSpotY, TicTacTwoBrain gameInstance)
+    private bool NewCenterSpotIsValid(int newGridMiddleSpotX, int newGridMiddleSpotY, TicTacTwoBrain gameInstance)
     {
         Console.Clear();
 
@@ -231,7 +344,7 @@ public static class GameController
                Math.Abs(newGridMiddleSpotY - currentGridMiddleSpotY) <= freeSpaceLeftToMove;
     }
 
-    private static void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
+    private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
     {
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
         
@@ -320,7 +433,7 @@ public static class GameController
     }
 
 
-    public static string ChooseCurrentGameConfigurationMenu()
+    public string ChooseCurrentGameConfigurationMenu()
     {
 
         var configMenuItems = new Dictionary<string, MenuItem>();
@@ -344,7 +457,7 @@ public static class GameController
 
     }
 
-    private static void ChangeGameConfiguration(string shortcut)
+    private void ChangeGameConfiguration(string shortcut)
     {
         
         if (shortcut == ConstantlyUsed.ExitShortcut ||  shortcut == ConstantlyUsed.ExitShortcut || shortcut ==  ConstantlyUsed.ReturnShortcut)
@@ -372,7 +485,7 @@ public static class GameController
     }
 
 
-    public static string MakeNewGameConfigurationMenu()
+    public string MakeNewGameConfigurationMenu()
     {
         
         Console.Clear();
@@ -407,7 +520,7 @@ public static class GameController
         return "r";
     }
 
-    private static int GetNewBoardWidth()
+    private int GetNewBoardWidth()
     {
         do
         {
@@ -433,7 +546,7 @@ public static class GameController
         
     }
 
-    private static string GetNewConfigName()
+    private string GetNewConfigName()
     {
 
         do
@@ -452,7 +565,7 @@ public static class GameController
         } while (true);
     }
     
-    private static int GetNewBoardHeight()
+    private int GetNewBoardHeight()
     {
         do
         {
@@ -477,7 +590,7 @@ public static class GameController
         
     }
     
-    private static int GetNewGridWidth(int boardWidth)
+    private int GetNewGridWidth(int boardWidth)
     {
         do
         {
@@ -507,19 +620,20 @@ public static class GameController
         
     }
 
-    private static int GetWinCondition()
+    private int GetWinCondition()
     {
         Console.Write("Please insert how many same symbols in a row needed to win: ");
         var winCondition = Console.ReadLine();
         return int.Parse(winCondition);
     }
 
-    private static int GetMovesNeededTillAdvancedMoves()
+    private int GetMovesNeededTillAdvancedMoves()
     {
         Console.Write("Please insert after how many moves advanced moving options apply: ");
         var howManyMovesTillAdvancedMoves = Console.ReadLine();
         return int.Parse(howManyMovesTillAdvancedMoves);
     }
+    
     
     
     

@@ -17,80 +17,31 @@ public class GameController
     public string PlayLoadedGame()
     {
         
-        string jsonString = @"
-            {
-              ""Grid"": {
-                ""MiddlePointX"": 2,
-                ""MiddlePointY"": 2,
-                ""BigBoardSize"": 5,
-                ""GridLength"": 3
-              },
-              ""GameBoard"": [
-                [
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
-                ],
-                [
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 1 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 2 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
-                ],
-                [
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 1 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 2 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
-                ],
-                [
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": true, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
-                ],
-                [
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 },
-                  { ""IsPartOfGrid"": false, ""Piece"": 0 }
-                ]
-              ],
-              ""NextMoveBy"": 1,
-              ""GameConfiguration"": {
-                ""Name"": ""Default TIC-TAC-TWO"",
-                ""BoardWidth"": 5,
-                ""BoardHeight"": 5,
-                ""GridHeight"": 3,
-                ""GridWidth"": 3,
-                ""WinCondition"": 3,
-                ""HowManyMovesTillAdvancedGameMoves"": 2,
-                ""Grid"": {
-                  ""MiddlePointX"": 2,
-                  ""MiddlePointY"": 2,
-                  ""BigBoardSize"": 5,
-                  ""GridLength"": 3
-                }
-              },
-              ""MovesMade"": 4
-            }";
-
-        var state = JsonSerializer.Deserialize<GameState>(jsonString);
-
-        if (state == null)
+        var savedGameMenuItems = new Dictionary<string, MenuItem>();
+        
+        for (var i = 0; i < GameRepository.GetSavedGameNames().Count; i++)
         {
-            throw new Exception("Should not be here!");
+            var returnValue = i.ToString();
+            savedGameMenuItems.Add(returnValue, new MenuItem()
+            {
+                Title = GameRepository.GetSavedGameNames()[i]!,
+                Shortcut = (i + 1).ToString(),
+                MenuItemAction = () => returnValue,
+                ShouldReturnByItself = true,
+            });
         }
-        
 
-        var loadedGameInstance = new TicTacTwoBrain(state);
+        var savedGamesMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose a saved game", savedGameMenuItems);
+
+        var chosenShortcut = savedGamesMenu.Run();
+
+        Console.WriteLine(chosenShortcut);
+
+        Console.ReadLine();
+
+        var chosenState = LoadOrDeleteSavedGame(chosenShortcut);
         
+        var loadedGameInstance = new TicTacTwoBrain(chosenState);
         
         CommonGameLoop(loadedGameInstance);
 
@@ -105,6 +56,23 @@ public class GameController
         CommonGameLoop(gameInstance);
         
         return "finished";
+    }
+
+    public GameState? LoadOrDeleteSavedGame(string shortcut)
+    {
+        if (shortcut == ConstantlyUsed.ExitShortcut ||  shortcut == ConstantlyUsed.ExitShortcut || shortcut ==  ConstantlyUsed.ReturnShortcut)
+        {
+            return null;
+        }
+
+
+        if (!int.TryParse(shortcut, out var chosenShortcutIndex))
+        {
+            return null;
+        }
+
+        return GameRepository.GetGameStateByIndex(chosenShortcutIndex);
+        
     }
 
     public GameState GetFreshGameState(GameConfiguration currentConfig)

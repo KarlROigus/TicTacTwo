@@ -31,10 +31,12 @@ public class GameController
         Console.ReadLine();
         
         var loadedGameInstance = new TicTacTwoBrain(chosenState);
+
+        _currentGameConfiguration = chosenState.GameConfiguration;
         
         CommonGameLoop(loadedGameInstance);
 
-        return ConstantlyUsed.ReturnShortcut;
+        return ConstantlyUsed.ReturnToMainMenuShortcut;
     }
 
     public string DeleteSavedGame()

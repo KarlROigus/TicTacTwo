@@ -133,11 +133,19 @@ public class GameController
                 break;
             }
 
-            if (!gameInstance.SomebodyHasWon()) continue;
-            AnnounceWinnerAndStopTheGame(gameInstance);
+            if (gameInstance.SomebodyHasWon())
+            {
+                AnnounceWinnerAndStopTheGame(gameInstance);
+                _gameIsTerminated = true;
+                break; 
+            }
+            
+            if (!gameInstance.ItsADraw()) continue;
+            AnnounceDrawAndStopTheGame(gameInstance);
             _gameIsTerminated = true;
             break;
-
+            
+            
         } while (gameInstance.GetMovesMade() <
                  _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
                  _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
@@ -177,13 +185,28 @@ public class GameController
                 if (gameInstance.SomebodyHasWon())
                 {
                     AnnounceWinnerAndStopTheGame(gameInstance);
-                
                     break;
                 }
+                
+                if (!gameInstance.ItsADraw()) continue;
+                AnnounceDrawAndStopTheGame(gameInstance);
+                _gameIsTerminated = true;
+                break;
             
             } while (true);
         }
         
+    }
+
+    private void AnnounceDrawAndStopTheGame(TicTacTwoBrain gameInstance)
+    {
+        Console.Clear();
+        ConsoleUI.Visualizer.DrawBoard(gameInstance);
+        Console.WriteLine();
+        Console.WriteLine($"Game has ended in a draw!");
+        Console.WriteLine("Press any key to return to the main menu!");
+        Console.ReadLine();
+        Console.Clear();
     }
 
     private void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)

@@ -225,10 +225,16 @@ public class TicTacTwoBrain
 
     }
 
-
-    public void SetGameStateFromSavedFile()
+    public bool ItsADraw()
     {
+        if (_gameState.MovesMade == _gameState.GameBoard.Length * _gameState.GameBoard[0].Length && _gameState.GameConfiguration.HowManyMovesTillAdvancedGameMoves == -1)
+        {
+            return true;
+        }
         
+        
+
+        return false;
     }
     
 }

@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json;
 using DAL;
 using GameBrain;
@@ -17,8 +18,46 @@ public class GameController
     public string PlayLoadedGame()
     {
         
-        var savedGameMenuItems = new Dictionary<string, MenuItem>();
+        var chosenShortcut = GetChosenShortcutFromSavedGamesList();
         
+        if (ChosenShortcutIsExitOrReturn(chosenShortcut))
+        {
+            return ConstantlyUsed.ReturnShortcut;
+        }
+        
+        var chosenState = GameRepository.GetGameStateByIndex(int.Parse(chosenShortcut) - 1);
+        
+        Console.WriteLine("Game chosen successfully! Press any key to continue the game!");
+        Console.ReadLine();
+        
+        var loadedGameInstance = new TicTacTwoBrain(chosenState);
+        
+        CommonGameLoop(loadedGameInstance);
+
+        return ConstantlyUsed.ReturnShortcut;
+    }
+
+    public string DeleteSavedGame()
+    {
+
+        var chosenShortcut = GetChosenShortcutFromSavedGamesList();
+
+        if (ChosenShortcutIsExitOrReturn(chosenShortcut))
+        {
+            return ConstantlyUsed.ReturnShortcut;
+        }
+        
+        GameRepository.DeleteSavedGame(int.Parse(chosenShortcut) - 1);
+        
+        Console.WriteLine("Saved game deleted succesfully! Press any key to continue!");
+        Console.ReadLine();
+        
+        return ConstantlyUsed.ReturnShortcut;
+    }
+
+    public string GetChosenShortcutFromSavedGamesList()
+    {
+        var savedGameMenuItems = new Dictionary<string, MenuItem>();
         for (var i = 0; i < GameRepository.GetSavedGameNames().Count; i++)
         {
             var returnValue = i.ToString();
@@ -30,29 +69,16 @@ public class GameController
                 ShouldReturnByItself = true,
             });
         }
+        var savedGamesMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose a game you saved", savedGameMenuItems);
 
-        var savedGamesMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose a saved game", savedGameMenuItems);
-
-        var chosenShortcut = savedGamesMenu.Run();
-        
-        if (chosenShortcut == ConstantlyUsed.ExitShortcut)
-        {
-            return ConstantlyUsed.ReturnShortcut;
-        } else if (chosenShortcut == ConstantlyUsed.ReturnShortcut)
-        {
-            return ConstantlyUsed.ReturnShortcut;
-        }
-
-        var chosenState = LoadOrDeleteSavedGame(chosenShortcut);
-        
-        
-        var loadedGameInstance = new TicTacTwoBrain(chosenState);
-        
-        CommonGameLoop(loadedGameInstance);
-
-        return ConstantlyUsed.ReturnShortcut;
+        return savedGamesMenu.Run();
     }
 
+    public bool ChosenShortcutIsExitOrReturn(string shortcut)
+    {
+        return shortcut == ConstantlyUsed.ExitShortcut || shortcut == ConstantlyUsed.ReturnShortcut;
+    }
+    
     
     public string PlayNewGame()
     {
@@ -62,12 +88,7 @@ public class GameController
         
         return ConstantlyUsed.ReturnShortcut;
     }
-
-    public GameState? LoadOrDeleteSavedGame(string shortcut)
-    {
-        var correctIndex = int.Parse(shortcut) - 1;
-        return GameRepository.GetGameStateByIndex(correctIndex);
-    }
+    
 
     public GameState GetFreshGameState(GameConfiguration currentConfig)
     {

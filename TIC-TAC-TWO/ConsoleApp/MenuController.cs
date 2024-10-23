@@ -30,7 +30,7 @@ public class MenuController
             {
                 Title = "Load or delete saved game",
                 Shortcut = "L",
-                MenuItemAction = _gameController.PlayLoadedGame
+                MenuItemAction = LoadOrDeleteSavedGamesMenu().Run
             }},
             {"S", new MenuItem()
             {
@@ -41,6 +41,31 @@ public class MenuController
         });
 
         return mainMenu;
+    }
+    
+    private Menu LoadOrDeleteSavedGamesMenu()
+    {
+        var optionsMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose option", new Dictionary<string, MenuItem>
+        {
+            {"L", new MenuItem()
+                {
+                    Title = "Load a saved game and play it",
+                    Shortcut = "L",
+                    MenuItemAction = _gameController.PlayLoadedGame
+                }
+                
+            },
+            {"D", new MenuItem()
+                {
+                    Title = "Delete a saved game",
+                    Shortcut = "D",
+                    MenuItemAction = _gameController.DeleteSavedGame
+                }
+                
+            }
+        });
+
+        return optionsMenu;
     }
 
     private Menu GetOptionsMenu()

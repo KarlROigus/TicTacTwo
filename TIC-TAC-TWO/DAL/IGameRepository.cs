@@ -9,4 +9,6 @@ public interface IGameRepository
     public List<string> GetSavedGameNames();
 
     GameState GetGameStateByIndex(int index);
+
+    void DeleteSavedGame(int index);
 }

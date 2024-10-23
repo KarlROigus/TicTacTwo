@@ -44,4 +44,18 @@ public class GameRepositoryJson : IGameRepository
 
         return state!;
     }
+
+    public void DeleteSavedGame(int index)
+    {
+        var fullFileNames = Directory.GetFiles(ConstantlyUsed.BasePath, "*" + ConstantlyUsed.GameExtension).ToList();
+
+        for (int i = 0; i < fullFileNames.Count; i++)
+        {
+            if (i == index)
+            {
+                System.IO.File.Delete(fullFileNames[i]);
+            }
+        }
+        
+    }
 }

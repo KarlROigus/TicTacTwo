@@ -34,18 +34,23 @@ public class GameController
         var savedGamesMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose a saved game", savedGameMenuItems);
 
         var chosenShortcut = savedGamesMenu.Run();
-
-        Console.WriteLine(chosenShortcut);
-
-        Console.ReadLine();
+        
+        if (chosenShortcut == ConstantlyUsed.ExitShortcut)
+        {
+            return ConstantlyUsed.ReturnShortcut;
+        } else if (chosenShortcut == ConstantlyUsed.ReturnShortcut)
+        {
+            return ConstantlyUsed.ReturnShortcut;
+        }
 
         var chosenState = LoadOrDeleteSavedGame(chosenShortcut);
+        
         
         var loadedGameInstance = new TicTacTwoBrain(chosenState);
         
         CommonGameLoop(loadedGameInstance);
 
-        return "hi";
+        return ConstantlyUsed.ReturnShortcut;
     }
 
     
@@ -55,24 +60,13 @@ public class GameController
         
         CommonGameLoop(gameInstance);
         
-        return "finished";
+        return ConstantlyUsed.ReturnShortcut;
     }
 
     public GameState? LoadOrDeleteSavedGame(string shortcut)
     {
-        if (shortcut == ConstantlyUsed.ExitShortcut ||  shortcut == ConstantlyUsed.ExitShortcut || shortcut ==  ConstantlyUsed.ReturnShortcut)
-        {
-            return null;
-        }
-
-
-        if (!int.TryParse(shortcut, out var chosenShortcutIndex))
-        {
-            return null;
-        }
-
-        return GameRepository.GetGameStateByIndex(chosenShortcutIndex);
-        
+        var correctIndex = int.Parse(shortcut) - 1;
+        return GameRepository.GetGameStateByIndex(correctIndex);
     }
 
     public GameState GetFreshGameState(GameConfiguration currentConfig)

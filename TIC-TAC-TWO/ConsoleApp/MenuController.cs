@@ -28,7 +28,7 @@ public class MenuController
             }},
             {"L", new MenuItem()
             {
-                Title = "Load game",
+                Title = "Load or delete saved game",
                 Shortcut = "L",
                 MenuItemAction = _gameController.PlayLoadedGame
             }},

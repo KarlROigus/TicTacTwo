@@ -65,11 +65,19 @@ public class GameController
             var returnValue = i.ToString();
             savedGameMenuItems.Add(returnValue, new MenuItem()
             {
-                Title = GameRepository.GetSavedGameNames()[i]!,
+                Title = GameRepository.GetSavedGameNames()[i],
                 Shortcut = (i + 1).ToString(),
                 MenuItemAction = () => returnValue,
                 ShouldReturnByItself = true,
             });
+        }
+
+        if (!savedGameMenuItems.Any())
+        {
+            Console.Clear();
+            Console.WriteLine("Cannot load or delete any game as there are not any games saved! Press any key to return");
+            Console.ReadLine();
+            return ConstantlyUsed.ReturnShortcut;
         }
         var savedGamesMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose a game you saved", savedGameMenuItems);
 
@@ -250,6 +258,7 @@ public class GameController
 
             if (keyInfo.Key == ConsoleKey.S)
             {
+                
                 GameRepository.SaveGame(gameInstance.GetGameStateJson(), gameInstance.GetGameConfigName());
                 Console.WriteLine("Game saved successfully! Press Enter to continue!");
                 Console.ReadLine();
@@ -491,8 +500,6 @@ public class GameController
         Console.WriteLine("Game configuration changed succesfully! Press Enter to continue.");
         Console.ReadLine();
         Console.WriteLine();
-
-        return;
     }
 
 
@@ -528,7 +535,7 @@ public class GameController
                           "Press Enter to continue.");
         Console.ReadLine();
         Console.WriteLine();
-        return "r";
+        return ConstantlyUsed.ReturnShortcut;
     }
 
     private int GetNewBoardWidth()

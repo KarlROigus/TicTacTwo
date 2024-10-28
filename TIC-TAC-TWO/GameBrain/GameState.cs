@@ -4,7 +4,7 @@ public class GameState
 {
     public Grid Grid { get; set; }
     public SpotOnTheBoard[][] GameBoard { get; set; }
-    public EGamePiece NextMoveBy { get; set; } = EGamePiece.X;
+    public EGamePiece NextMoveBy { get; set; }
 
     public GameConfiguration GameConfiguration { get; set; }
 
@@ -19,8 +19,6 @@ public class GameState
         NextMoveBy = nextMoveBy;
     }
     
-    
-
     public override string ToString()
     {
         return System.Text.Json.JsonSerializer.Serialize(this);

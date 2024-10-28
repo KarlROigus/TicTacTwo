@@ -22,6 +22,11 @@ public class GameRepositoryJson : IGameRepository
 
     public List<string> GetSavedGameNames()
     {
+        if (!Directory.Exists(ConstantlyUsed.BasePath))
+        {
+            Directory.CreateDirectory(ConstantlyUsed.BasePath);
+        }
+        
         var result = new List<string>();
         
         foreach (var fullFileName in Directory.GetFiles(ConstantlyUsed.BasePath, "*" + ConstantlyUsed.GameExtension).ToList())
@@ -30,7 +35,6 @@ public class GameRepositoryJson : IGameRepository
             var mainFileName = Path.GetFileNameWithoutExtension(twoParts);
             result.Add(mainFileName);
         }
-
         return result;
     }
 

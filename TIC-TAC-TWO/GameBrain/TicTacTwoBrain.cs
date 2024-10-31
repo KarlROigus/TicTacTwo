@@ -39,12 +39,12 @@ public class TicTacTwoBrain
     {
         if (_gameState.NextMoveBy == EGamePiece.X)
         {
-            return _gameState.PiecesForPlayerX != 0;
+            return _gameState.PiecesForPlayerX > 0;
         }
 
         if (_gameState.NextMoveBy == EGamePiece.O)
         {
-            return _gameState.PiecesForPlayerO != 0;
+            return _gameState.PiecesForPlayerO > 0;
         }
 
         return false; // Should not reach here
@@ -82,7 +82,7 @@ public class TicTacTwoBrain
 
     }
 
-    public bool MoveTheGrid(int centerX, int centerY)
+    public void MoveTheGrid(int centerX, int centerY)
     {
         
         var newGrid = new Grid(centerX, centerY, DimY, _gameState.Grid.GetGridLength());
@@ -100,35 +100,40 @@ public class TicTacTwoBrain
         Console.WriteLine("Grid location changed successfully! Press Enter to continue.");
         Console.ReadLine();
         
-        return true;
     }
     
 
-    public void MakeAMove(int x, int y)
+    public bool MakeAMove(int x, int y)
     {
         if (_gameState.GameBoard[y][x].GetSpotValue() != EGamePiece.Empty)
         {
             Console.Clear();
             Console.WriteLine("You cannot put a piece on this spot! Press any key to choose again!");
             Console.ReadLine();
-            return;
+            return false;
         }
-        
         _gameState.GameBoard[y][x].SetSpotValue(_gameState.NextMoveBy);
         _gameState.NextMoveBy = _gameState.NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
         _gameState.MovesMade++;
-        
+        return true;
     }
+
 
     public void ReducePieceCountForPlayer()
     {
         switch (_gameState.NextMoveBy)
         {
-            case EGamePiece.X:
-                _gameState.PiecesForPlayerX -= 1;
-                break;
             case EGamePiece.O:
+                _gameState.PiecesForPlayerX -= 1;
+                Console.Clear();
+                Console.WriteLine(_gameState.PiecesForPlayerX);
+                Console.ReadLine();
+                break;
+            case EGamePiece.X:
                 _gameState.PiecesForPlayerO -= 1;
+                Console.Clear();
+                Console.WriteLine(_gameState.PiecesForPlayerO);
+                Console.ReadLine();
                 break;
         }
     }
@@ -266,9 +271,6 @@ public class TicTacTwoBrain
         {
             return true;
         }
-        
-        
-
         return false;
     }
     

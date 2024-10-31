@@ -57,7 +57,7 @@ public class GameController
         return ConstantlyUsed.ReturnShortcut;
     }
 
-    public string GetChosenShortcutFromSavedGamesList()
+    private string GetChosenShortcutFromSavedGamesList()
     {
         var savedGameMenuItems = new Dictionary<string, MenuItem>();
         for (var i = 0; i < GameRepository.GetSavedGameNames().Count; i++)
@@ -84,7 +84,7 @@ public class GameController
         return savedGamesMenu.Run();
     }
 
-    public bool ChosenShortcutIsExitOrReturn(string shortcut)
+    private bool ChosenShortcutIsExitOrReturn(string shortcut)
     {
         return shortcut == ConstantlyUsed.ExitShortcut || shortcut == ConstantlyUsed.ReturnShortcut;
     }
@@ -98,9 +98,9 @@ public class GameController
         
         return ConstantlyUsed.ReturnShortcut;
     }
-    
 
-    public GameState GetFreshGameState(GameConfiguration currentConfig)
+
+    private GameState GetFreshGameState(GameConfiguration currentConfig)
     {
         var grid = currentConfig.Grid;
         
@@ -158,7 +158,7 @@ public class GameController
             
         } while (gameInstance.GetMovesMade() <
                  _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
-                 _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == -1);
+                 _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == ConstantlyUsed.ClassicalGame);
 
         if (_gameIsTerminated)
         {
@@ -166,7 +166,7 @@ public class GameController
             return;
         }
 
-        if (_currentGameConfiguration.HowManyMovesTillAdvancedGameMoves != -1)
+        if (_currentGameConfiguration.HowManyMovesTillAdvancedGameMoves != ConstantlyUsed.ClassicalGame)
         {
             do
             {
@@ -229,8 +229,8 @@ public class GameController
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
         ConsoleUI.Visualizer.CommonMessageInEveryFirstRound(gameInstance);
         
-        int boardWidth = (gameInstance.DimX - 1) * 4 + 1;
-        int boardHeight = (gameInstance.DimY - 1) * 2;
+        int boardWidth = ConstantlyUsed.CalculateMaxBoardWidthForCursor(gameInstance);
+        int boardHeight = ConstantlyUsed.CalculateMaxBoardHeightForCursor(gameInstance);
 
         int cursorX = 1;
         int cursorY = 0;
@@ -285,15 +285,19 @@ public class GameController
 
         var indexForX = cursorX / 4;
         var indexForY = cursorY / 2;
-        gameInstance.ReducePieceCountForPlayer();
-        gameInstance.MakeAMove(indexForX, indexForY);
+        
+        var moveWasSuccessful = gameInstance.MakeAMove(indexForX, indexForY);
+        if (moveWasSuccessful)
+        {
+            gameInstance.ReducePieceCountForPlayer();
+        }
     }
 
     private void MoveTheGrid(TicTacTwoBrain gameInstance)
     {
         
-        var boardWidth = (gameInstance.DimX - 1) * 4 + 1;
-        var boardHeight = (gameInstance.DimY - 1) * 2;
+        int boardWidth = ConstantlyUsed.CalculateMaxBoardWidthForCursor(gameInstance);
+        int boardHeight = ConstantlyUsed.CalculateMaxBoardHeightForCursor(gameInstance);
                 
         var enterHasBeenPressed = false;
         var cursorX = 1;
@@ -363,8 +367,8 @@ public class GameController
         
         Console.WriteLine($"{gameInstance.GetNextOneToMove()} -> choose a piece to move: ");
                 
-        int boardWidth = (gameInstance.DimX - 1) * 4 + 1;
-        int boardHeight = (gameInstance.DimY - 1) * 2;
+        int boardWidth = ConstantlyUsed.CalculateMaxBoardWidthForCursor(gameInstance);
+        int boardHeight = ConstantlyUsed.CalculateMaxBoardHeightForCursor(gameInstance);
                 
         bool enterHasBeenPressed = false;
         int cursorX = 1;
@@ -436,7 +440,6 @@ public class GameController
                             
                         }
                     }
-                    
                     enterHasBeenPressed = true;
                 }
                 

@@ -8,11 +8,13 @@ public static class  Visualizer
     {
         
         Console.Clear();
-        
+
         for (int y = 0; y < gameInstance.DimY; y++)
         {
             for (int x = 0; x < gameInstance.DimX; x++)
             {
+                Console.ResetColor();
+                
                 var currentSpot = gameInstance.GameBoard[y][x];
                 var nextSpotXValue = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
                 var prevSpotXValue = x - 1 < 0 ? 0 : x - 1;
@@ -47,9 +49,7 @@ public static class  Visualizer
                 {
                     SpotOnTheBoard currentSpot = gameInstance.GameBoard[y][x];
                     var nextSpotXValue = x + 1 > gameInstance.DimX - 1 ? gameInstance.DimX - 1 : x + 1;
-                    var prevSpotXValue = x - 1 < 0 ? 0 : x - 1;
                     SpotOnTheBoard nextSpot = gameInstance.GameBoard[y][nextSpotXValue];
-                    var prevSpot = gameInstance.GameBoard[y][prevSpotXValue];
                     var nextRowYValue = y + 1 > gameInstance.DimY - 1 ? gameInstance.DimY - 1 : y + 1;
                     SpotOnTheBoard nextRowSpot = gameInstance.GameBoard[nextRowYValue][x];
                     

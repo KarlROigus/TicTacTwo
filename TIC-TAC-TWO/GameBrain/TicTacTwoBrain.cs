@@ -25,6 +25,16 @@ public class TicTacTwoBrain
     {
         return _gameState.ToString();
     }
+
+    public int GetPiecesForPlayerX()
+    {
+        return _gameState.PiecesForPlayerX;
+    }
+    
+    public int GetPiecesForPlayerO()
+    {
+        return _gameState.PiecesForPlayerO;
+    }
     
     public Grid GetGrid()
     {
@@ -121,15 +131,9 @@ public class TicTacTwoBrain
         {
             case EGamePiece.O:
                 _gameState.PiecesForPlayerX -= 1;
-                Console.Clear();
-                Console.WriteLine(_gameState.PiecesForPlayerX);
-                Console.ReadLine();
                 break;
             case EGamePiece.X:
                 _gameState.PiecesForPlayerO -= 1;
-                Console.Clear();
-                Console.WriteLine(_gameState.PiecesForPlayerO);
-                Console.ReadLine();
                 break;
         }
     }
@@ -154,10 +158,10 @@ public class TicTacTwoBrain
 
     private bool GameWinThroughARow()
     {
-        for (int y = 0; y < _gameState.GameConfiguration.BoardHeight; y++)
+        for (int y = 0; y < _gameState.GameConfiguration.BoardDimension; y++)
         {
             var sumOfRow = 0;
-            for (int x = 0; x < _gameState.GameConfiguration.BoardWidth; x++)
+            for (int x = 0; x < _gameState.GameConfiguration.BoardDimension; x++)
             {
                 var currentPiece = _gameState.GameBoard[y][x];
                 if (currentPiece.IsPartOfGrid)
@@ -181,10 +185,10 @@ public class TicTacTwoBrain
     private bool GameWinThroughAColumn()
     {
 
-        for (int x = 0; x < _gameState.GameConfiguration.BoardWidth; x++)
+        for (int x = 0; x < _gameState.GameConfiguration.BoardDimension; x++)
         {
             var sumOfColumn = 0;
-            for (int y = 0; y < _gameState.GameConfiguration.BoardHeight; y++)
+            for (int y = 0; y < _gameState.GameConfiguration.BoardDimension; y++)
             {
                 var currentSpot = _gameState.GameBoard[y][x];
                 if (currentSpot.IsPartOfGrid)

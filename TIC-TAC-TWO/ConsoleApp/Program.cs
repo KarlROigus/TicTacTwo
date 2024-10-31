@@ -11,6 +11,7 @@ MenuController.GetMainMenu().Run();
 //TODO: quiting game everywhere??
 
 //TODO: making a new configuration returns what..?? string or can it be void?
+
 //TODO: error check for loading a saved game
 
 

@@ -104,12 +104,12 @@ public class GameController
     {
         var grid = currentConfig.Grid;
         
-        var gameBoard = new SpotOnTheBoard[currentConfig.BoardHeight][];
-        for (int y = 0; y < currentConfig.BoardHeight; y++)
+        var gameBoard = new SpotOnTheBoard[currentConfig.BoardDimension][];
+        for (int y = 0; y < currentConfig.BoardDimension; y++)
         {
-            gameBoard[y] = new SpotOnTheBoard[currentConfig.BoardWidth];
+            gameBoard[y] = new SpotOnTheBoard[currentConfig.BoardDimension];
 
-            for (int x = 0; x < currentConfig.BoardWidth; x++)
+            for (int x = 0; x < currentConfig.BoardDimension; x++)
             {
                 gameBoard[y][x] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y, grid));
             }
@@ -497,7 +497,6 @@ public class GameController
         Console.WriteLine();
         var name = GetNewConfigName();
         var boardWidth = GetNewBoardWidth();
-        var boardHeight = GetNewBoardHeight();
         var gridWidth = GetNewGridWidth(boardWidth);
         var winCondition = GetWinCondition();
         var howManyMovesTillAdvancedMoves = GetMovesNeededTillAdvancedMoves();
@@ -507,10 +506,8 @@ public class GameController
         var newGameConfiguration = new GameConfiguration()
         {
             Name = name,
-            BoardWidth = boardWidth,
-            BoardHeight = boardHeight,
-            GridHeight = gridWidth,
-            GridWidth = gridWidth,
+            BoardDimension = boardWidth,
+            GridDimension = gridWidth,
             WinCondition = winCondition,
             HowManyMovesTillAdvancedGameMoves = howManyMovesTillAdvancedMoves,
             PiecesPerPlayer = pieces,

@@ -111,6 +111,8 @@ public static class  Visualizer
     {
         Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
         Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
+        Console.WriteLine("Pieces left for player X: " + gameInstance.GetPiecesForPlayerX());
+        Console.WriteLine("Pieces left for player O: " + gameInstance.GetPiecesForPlayerO());
         Console.WriteLine();
         Console.WriteLine("Press S to SAVE GAME.");
         Console.WriteLine("Press Q to QUIT.");

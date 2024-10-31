@@ -10,10 +10,8 @@ public class ConfigRepositoryHardCoded : IConfigRepository
         new GameConfiguration()
         {
             Name = "Classical TIC-TAC-TOE",
-            BoardWidth = 3,
-            BoardHeight = 3,
-            GridWidth = 3,
-            GridHeight = 3,
+            BoardDimension = 3,
+            GridDimension = 3,
             WinCondition = 3,
             HowManyMovesTillAdvancedGameMoves = -1, // Cannot exist in the classical game
             Grid = new Grid(1, 1, 3, 3)

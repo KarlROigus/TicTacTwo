@@ -25,11 +25,7 @@ public class TicTacTwoBrain
     {
         return _gameState.ToString();
     }
-
-    public string GetGameConfigName()
-    {
-        return _gameState.GameConfiguration.Name;
-    }
+    
     public Grid GetGrid()
     {
         return _gameState.Grid;

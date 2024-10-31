@@ -120,8 +120,8 @@ public class GameController
             currentConfig,
             0,
             EGamePiece.X,
-            4,
-            4);
+            currentConfig.PiecesPerPlayer,
+            currentConfig.PiecesPerPlayer);
     }
     
     private bool CheckIfSpotIsPartOfGrid(int x, int y, Grid grid)
@@ -250,10 +250,9 @@ public class GameController
 
             if (keyInfo.Key == ConsoleKey.S)
             {
-                
-                GameRepository.SaveGame(gameInstance.GetGameStateJson(), gameInstance.GetGameConfigName());
-                Console.WriteLine("Game saved successfully! Press Enter to continue!");
-                Console.ReadLine();
+                SaveCurrentGame(gameInstance);
+                _gameIsTerminated = true;
+                break;
             }
             
             if (keyInfo.Key == ConsoleKey.UpArrow)
@@ -458,7 +457,7 @@ public class GameController
             var returnValue = i.ToString();
             configMenuItems.Add(returnValue, new MenuItem()
             {
-                Title = ConfigRepository.GetConfigurationNames()[i]!,
+                Title = ConfigRepository.GetConfigurationNames()[i],
                 Shortcut = (i + 1).ToString(),
                 MenuItemAction = () => returnValue,
                 ShouldReturnByItself = true,
@@ -502,6 +501,8 @@ public class GameController
         var gridWidth = GetNewGridWidth(boardWidth);
         var winCondition = GetWinCondition();
         var howManyMovesTillAdvancedMoves = GetMovesNeededTillAdvancedMoves();
+        var pieces = GetAmountOfPieces();
+        
         
         var newGameConfiguration = new GameConfiguration()
         {
@@ -512,6 +513,7 @@ public class GameController
             GridWidth = gridWidth,
             WinCondition = winCondition,
             HowManyMovesTillAdvancedGameMoves = howManyMovesTillAdvancedMoves,
+            PiecesPerPlayer = pieces,
             Grid = new Grid(boardWidth / 2, boardWidth / 2, boardWidth, gridWidth)
 
         };
@@ -520,6 +522,32 @@ public class GameController
         
         ConsoleUI.Visualizer.AnnounceNewConfigAddedSuccess();
         return ConstantlyUsed.ReturnShortcut;
+    }
+
+    private int GetAmountOfPieces()
+    {
+        
+        do
+        {
+            Console.Write("Please insert how many pieces each player has: ");
+            var pieces = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(pieces))
+            {
+                Console.WriteLine("You must insert something! ");
+            }
+            else if (!int.TryParse(pieces, out var piecesInInt))
+            {
+                Console.WriteLine("Please insert a valid number! You inserted unknown symbol! ");
+            } else if (piecesInInt < 4)
+            {
+                Console.WriteLine("Please insert a number that is greater than 3 for the game to make sense! The original version has at least 4 pieces!");
+            }
+            else
+            {
+                return piecesInInt;
+            }
+            
+        } while (true);
     }
 
     private int GetNewBoardWidth()
@@ -634,6 +662,33 @@ public class GameController
         Console.Write("Please insert after how many moves advanced moving options apply: ");
         var howManyMovesTillAdvancedMoves = Console.ReadLine();
         return int.Parse(howManyMovesTillAdvancedMoves);
+    }
+
+
+    private void SaveCurrentGame(TicTacTwoBrain gameInstance)
+    {
+        Console.Clear();
+        Console.WriteLine("Please give a name for the game you want to save");
+        var savedGameName = GetNameForTheGameSaving();
+        GameRepository.SaveGame(gameInstance.GetGameStateJson(), savedGameName);
+        Console.WriteLine("Game saved successfully! Press Enter to continue!");
+        Console.ReadLine();
+    }
+
+    private string GetNameForTheGameSaving()
+    {
+        var nameIsInserted = false;
+        var name = "";
+        while (!nameIsInserted)
+        {
+            name = Console.ReadLine() ?? "";
+            if (!String.IsNullOrWhiteSpace(name))
+            {
+                nameIsInserted = true;
+            }
+            
+        }
+        return name;
     }
 
 }

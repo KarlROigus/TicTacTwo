@@ -69,6 +69,7 @@ public static class  Visualizer
                     }
                 }
                 Console.WriteLine();
+                
             }
             
         }
@@ -88,5 +89,53 @@ public static class  Visualizer
             EGamePiece.O => "O",
             _ => " "
         };
+
+    public static void AnnounceGameConfigChangeSuccess()
+    {
+        Console.WriteLine();
+        Console.WriteLine("Game configuration changed succesfully! Press Enter to continue.");
+        Console.ReadLine();
+        Console.WriteLine();
+    }
+
+    public static void AnnounceNewConfigAddedSuccess()
+    {
+        Console.WriteLine();
+        Console.WriteLine("New configuration added successfully! Now go on and choose your configuration!" +
+                          "Press Enter to continue.");
+        Console.ReadLine();
+        Console.WriteLine();
+    }
+
+    public static void CommonMessageInEveryFirstRound(TicTacTwoBrain gameInstance)
+    {
+        Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
+        Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
+        Console.WriteLine();
+        Console.WriteLine("Press S to SAVE GAME.");
+        Console.WriteLine("Press Q to QUIT.");
+    }
+
+    public static void AnnounceTheWinner(TicTacTwoBrain gameInstance)
+    {
+        Console.Clear();
+        DrawBoard(gameInstance);
+        Console.WriteLine();
+        Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
+        Console.WriteLine("Press any key to return to the main menu!");
+        Console.ReadLine();
+        Console.Clear();
+    }
+
+    public static void AnnounceTheDraw(TicTacTwoBrain gameInstance)
+    {
+        Console.Clear();
+        DrawBoard(gameInstance);
+        Console.WriteLine();
+        Console.WriteLine($"Game has ended in a draw!");
+        Console.WriteLine("Press any key to return to the main menu!");
+        Console.ReadLine();
+        Console.Clear();
+    }
 
 }

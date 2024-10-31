@@ -119,7 +119,9 @@ public class GameController
             gameBoard,
             currentConfig,
             0,
-            EGamePiece.X);
+            EGamePiece.X,
+            4,
+            4);
     }
     
     private bool CheckIfSpotIsPartOfGrid(int x, int y, Grid grid)
@@ -143,13 +145,13 @@ public class GameController
 
             if (gameInstance.SomebodyHasWon())
             {
-                AnnounceWinnerAndStopTheGame(gameInstance);
+                ConsoleUI.Visualizer.AnnounceTheWinner(gameInstance);
                 _gameIsTerminated = true;
                 break; 
             }
             
             if (!gameInstance.ItsADraw()) continue;
-            AnnounceDrawAndStopTheGame(gameInstance);
+            ConsoleUI.Visualizer.AnnounceTheDraw(gameInstance);
             _gameIsTerminated = true;
             break;
             
@@ -172,7 +174,9 @@ public class GameController
                 {
                     break;
                 }
-                var advancedGameOptionsMenu = new MenuController().GetAdvancedGameOptionsMenu();
+
+                var advancedGameOptionsMenu = MenuController.GetAdvancedGameOptionsMenu();
+                
                 var chosenShortcut = advancedGameOptionsMenu.Run();
                 
                 if (chosenShortcut == ConstantlyUsed.MoveAPieceOnTheBoardShortcut) 
@@ -184,7 +188,17 @@ public class GameController
                     
                 } else if (chosenShortcut == ConstantlyUsed.AddANewPieceShortcut)
                 {
-                    MakeANormalMoveWithoutAdditionalOptions(gameInstance);
+                    if (gameInstance.PlayerHasMovesLeft())
+                    {
+                        MakeANormalMoveWithoutAdditionalOptions(gameInstance);
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Player does not have any more pieces left! Choose another option from the list! Press any key to try again!");
+                        Console.ReadLine();
+                    }
+                    
                 }
                 else if (chosenShortcut == ConstantlyUsed.ExitShortcut)
                 {
@@ -192,12 +206,13 @@ public class GameController
                 }
                 if (gameInstance.SomebodyHasWon())
                 {
-                    AnnounceWinnerAndStopTheGame(gameInstance);
+                    ConsoleUI.Visualizer.AnnounceTheWinner(gameInstance);
                     break;
                 }
                 
                 if (!gameInstance.ItsADraw()) continue;
-                AnnounceDrawAndStopTheGame(gameInstance);
+                
+                ConsoleUI.Visualizer.AnnounceTheDraw(gameInstance);
                 _gameIsTerminated = true;
                 break;
             
@@ -205,38 +220,15 @@ public class GameController
         }
         
     }
-
-    private void AnnounceDrawAndStopTheGame(TicTacTwoBrain gameInstance)
-    {
-        Console.Clear();
-        ConsoleUI.Visualizer.DrawBoard(gameInstance);
-        Console.WriteLine();
-        Console.WriteLine($"Game has ended in a draw!");
-        Console.WriteLine("Press any key to return to the main menu!");
-        Console.ReadLine();
-        Console.Clear();
-    }
-
-    private void AnnounceWinnerAndStopTheGame(TicTacTwoBrain gameInstance)
-    {
-        Console.Clear();
-        ConsoleUI.Visualizer.DrawBoard(gameInstance);
-        Console.WriteLine();
-        Console.WriteLine($"{gameInstance.GetPreviousMover()} has won the game!");
-        Console.WriteLine("Press any key to return to the main menu!");
-        Console.ReadLine();
-        Console.Clear();
-    }
-
+    
+    
 
     private void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance)
     {
+        
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
-        Console.WriteLine("Making a move - use arrows keys to move around, press Enter to select a location.");
-        Console.WriteLine("Current one to move: " + gameInstance.GetNextOneToMove());
-        Console.WriteLine();
-        Console.WriteLine("Press S to SAVE GAME.");
-        Console.WriteLine("Press Q to QUIT.");
+        ConsoleUI.Visualizer.CommonMessageInEveryFirstRound(gameInstance);
+        
         int boardWidth = (gameInstance.DimX - 1) * 4 + 1;
         int boardHeight = (gameInstance.DimY - 1) * 2;
 
@@ -293,6 +285,7 @@ public class GameController
 
         var indexForX = cursorX / 4;
         var indexForY = cursorY / 2;
+        gameInstance.ReducePieceCountForPlayer();
         gameInstance.MakeAMove(indexForX, indexForY);
     }
 
@@ -452,7 +445,6 @@ public class GameController
         
     }
 
-
     public string ChooseCurrentGameConfigurationMenu()
     {
 
@@ -484,25 +476,18 @@ public class GameController
         {
             return;
         }
-
-
+        
         if (!int.TryParse(shortcut, out var chosenShortcutIndex))
         {
             return;
         }
-        
         var chosenConfig = ConfigRepository.GetConfigurationByIndex(chosenShortcutIndex);
 
         _currentGameConfiguration = chosenConfig;
         
-
-        Console.WriteLine();
-        Console.WriteLine("Game configuration changed succesfully! Press Enter to continue.");
-        Console.ReadLine();
-        Console.WriteLine();
+        ConsoleUI.Visualizer.AnnounceGameConfigChangeSuccess();
     }
-
-
+    
     public string MakeNewGameConfigurationMenu()
     {
         
@@ -530,11 +515,7 @@ public class GameController
 
         ConfigRepository.AddNewConfiguration(newGameConfiguration);
         
-        Console.WriteLine();
-        Console.WriteLine("New configuration added successfully! Now go on and choose your configuration!" +
-                          "Press Enter to continue.");
-        Console.ReadLine();
-        Console.WriteLine();
+        ConsoleUI.Visualizer.AnnounceNewConfigAddedSuccess();
         return ConstantlyUsed.ReturnShortcut;
     }
 
@@ -651,9 +632,5 @@ public class GameController
         var howManyMovesTillAdvancedMoves = Console.ReadLine();
         return int.Parse(howManyMovesTillAdvancedMoves);
     }
-    
-    
-    
-    
-    // =========================================================
+
 }

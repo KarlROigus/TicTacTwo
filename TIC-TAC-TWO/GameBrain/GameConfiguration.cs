@@ -13,6 +13,7 @@ public record struct GameConfiguration()
 
     public int WinCondition { get; set; } = 3;
     public int HowManyMovesTillAdvancedGameMoves { get; set; } = 2;
+    
 
     public Grid Grid { get; set; } = new Grid(2, 2, 5, 3);
     

@@ -1,4 +1,7 @@
-﻿namespace GameBrain;
+﻿using System.Security.AccessControl;
+using System.Threading.Channels;
+
+namespace GameBrain;
 
 public class TicTacTwoBrain
 {
@@ -12,7 +15,9 @@ public class TicTacTwoBrain
             gameState.GameBoard, 
             gameState.GameConfiguration, 
             gameState.MovesMade,
-            gameState.NextMoveBy);
+            gameState.NextMoveBy,
+            gameState.PiecesForPlayerX,
+            gameState.PiecesForPlayerO);
         
     }
 
@@ -28,6 +33,21 @@ public class TicTacTwoBrain
     public Grid GetGrid()
     {
         return _gameState.Grid;
+    }
+
+    public bool PlayerHasMovesLeft()
+    {
+        if (_gameState.NextMoveBy == EGamePiece.X)
+        {
+            return _gameState.PiecesForPlayerX != 0;
+        }
+
+        if (_gameState.NextMoveBy == EGamePiece.O)
+        {
+            return _gameState.PiecesForPlayerO != 0;
+        }
+
+        return false; // Should not reach here
     }
 
     public int GetMovesMade()
@@ -84,18 +104,33 @@ public class TicTacTwoBrain
     }
     
 
-    public bool MakeAMove(int x, int y)
+    public void MakeAMove(int x, int y)
     {
         if (_gameState.GameBoard[y][x].GetSpotValue() != EGamePiece.Empty)
         {
-            return false;
+            Console.Clear();
+            Console.WriteLine("You cannot put a piece on this spot! Press any key to choose again!");
+            Console.ReadLine();
+            return;
         }
-
+        
         _gameState.GameBoard[y][x].SetSpotValue(_gameState.NextMoveBy);
         _gameState.NextMoveBy = _gameState.NextMoveBy == EGamePiece.X ? EGamePiece.O : EGamePiece.X;
         _gameState.MovesMade++;
         
-        return true;
+    }
+
+    public void ReducePieceCountForPlayer()
+    {
+        switch (_gameState.NextMoveBy)
+        {
+            case EGamePiece.X:
+                _gameState.PiecesForPlayerX -= 1;
+                break;
+            case EGamePiece.O:
+                _gameState.PiecesForPlayerO -= 1;
+                break;
+        }
     }
     
 

@@ -10,13 +10,19 @@ public class GameState
 
     public int MovesMade { get; set; }
 
-    public GameState(Grid grid, SpotOnTheBoard[][] gameBoard, GameConfiguration gameConfiguration, int movesMade, EGamePiece nextMoveBy)
+    public int PiecesForPlayerX { get; set; }
+
+    public int PiecesForPlayerO { get; set; }
+
+    public GameState(Grid grid, SpotOnTheBoard[][] gameBoard, GameConfiguration gameConfiguration, int movesMade, EGamePiece nextMoveBy, int piecesForPlayerX, int piecesForPlayerO)
     {
         Grid = grid;
         GameBoard = gameBoard;
         GameConfiguration = gameConfiguration;
         MovesMade = movesMade;
         NextMoveBy = nextMoveBy;
+        PiecesForPlayerX = piecesForPlayerX;
+        PiecesForPlayerO = piecesForPlayerO;
     }
     
     public override string ToString()

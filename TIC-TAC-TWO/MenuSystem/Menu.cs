@@ -47,7 +47,7 @@ public class Menu
         MenuLevel = menuLevel;
         
         
-        if (MenuLevel != EMenuLevel.Main)
+        if (MenuLevel != EMenuLevel.Main && MenuLevel != EMenuLevel.InTheGame)
         {
             DictMenuItems.Add(ConstantlyUsed.ReturnShortcut, _menuItemReturn);
         }

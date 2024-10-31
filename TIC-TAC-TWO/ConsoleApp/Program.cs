@@ -2,8 +2,7 @@
 using ConsoleApp;
 using GameBrain;
 
-var menuController = new MenuController();
-menuController.GetMainMenu().Run();
+MenuController.GetMainMenu().Run();
 
 
 //TODO: implement reset game functionality

@@ -39,6 +39,11 @@ public class ConfigRepositoryHardCoded : IConfigRepository
 
         return _gameConfigurations[index];
     }
+    
+    public GameConfiguration GetClassicConfiguration()
+    {
+        return _gameConfigurations[0];
+    }
 
     public GameConfiguration GetDefaultConfiguration()
     {
@@ -49,6 +54,10 @@ public class ConfigRepositoryHardCoded : IConfigRepository
     {
         _gameConfigurations.Add(newConfig);
     }
+
+    
+    
+    
 
 
 }

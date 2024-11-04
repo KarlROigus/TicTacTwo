@@ -3,7 +3,7 @@ using ConsoleApp;
 using DAL;
 
 
-// MenuController.GetMainMenu().Run();
+MenuController.GetMainMenu().Run();
 
 
 //TODO: implement reset game functionality
@@ -20,16 +20,18 @@ using DAL;
 //TODO: ASK ANDRES. BLUE TERMINAL BACKGROUND
 
 
-var configRepoDB = new ConfigRepositoryDB();
+// var configRepoDB = new ConfigRepositoryDB();
+//
+// var configs = configRepoDB.GetConfigurationNames();
+//
+// foreach (var config in configs)
+// {
+//
+//     Console.WriteLine(config);
+// }
 
-Console.WriteLine(configRepoDB._context.Configs.Count());
 
-configRepoDB.GetConfigurationNames();
 
-foreach (var config in configRepoDB._context.Configs)
-{
-    Console.WriteLine(config.ConfigJsonString);
-}
 
 
 

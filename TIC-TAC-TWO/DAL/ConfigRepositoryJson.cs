@@ -7,7 +7,6 @@ namespace DAL;
 public class ConfigRepositoryJson : IConfigRepository
 {
     
-    
     public List<string> GetConfigurationNames()
     {
 
@@ -39,11 +38,7 @@ public class ConfigRepositoryJson : IConfigRepository
         
         return config;
     }
-
-    public GameConfiguration GetDefaultConfiguration()
-    {
-        return new GameConfiguration();
-    }
+    
 
     public void AddNewConfiguration(GameConfiguration newConfig)
     {

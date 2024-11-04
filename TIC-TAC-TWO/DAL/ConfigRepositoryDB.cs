@@ -34,17 +34,37 @@ public class ConfigRepositoryDB : IConfigRepository
             InsertTwoInitialConfigurations();
         }
 
-        return new List<string>();
+        return _context.Configs.Select(config => config.Name).ToList();
     }
 
     public GameConfiguration GetConfigurationByIndex(int index)
     {
-        throw new NotImplementedException();
+        var allConfigNames = GetConfigurationNames();
+        
+        var correctConfigName = allConfigNames[index];
+
+        var configJsonString = _context.Configs
+            .Where(x => x.Name == correctConfigName)
+            .Select(x => x.ConfigJsonString)
+            .FirstOrDefault();
+
+        if (configJsonString != null)
+        {
+            return JsonSerializer.Deserialize<GameConfiguration>(configJsonString);
+        }
+
+        throw new Exception("Should not happen"); // Should never happen
     }
 
     public void AddNewConfiguration(GameConfiguration newConfig)
     {
-        throw new NotImplementedException();
+        _context.Configs.Add(new Config()
+        {
+            Name = newConfig.Name,
+            ConfigJsonString = JsonSerializer.Serialize(newConfig)
+        });
+        
+        _context.SaveChanges(); // CRUCIAL SENTENCE
     }
 
     private void InsertTwoInitialConfigurations()

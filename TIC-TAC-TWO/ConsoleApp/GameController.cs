@@ -9,8 +9,8 @@ namespace ConsoleApp;
 public class GameController
 {
 
-    private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryDB();
-    private static readonly IGameRepository GameRepository = new GameRepositoryJson();
+    private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryDb();
+    private static readonly IGameRepository GameRepository = new GameRepositoryDb();
     private static GameConfiguration _currentGameConfiguration = new GameConfiguration();
     private static bool _gameIsTerminated;
 
@@ -654,7 +654,7 @@ public class GameController
         Console.Clear();
         Console.WriteLine("Please give a name for the game you want to save");
         var savedGameName = GetNameForTheGameSaving();
-        GameRepository.SaveGame(gameInstance.GetGameStateJson(), savedGameName);
+        GameRepository.SaveGame(gameInstance.GetGameStateJson(), savedGameName, _currentGameConfiguration);
         Console.WriteLine("Game saved successfully! Press Enter to continue!");
         Console.ReadLine();
     }

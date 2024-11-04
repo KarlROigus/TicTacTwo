@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL;
 
-public class ConfigRepositoryDB : IConfigRepository
+public class ConfigRepositoryDb : IConfigRepository
 {
 
     public AppDbContext _context;
 
-    public ConfigRepositoryDB()
+    public ConfigRepositoryDb()
     {
         var connectionString = $"Data Source={ConstantlyUsed.BasePath}app.db";
         
@@ -25,7 +25,6 @@ public class ConfigRepositoryDB : IConfigRepository
         _context = new AppDbContext(contextOptions);
         
     }
-    
     
     public List<string> GetConfigurationNames()
     {

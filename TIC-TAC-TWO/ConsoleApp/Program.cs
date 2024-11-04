@@ -2,7 +2,6 @@
 using ConsoleApp;
 using DAL;
 
-
 MenuController.GetMainMenu().Run();
 
 
@@ -18,6 +17,9 @@ MenuController.GetMainMenu().Run();
 
 
 //TODO: ASK ANDRES. BLUE TERMINAL BACKGROUND
+
+
+//TODO: Ask Mikk about getting gamestates and configs from json.
 
 
 // var configRepoDB = new ConfigRepositoryDB();

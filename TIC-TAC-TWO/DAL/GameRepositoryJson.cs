@@ -8,7 +8,7 @@ public class GameRepositoryJson : IGameRepository
 {
     
     
-    public void SaveGame(string jsonStateString, string gameConfigName)
+    public void SaveGame(string jsonStateString, string gameConfigName, GameConfiguration config)
     {
         
         var fileName = ConstantlyUsed.BasePath + 
@@ -57,7 +57,7 @@ public class GameRepositoryJson : IGameRepository
         {
             if (i == index)
             {
-                System.IO.File.Delete(fullFileNames[i]);
+                File.Delete(fullFileNames[i]);
             }
         }
         

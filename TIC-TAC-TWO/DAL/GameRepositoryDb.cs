@@ -64,6 +64,11 @@ public class GameRepositoryDb : IGameRepository
 
     public void DeleteSavedGame(int index)
     {
-        throw new NotImplementedException();
+        List<String> savedGameNames = GetSavedGameNames();
+        var correctGame = savedGameNames[index];
+        var gameToBeDeleted = _context.GameStateJsons.Where(x => x.Name == correctGame).First();
+
+        _context.GameStateJsons.Remove(gameToBeDeleted);
+        _context.SaveChanges();
     }
 }

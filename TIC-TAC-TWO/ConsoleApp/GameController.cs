@@ -49,7 +49,7 @@ public class GameController
             return ConstantlyUsed.ReturnShortcut;
         }
         
-        GameRepository.DeleteSavedGame(int.Parse(chosenShortcut) - 1);
+        GameRepository.DeleteSavedGame(int.Parse(chosenShortcut));
         
         Console.WriteLine("Saved game deleted succesfully! Press any key to continue!");
         Console.ReadLine();

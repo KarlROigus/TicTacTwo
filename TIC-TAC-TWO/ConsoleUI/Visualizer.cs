@@ -140,4 +140,9 @@ public static class  Visualizer
         Console.Clear();
     }
 
+    public static string GameSpotToString(SpotOnTheBoard spot)
+    {
+        return spot.ToString();
+    }
+
 }

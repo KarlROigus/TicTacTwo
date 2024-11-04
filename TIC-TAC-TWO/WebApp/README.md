@@ -1,0 +1,2 @@
+dotnet aspnet-codegenerator razorpage -m Restaurant -dc AppDbContext -udl -outDir Pages/Restaurants --referenceScriptLibraries
+dotnet aspnet-codegenerator razorpage -m Table -dc AppDbContext -udl -outDir Pages/Tables --referenceScriptLibraries

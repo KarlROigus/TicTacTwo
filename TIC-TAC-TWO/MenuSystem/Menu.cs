@@ -74,13 +74,12 @@ public class Menu
             if (menuItem.MenuItemAction != null)
             {
                 menuReturnValue = menuItem.MenuItemAction();
+                if (menuItem.ShouldReturnByItself)
+                {
+                    return menuReturnValue;
+                }
             }
-
-            if (menuItem.ChangeConfigAction != null)
-            {
-                menuItem.ChangeConfigAction(menuReturnValue);
-            }
-
+            
             if (menuItem.Shortcut == _menuItemReturn.Shortcut)
             {
                 return _menuItemReturn.Shortcut;
@@ -95,11 +94,7 @@ public class Menu
             {
                 return _menuItemReturnMain.Shortcut;
             }
-
-            if (menuItem.ShouldReturnByItself)
-            {
-                return menuItem.Shortcut;
-            }
+            
             
         } while (true);
     }

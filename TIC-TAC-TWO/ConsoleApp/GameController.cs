@@ -25,7 +25,7 @@ public class GameController
             return ConstantlyUsed.ReturnShortcut;
         }
         
-        var chosenState = GameRepository.GetGameStateByIndex(int.Parse(chosenShortcut) - 1);
+        var chosenState = GameRepository.GetGameStateByIndex(int.Parse(chosenShortcut));
         
         Console.WriteLine("Game chosen successfully! Press any key to continue the game!");
         Console.ReadLine();
@@ -103,18 +103,9 @@ public class GameController
     private GameState GetFreshGameState(GameConfiguration currentConfig)
     {
         var grid = currentConfig.Grid;
-        
-        var gameBoard = new SpotOnTheBoard[currentConfig.BoardDimension][];
-        for (int y = 0; y < currentConfig.BoardDimension; y++)
-        {
-            gameBoard[y] = new SpotOnTheBoard[currentConfig.BoardDimension];
 
-            for (int x = 0; x < currentConfig.BoardDimension; x++)
-            {
-                gameBoard[y][x] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y, grid));
-            }
-        }
-        
+        var gameBoard = currentConfig.GetFreshGameBoard(currentConfig, grid);
+
         return new GameState(grid,
             gameBoard,
             currentConfig,
@@ -124,12 +115,7 @@ public class GameController
             currentConfig.PiecesPerPlayer);
     }
     
-    private bool CheckIfSpotIsPartOfGrid(int x, int y, Grid grid)
-    {
-        return grid.BooleanAt(x, y);
-    }
-
-
+    
     private void CommonGameLoop(TicTacTwoBrain gameInstance)
     {
         _gameIsTerminated = false;
@@ -461,20 +447,21 @@ public class GameController
                 Shortcut = (i + 1).ToString(),
                 MenuItemAction = () => returnValue,
                 ShouldReturnByItself = true,
-                ChangeConfigAction = ChangeGameConfiguration
             });
         }
 
         var configMenu = new Menu(EMenuLevel.Deep, "TIC-TAC-TWO Choose config", configMenuItems);
 
-        return configMenu.Run();
+        var shortcut = configMenu.Run();
+        ChangeGameConfiguration(shortcut);
 
+        return shortcut == ConstantlyUsed.ReturnToMainMenuShortcut ? ConstantlyUsed.ReturnToMainMenuShortcut : ConstantlyUsed.ReturnShortcut;
     }
 
     private void ChangeGameConfiguration(string shortcut)
     {
         
-        if (shortcut == ConstantlyUsed.ExitShortcut ||  shortcut == ConstantlyUsed.ExitShortcut || shortcut ==  ConstantlyUsed.ReturnShortcut)
+        if (shortcut == ConstantlyUsed.ExitShortcut ||  shortcut == ConstantlyUsed.ReturnToMainMenuShortcut || shortcut ==  ConstantlyUsed.ReturnShortcut)
         {
             return;
         }

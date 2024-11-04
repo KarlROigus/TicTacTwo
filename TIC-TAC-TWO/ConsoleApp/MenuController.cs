@@ -117,22 +117,22 @@ public static class MenuController
                 {"A", new MenuItem()
                 {
                     Title = "Add new piece",
-                    Shortcut = "A",
-                    MenuItemAction = null,
+                    Shortcut = ConstantlyUsed.AddANewPieceShortcut,
+                    MenuItemAction = () => ConstantlyUsed.AddANewPieceShortcut,
                     ShouldReturnByItself = true
                 }},
                 {"B", new MenuItem()
                 {
                     Title = "Move current piece",
-                    Shortcut = "B",
-                    MenuItemAction = null,
+                    Shortcut = ConstantlyUsed.MoveAPieceOnTheBoardShortcut,
+                    MenuItemAction = () => ConstantlyUsed.MoveAPieceOnTheBoardShortcut,
                     ShouldReturnByItself = true,
                 }},
                 {"C", new MenuItem()
                 {
                     Title = "Change grid position",
-                    Shortcut = "C",
-                    MenuItemAction = null,
+                    Shortcut = ConstantlyUsed.ChangeGridPositionShortcut,
+                    MenuItemAction = () => ConstantlyUsed.ChangeGridPositionShortcut,
                     ShouldReturnByItself = true
                 }}
             });

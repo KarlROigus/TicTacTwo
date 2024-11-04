@@ -13,6 +13,7 @@ public class ConfigRepositoryHardCoded : IConfigRepository
             BoardDimension = 3,
             GridDimension = 3,
             WinCondition = 3,
+            PiecesPerPlayer = 3,
             HowManyMovesTillAdvancedGameMoves = -1, // Cannot exist in the classical game
             Grid = new Grid(1, 1, 3, 3)
 

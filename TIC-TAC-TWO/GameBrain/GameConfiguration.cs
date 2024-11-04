@@ -15,4 +15,27 @@ public record struct GameConfiguration()
             $"Board {BoardDimension}x{BoardDimension}, to win: {WinCondition}, can move piece after {HowManyMovesTillAdvancedGameMoves}.";
     }
     
+    public SpotOnTheBoard[][] GetFreshGameBoard(GameConfiguration currentConfig, Grid grid)
+    {
+        var gameBoard = new SpotOnTheBoard[currentConfig.BoardDimension][];
+        for (int y = 0; y < currentConfig.BoardDimension; y++)
+        {
+            gameBoard[y] = new SpotOnTheBoard[currentConfig.BoardDimension];
+
+            for (int x = 0; x < currentConfig.BoardDimension; x++)
+            {
+                gameBoard[y][x] = new SpotOnTheBoard(EGamePiece.Empty, CheckIfSpotIsPartOfGrid(x, y, grid));
+            }
+        }
+
+        return gameBoard;
+    }
+    
+    private bool CheckIfSpotIsPartOfGrid(int x, int y, Grid grid)
+    {
+        return grid.BooleanAt(x, y);
+    }
+    
+    
+    
 }

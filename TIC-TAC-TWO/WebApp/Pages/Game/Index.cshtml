@@ -1,0 +1,20 @@
+@page
+@model WebApp.Pages.Game.Index
+
+<h1>@Model.TicTacTwoBrain.GetPiecesForPlayerO()</h1>
+
+<table class="table" style="max-width: 200px" border="1">
+    @foreach (var row in @Model.TicTacTwoBrain.GameBoard)
+    {
+        <tr border="1">
+            @foreach (var piece in row)
+            {
+                <td border="1">
+                    &nbsp;
+                    @ConsoleUI.Visualizer.GameSpotToString(piece);
+                </td>
+                
+            }
+        </tr>
+    }
+</table>

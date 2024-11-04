@@ -10,11 +10,6 @@ public class MenuItem
         set;
     }
     
-    public Action<string>? ChangeConfigAction {
-        get;
-        set;
-    }
-
     public bool ShouldReturnByItself { get; set; } = false;
 
     public string Title

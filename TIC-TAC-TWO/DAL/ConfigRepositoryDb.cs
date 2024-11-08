@@ -32,7 +32,7 @@ public class ConfigRepositoryDb : IConfigRepository
         {
             InsertTwoInitialConfigurations();
         }
-
+        
         return _context.Configs.Select(config => config.Name).ToList();
     }
 

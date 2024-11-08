@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApp.Pages;
 
@@ -14,5 +15,6 @@ public class IndexModel : PageModel
 
     public void OnGet()
     {
+        ViewData["foobar"] = "tere";
     }
 }

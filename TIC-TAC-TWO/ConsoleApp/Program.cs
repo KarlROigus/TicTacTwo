@@ -15,22 +15,10 @@ MenuController.GetMainMenu().Run();
 
 //TODO: error check for loading a saved game
 
-
 //TODO: ASK ANDRES. BLUE TERMINAL BACKGROUND
 
+//TODO: Ask Mikk about getting gamestates and configs from json. Ask about the fact that im searching DB by index.
 
-//TODO: Ask Mikk about getting gamestates and configs from json.
-
-
-// var configRepoDB = new ConfigRepositoryDB();
-//
-// var configs = configRepoDB.GetConfigurationNames();
-//
-// foreach (var config in configs)
-// {
-//
-//     Console.WriteLine(config);
-// }
 
 
 

@@ -10,6 +10,11 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.RenameTable(
+
+                name: "GameStateJsons",
+                newName: "GameStates");
+            
             migrationBuilder.CreateTable(
                 name: "Configs",
                 columns: table => new
@@ -49,6 +54,8 @@ namespace DAL.Migrations
                 name: "IX_GameStateJsons_ConfigId",
                 table: "GameStateJsons",
                 column: "ConfigId");
+
+            
         }
 
         /// <inheritdoc />

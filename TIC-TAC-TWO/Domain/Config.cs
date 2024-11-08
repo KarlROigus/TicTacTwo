@@ -13,5 +13,5 @@ public class Config
     [MaxLength(10240)]
     public string ConfigJsonString { get; set; } = default!;
 
-    public ICollection<GameStateJson>? GameStateJsons { get; set; }
+    public ICollection<GameState>? GameStateJsons { get; set; }
 }

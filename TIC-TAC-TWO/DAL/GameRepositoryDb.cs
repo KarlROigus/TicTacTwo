@@ -2,6 +2,7 @@ using System.Text.Json;
 using Domain;
 using GameBrain;
 using Microsoft.EntityFrameworkCore;
+using GameState = Domain.GameState;
 
 namespace DAL;
 
@@ -25,13 +26,13 @@ public class GameRepositoryDb : IGameRepository
     }
     
     
-    public void SaveGame(string jsonStateString, string gameConfigName, GameConfiguration config)
+    public void SaveGame(string jsonStateString, string savedGameName, GameConfiguration config)
     {
         var correctConfig = _context.Configs.FirstOrDefault(x => x.Name == config.Name);
         
-        _context.GameStateJsons.Add(new GameStateJson()
+        _context.GameStates.Add(new GameState()
         {
-            Name = gameConfigName,
+            Name = savedGameName,
             GameStateJsonString = jsonStateString,
             Config = correctConfig
         });
@@ -41,34 +42,29 @@ public class GameRepositoryDb : IGameRepository
 
     public List<string> GetSavedGameNames()
     {
-        return _context.GameStateJsons.Select(savedGame => savedGame.Name).ToList();
+        return _context.GameStates.Select(savedGame => savedGame.Name).ToList();
     }
 
-    public GameState GetGameStateByIndex(int index)
+    public GameBrain.GameState GetGameStateByIndex(int index)
     {
         var allSavedGameNames = GetSavedGameNames();
         var correctSavedGameName = allSavedGameNames[index];
         
-        var gameStateJsonString = _context.GameStateJsons
+        var gameStateJsonString = _context.GameStates
             .Where(x => x.Name == correctSavedGameName)
             .Select(x => x.GameStateJsonString)
-            .FirstOrDefault();
+            .FirstOrDefault()!;
 
-        if (gameStateJsonString != null)
-        {
-            return JsonSerializer.Deserialize<GameState>(gameStateJsonString)!;
-        }
-        
-        throw new Exception(); // Should never happen
+        return JsonSerializer.Deserialize<GameBrain.GameState>(gameStateJsonString)!;
     }
 
     public void DeleteSavedGame(int index)
     {
         List<String> savedGameNames = GetSavedGameNames();
-        var correctGame = savedGameNames[index];
-        var gameToBeDeleted = _context.GameStateJsons.Where(x => x.Name == correctGame).First();
+        var correctGameName = savedGameNames[index];
+        var gameToBeDeleted = _context.GameStates.First(x => x.Name == correctGameName);
 
-        _context.GameStateJsons.Remove(gameToBeDeleted);
+        _context.GameStates.Remove(gameToBeDeleted);
         _context.SaveChanges();
     }
 }

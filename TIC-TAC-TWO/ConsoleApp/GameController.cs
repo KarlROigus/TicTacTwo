@@ -9,8 +9,8 @@ namespace ConsoleApp;
 public class GameController
 {
 
-    private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryDb();
-    private static readonly IGameRepository GameRepository = new GameRepositoryDb();
+    private static readonly IConfigRepository ConfigRepository = new ConfigRepositoryJson();
+    private static readonly IGameRepository GameRepository = new GameRepositoryJson();
     private static GameConfiguration _currentGameConfiguration = new GameConfiguration();
     private static bool _gameIsTerminated;
 

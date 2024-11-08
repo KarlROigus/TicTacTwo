@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain;
 
-public class GameStateJson
+public class GameState
 {
     public int Id { get; set; }
 

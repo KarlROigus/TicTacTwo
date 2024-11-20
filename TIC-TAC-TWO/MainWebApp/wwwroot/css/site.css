@@ -20,3 +20,17 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.form-group {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.control-label {
+  margin-bottom: 0.25em;
+}
+
+.btn-info {
+  color: white;
+}
+

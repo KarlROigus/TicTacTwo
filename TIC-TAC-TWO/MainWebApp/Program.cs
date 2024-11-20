@@ -10,6 +10,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddScoped<IConfigRepository, ConfigRepositoryJson>();
+// builder.Services.AddScoped<IConfigRepository, ConfigRepositoryDb>();
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -25,12 +28,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.MapStaticAssets();
 
 app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.MapRazorPages().WithStaticAssets();
 
 app.Run();

@@ -17,8 +17,10 @@ MenuController.GetMainMenu().Run();
 
 //TODO: ASK ANDRES. BLUE TERMINAL BACKGROUND
 
-//TODO: Ask Mikk about getting gamestates and configs from json. Ask about the fact that im searching DB by index.
 
+// FRONT-CONTROLLER?
+// HOW EASY WOULD IT BE FOR HIM TO SET UP COOKIEe
+// IS MY IMPLEMENTATION HANGING AROUND?
 
 
 

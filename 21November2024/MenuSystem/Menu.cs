@@ -95,7 +95,6 @@ public class Menu
                 return _menuItemReturnMain.Shortcut;
             }
             
-            
         } while (true);
     }
 

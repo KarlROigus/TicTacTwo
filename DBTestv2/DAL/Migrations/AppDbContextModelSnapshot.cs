@@ -2,7 +2,6 @@
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,11 +9,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241123120545_InitialCreate")]
-    partial class InitialCreate
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -56,40 +53,40 @@ namespace DAL.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PlayerOUserId")
+                    b.Property<int>("PrimaryUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PlayerXUserId")
+                    b.Property<int>("SecondaryUserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("GameId");
 
-                    b.HasIndex("PlayerOUserId");
+                    b.HasIndex("PrimaryUserId");
 
-                    b.HasIndex("PlayerXUserId");
+                    b.HasIndex("SecondaryUserId");
 
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Domain.State", b =>
+            modelBuilder.Entity("Domain.GameState", b =>
                 {
-                    b.Property<int>("StateId")
+                    b.Property<int>("GameStateId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("GameId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("StateJson")
+                    b.Property<string>("GameStateJson")
                         .IsRequired()
                         .HasMaxLength(10240)
                         .HasColumnType("TEXT");
 
-                    b.HasKey("StateId");
+                    b.HasKey("GameStateId");
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("States");
+                    b.ToTable("GameStates");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -98,7 +95,7 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("TEXT");
@@ -121,26 +118,27 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.Game", b =>
                 {
-                    b.HasOne("Domain.User", "PlayerO")
+                    b.HasOne("Domain.User", "PrimaryUser")
                         .WithMany()
-                        .HasForeignKey("PlayerOUserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.User", "PlayerX")
-                        .WithMany()
-                        .HasForeignKey("PlayerXUserId")
+                        .HasForeignKey("PrimaryUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("PlayerO");
+                    b.HasOne("Domain.User", "SecondaryUser")
+                        .WithMany()
+                        .HasForeignKey("SecondaryUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("PlayerX");
+                    b.Navigation("PrimaryUser");
+
+                    b.Navigation("SecondaryUser");
                 });
 
-            modelBuilder.Entity("Domain.State", b =>
+            modelBuilder.Entity("Domain.GameState", b =>
                 {
                     b.HasOne("Domain.Game", "Game")
-                        .WithMany("States")
+                        .WithMany("GameStates")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -150,7 +148,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.Game", b =>
                 {
-                    b.Navigation("States");
+                    b.Navigation("GameStates");
                 });
 #pragma warning restore 612, 618
         }

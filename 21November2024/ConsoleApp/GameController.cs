@@ -71,15 +71,11 @@ public class GameController
             .FirstOrDefault();
 
         var stateJson = lastState.StateJson;
-
-        Console.WriteLine(stateJson);
-        Console.ReadLine();
+        
         
         var deSerialized = JsonSerializer.Deserialize<GameState>(stateJson);
-        
 
         var gameInstance = new TicTacTwoBrain(deSerialized);
-        
         
         CommonGameLoop(gameInstance, chosenGame.GameName);
         
@@ -141,7 +137,9 @@ public class GameController
         
         _gameIsTerminated = false;
         
-        do
+        while (gameInstance.GetMovesMade() < 
+               _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
+               _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == ConstantlyUsed.ClassicalGame)
         {
             MakeANormalMoveWithoutAdditionalOptions(gameInstance, nameOfTheGame);
 
@@ -152,21 +150,18 @@ public class GameController
 
             if (gameInstance.SomebodyHasWon())
             {
-                
                 ConsoleUI.Visualizer.AnnounceTheWinner(gameInstance);
                 _gameIsTerminated = true;
-                break; 
+                break;
             }
-            
-            if (!gameInstance.ItsADraw()) continue;
-            ConsoleUI.Visualizer.AnnounceTheDraw(gameInstance);
-            _gameIsTerminated = true;
-            break;
-            
-            
-        } while (gameInstance.GetMovesMade() <
-                 _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
-                 _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves == ConstantlyUsed.ClassicalGame);
+
+            if (gameInstance.ItsADraw())
+            {
+                ConsoleUI.Visualizer.AnnounceTheDraw(gameInstance);
+                _gameIsTerminated = true;
+                break;
+            }
+        }
 
         if (_gameIsTerminated)
         {
@@ -181,7 +176,8 @@ public class GameController
                 if (gameInstance.GetCurrentOneToMove() != _username)
                 {
                     Console.Clear();
-                    Console.WriteLine("ASDASD");
+                    Console.WriteLine("It is not currently your turn! Please wait for the other player to make a move!");
+                    Console.WriteLine("Press any key to return!");
                     Console.ReadLine();
                     break;
                 }
@@ -197,10 +193,10 @@ public class GameController
                 
                 if (chosenShortcut == ConstantlyUsed.MoveAPieceOnTheBoardShortcut) 
                 {
-                    MoveAPieceOnTheBoard(gameInstance);
+                    MoveAPieceOnTheBoard(gameInstance, nameOfTheGame);
                 } else if (chosenShortcut == ConstantlyUsed.ChangeGridPositionShortcut)
                 {
-                    MoveTheGrid(gameInstance);
+                    MoveTheGrid(gameInstance, nameOfTheGame);
                     
                 } else if (chosenShortcut == ConstantlyUsed.AddANewPieceShortcut)
                 {
@@ -313,20 +309,15 @@ public class GameController
             gameInstance.ReducePieceCountForPlayer();
             var playerXName = _gameRepository.GetPlayerName(nameOfTheGame, "X");
             var playerOName = _gameRepository.GetPlayerName(nameOfTheGame, "O");
-
-            Console.WriteLine(playerXName);
-            Console.WriteLine(playerOName);
-
-            Console.ReadLine();
+            
             gameInstance.ToggleCurrentOneToMove(playerXName, playerOName);
             _gameRepository.SaveGame(gameInstance.GetGameStateJson(), 
                 nameOfTheGame, _username);
             
-            
         }
     }
 
-    private void MoveTheGrid(TicTacTwoBrain gameInstance)
+    private void MoveTheGrid(TicTacTwoBrain gameInstance, string nameOfTheGame)
     {
         
         int boardWidth = ConstantlyUsed.CalculateMaxBoardWidthForCursor(gameInstance);
@@ -366,8 +357,14 @@ public class GameController
 
                 if (NewCenterSpotIsValid(newCenterSpotX, newCenterSpotY, gameInstance))
                 {
-                    
                     gameInstance.MoveTheGrid(newCenterSpotX, newCenterSpotY);
+                    var playerXName = _gameRepository.GetPlayerName(nameOfTheGame, "X");
+                    var playerOName = _gameRepository.GetPlayerName(nameOfTheGame, "O");
+            
+                    gameInstance.ToggleCurrentOneToMove(playerXName, playerOName);
+                    _gameRepository.SaveGame(gameInstance.GetGameStateJson(), 
+                        nameOfTheGame, _username);
+                    
                     enterHasBeenPressed = true;
                 }
                 else
@@ -394,7 +391,7 @@ public class GameController
                Math.Abs(newGridMiddleSpotY - currentGridMiddleSpotY) <= freeSpaceLeftToMove;
     }
 
-    private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance)
+    private void MoveAPieceOnTheBoard(TicTacTwoBrain gameInstance, string nameOfTheGame)
     {
         ConsoleUI.Visualizer.DrawBoard(gameInstance);
         
@@ -468,6 +465,12 @@ public class GameController
                             if (newSpotPicked.GetSpotValue() == EGamePiece.Empty)
                             {
                                 gameInstance.MakeAMove(newSpotX, newSpotY);
+                                var playerXName = _gameRepository.GetPlayerName(nameOfTheGame, "X");
+                                var playerOName = _gameRepository.GetPlayerName(nameOfTheGame, "O");
+            
+                                gameInstance.ToggleCurrentOneToMove(playerXName, playerOName);
+                                _gameRepository.SaveGame(gameInstance.GetGameStateJson(), 
+                                    nameOfTheGame, _username);
                                 anotherEnterPressed = true;
                             }
                             

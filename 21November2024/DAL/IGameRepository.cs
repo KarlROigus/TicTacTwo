@@ -9,9 +9,9 @@ public interface IGameRepository
     
     public List<string> GetGamesThatCouldBeJoined(string username);
 
-    public Game GetFreeGameByIndex(int index, string userName);
+    public string GetFreeGameByIndex(int index, string userName);
 
-    public void AddSecondPlayer(string userName, int gameId);
+    public void AddSecondPlayer(string userName, string gameName);
 
     public List<Game> GetGamesImPartOf(string userName);
 

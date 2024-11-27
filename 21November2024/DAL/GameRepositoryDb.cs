@@ -13,7 +13,7 @@ public class GameRepositoryDb : IGameRepository
 
     public GameRepositoryDb()
     {
-        var connectionString = $"Data Source=/Users/karlrudolf/Desktop/21novStart/app.db";
+        var connectionString = $"Data Source={ConstantlyUsed.BasePath}app.db";
         
         
         var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
@@ -73,18 +73,18 @@ public class GameRepositoryDb : IGameRepository
 
     }
 
-    public Game GetFreeGameByIndex(int index, string userName)
+    public string GetFreeGameByIndex(int index, string userName)
     {
         var gamesThatCanBeJoined = GetGamesThatCouldBeJoined(userName);
         var correctGame = gamesThatCanBeJoined[index];
 
-        return _database.Games.First(each => each.GameName == correctGame);
+        return _database.Games.First(each => each.GameName == correctGame).GameName;
 
     }
 
-    public void AddSecondPlayer(string userName, int gameId)
+    public void AddSecondPlayer(string userName, string gameName)
     {
-        var selectedGame = _database.Games.First(each => each.GameId == gameId);
+        var selectedGame = _database.Games.First(each => each.GameName == gameName);
         var otherUserId = _database.Users.First(each => each.Username == userName).UserId;
 
         selectedGame.PlayerOUserId = otherUserId;

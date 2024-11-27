@@ -15,12 +15,12 @@ public class GameController
     private static IConfigRepository _configRepository = default!;
     private static IGameRepository _gameRepository = default!;
     private static GameConfiguration _currentGameConfiguration = new GameConfiguration();
-    private static bool _gameIsTerminated;
+    private static bool _gameIsPaused;
 
     public GameController(string username)
     {
        _configRepository = new ConfigRepositoryDb();
-       _gameRepository = new GameRepositoryDb();
+       _gameRepository = new GameRepositoryJson();
        _username = username;
        
     }
@@ -66,16 +66,16 @@ public class GameController
         var chosenGame = _gameRepository.GetSavedGameByIndex(int.Parse(chosenGameIndex), _username);
         
         
-        var lastState = chosenGame.States
+        var lastState = chosenGame.States!
             .OrderByDescending(state => state.StateId)
             .FirstOrDefault();
 
-        var stateJson = lastState.StateJson;
+        var stateJson = lastState!.StateJson;
         
         
         var deSerialized = JsonSerializer.Deserialize<GameState>(stateJson);
 
-        var gameInstance = new TicTacTwoBrain(deSerialized);
+        var gameInstance = new TicTacTwoBrain(deSerialized!);
         
         CommonGameLoop(gameInstance, chosenGame.GameName);
         
@@ -135,7 +135,7 @@ public class GameController
         
         gameInstance.SetLoginUser(_username);
         
-        _gameIsTerminated = false;
+        _gameIsPaused = false;
         
         while (gameInstance.GetMovesMade() < 
                _currentGameConfiguration.HowManyMovesTillAdvancedGameMoves * 2 ||
@@ -143,7 +143,7 @@ public class GameController
         {
             MakeANormalMoveWithoutAdditionalOptions(gameInstance, nameOfTheGame);
 
-            if (_gameIsTerminated)
+            if (_gameIsPaused)
             {
                 break;
             }
@@ -151,20 +151,21 @@ public class GameController
             if (gameInstance.SomebodyHasWon())
             {
                 ConsoleUI.Visualizer.AnnounceTheWinner(gameInstance);
-                _gameIsTerminated = true;
+                _gameIsPaused = true;
                 break;
             }
 
             if (gameInstance.ItsADraw())
             {
                 ConsoleUI.Visualizer.AnnounceTheDraw(gameInstance);
-                _gameIsTerminated = true;
+                _gameIsPaused = true;
                 break;
             }
         }
 
-        if (_gameIsTerminated)
+        if (_gameIsPaused)
         {
+            _gameIsPaused = false;
             Console.Clear();
             return;
         }
@@ -182,7 +183,7 @@ public class GameController
                     break;
                 }
                 
-                if (_gameIsTerminated)
+                if (_gameIsPaused)
                 {
                     break;
                 }
@@ -203,6 +204,7 @@ public class GameController
                     if (gameInstance.PlayerHasMovesLeft())
                     {
                         MakeANormalMoveWithoutAdditionalOptions(gameInstance, nameOfTheGame);
+                        
                     }
                     else
                     {
@@ -225,7 +227,7 @@ public class GameController
                 if (!gameInstance.ItsADraw()) continue;
                 
                 ConsoleUI.Visualizer.AnnounceTheDraw(gameInstance);
-                _gameIsTerminated = true;
+                _gameIsPaused = true;
                 break;
             
             } while (true);
@@ -234,7 +236,6 @@ public class GameController
     }
     
     
-
     private void MakeANormalMoveWithoutAdditionalOptions(TicTacTwoBrain gameInstance, string nameOfTheGame)
     {
         
@@ -251,6 +252,7 @@ public class GameController
         {
             Console.WriteLine("You have to wait for the other player to make a move!");
             Console.ReadLine();
+            _gameIsPaused = true;
             return;
         }
         
@@ -269,7 +271,7 @@ public class GameController
 
             if (keyInfo.Key == ConsoleKey.Q)
             {
-                _gameIsTerminated = true;
+                _gameIsPaused = true;
                 break;
             }
             
@@ -295,7 +297,7 @@ public class GameController
             }
         }
 
-        if (_gameIsTerminated)
+        if (_gameIsPaused)
         {
             return;
         }
@@ -310,7 +312,7 @@ public class GameController
             var playerXName = _gameRepository.GetPlayerName(nameOfTheGame, "X");
             var playerOName = _gameRepository.GetPlayerName(nameOfTheGame, "O");
             
-            gameInstance.ToggleCurrentOneToMove(playerXName, playerOName);
+            gameInstance.ToggleCurrentOneToMove(playerXName!, playerOName);
             _gameRepository.SaveGame(gameInstance.GetGameStateJson(), 
                 nameOfTheGame, _username);
             
@@ -719,9 +721,9 @@ public class GameController
             return ConstantlyUsed.ReturnShortcut;
         }
         
-        var chosenGame = _gameRepository.GetFreeGameByIndex(int.Parse(chosenShortcut), _username);
+        var chosenGameName = _gameRepository.GetFreeGameByIndex(int.Parse(chosenShortcut), _username);
         
-        _gameRepository.AddSecondPlayer(_username, chosenGame.GameId);
+        _gameRepository.AddSecondPlayer(_username, chosenGameName);
 
         Console.WriteLine("Game joined successfully! It is now in your loaded games list!");
         Console.WriteLine("Press Enter to continue!");

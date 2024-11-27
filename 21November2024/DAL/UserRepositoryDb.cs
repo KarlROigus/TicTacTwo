@@ -2,14 +2,14 @@ using Domain;
 
 namespace DAL;
 
-public class UserRepository
+public class UserRepositoryDb
 {
 
-    private AppDbContext _database;
+    private readonly AppDbContext _database;
 
     private string _userName;
     
-    public UserRepository(AppDbContext ctx)
+    public UserRepositoryDb(AppDbContext ctx)
     {
         _database = ctx;
     }
@@ -22,14 +22,23 @@ public class UserRepository
     
     public void CreateUserOrLogin()
     {
+        string userChoice;
         
-        Console.WriteLine("Hello!");
-        Console.WriteLine("1) LOG IN");
-        Console.WriteLine("2) CREATE NEW ACCOUNT");
-        Console.Write("Please insert your choice: ");
-        var choice = Console.ReadLine();
+        do
+        {
+            Console.WriteLine("Hello!");
+            Console.WriteLine("1) LOG IN");
+            Console.WriteLine("2) CREATE NEW ACCOUNT");
+            Console.Write("Please insert your choice: ");
+            userChoice = Console.ReadLine();
 
-        if (choice == "2")
+            if (userChoice != "1" && userChoice != "2")
+            {
+                Console.WriteLine("Invalid choice. Please select 1 or 2.");
+            }
+        } while (userChoice != "1" && userChoice != "2");
+
+        if (userChoice == "2")
         {
             bool successfulAccountAdded = false;
 
@@ -37,27 +46,33 @@ public class UserRepository
             {
                 successfulAccountAdded = CreateNewAccount();
             }
-            
         }
         else
         {
-            Console.Write("Please insert your username: ");
-            var userName = Console.ReadLine();
-            
-            var user = _database.Users.FirstOrDefault(user => user.Username == userName);
-            
-            if (user != null)
+            bool validUser = false;
+
+            while (!validUser)
             {
-                _userName = user.Username;
-            }
-            else
-            {
-                Console.WriteLine("I dont have this type of user!");
-                
+                Console.Write("Please insert your username: ");
+                var userName = Console.ReadLine();
+
+                var user = _database.Users.FirstOrDefault(user => user.Username == userName);
+
+                if (user != null)
+                {
+                    _userName = user.Username;
+                    Console.WriteLine("User found! Press any key to log in!");
+                    Console.ReadLine();
+                    validUser = true;
+                }
+                else
+                {
+                    Console.WriteLine("User not found. Please try again.");
+                }
             }
         }
-
     }
+
 
     private bool CreateNewAccount()
     {

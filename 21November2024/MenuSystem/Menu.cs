@@ -63,6 +63,8 @@ public class Menu
 
     public string Run()
     {
+        
+        
         Console.Clear();
 
         do

@@ -15,6 +15,8 @@ public static class ConstantlyUsed
     public static readonly string BasePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
                                              + Path.DirectorySeparatorChar + "tic-tac-two" + Path.DirectorySeparatorChar;
 
+    public static readonly string UserFolderPath = BasePath + "Users" + Path.DirectorySeparatorChar;
+
     public static readonly string ConfigExtension = ".config.json";
     public static readonly string GameExtension = ".game.json";
 

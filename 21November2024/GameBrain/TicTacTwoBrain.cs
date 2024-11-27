@@ -280,7 +280,7 @@ public class TicTacTwoBrain
         return _gameState.CurrentOneToMove;
     }
 
-    public void ToggleCurrentOneToMove(string playerX, string playerO)
+    public void ToggleCurrentOneToMove(string playerX, string? playerO)
     {
         if (playerO == null)
         {

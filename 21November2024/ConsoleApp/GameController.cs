@@ -1,8 +1,6 @@
 
 using System.Text.Json;
-using System.Threading.Channels;
 using DAL;
-using Domain;
 using GameBrain;
 using MenuSystem;
 
@@ -38,7 +36,7 @@ public class GameController
             var returnValue = i.ToString();
             gamesImPartOfMenuItems.Add(returnValue, new MenuItem()
             {
-                Title = gamesImPartOf[i].GameName,
+                Title = gamesImPartOf[i],
                 Shortcut = (i + 1).ToString(),
                 MenuItemAction = () => returnValue,
                 ShouldReturnByItself = true,
@@ -54,30 +52,23 @@ public class GameController
         
         var gamesImPartOfMenu = new Menu(EMenuLevel.Secondary, "TIC-TAC-TWO Choose a game you are part of",
             gamesImPartOfMenuItems);
-
-
+        
         var chosenGameIndex = gamesImPartOfMenu.Run();
         
         if (ChosenShortcutIsExitOrReturn(chosenGameIndex))
         {
             return ConstantlyUsed.ReturnShortcut;
         }
-        
-        var chosenGame = _gameRepository.GetSavedGameByIndex(int.Parse(chosenGameIndex), _username);
-        
-        
-        var lastState = chosenGame.States!
-            .OrderByDescending(state => state.StateId)
-            .FirstOrDefault();
 
-        var stateJson = lastState!.StateJson;
+
+        var lastStateAsString = _gameRepository.GetSavedGameLastStateByIndex(int.Parse(chosenGameIndex), _username);
+        var chosenGameName = _gameRepository.GetChosenGameNameByIndex(int.Parse(chosenGameIndex), _username);
         
-        
-        var deSerialized = JsonSerializer.Deserialize<GameState>(stateJson);
+        var deSerialized = JsonSerializer.Deserialize<GameState>(lastStateAsString);
 
         var gameInstance = new TicTacTwoBrain(deSerialized!);
         
-        CommonGameLoop(gameInstance, chosenGame.GameName);
+        CommonGameLoop(gameInstance, chosenGameName);
         
 
         return ConstantlyUsed.ReturnShortcut;

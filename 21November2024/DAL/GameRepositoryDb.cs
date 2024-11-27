@@ -1,4 +1,6 @@
 
+using System.Security.Cryptography;
+using System.Threading.Channels;
 using Domain;
 using GameBrain;
 using Microsoft.EntityFrameworkCore;
@@ -91,32 +93,37 @@ public class GameRepositoryDb : IGameRepository
         _database.SaveChanges();
     }
 
-    public List<Game> GetGamesImPartOf(string userName)
+    public List<string> GetGamesImPartOf(string userName)
     {
         var myId = _database.Users.First(each => each.Username == userName).UserId;
 
-        var games = _database.Games.
-            Include(each => each.States).
-            Where(game => game.PlayerOUserId == myId 
-                                                  || game.PlayerXUserId == myId).ToList();
+        var gameNames = _database.Games.Include(each => each.States)
+            .Where(game => game.PlayerOUserId == myId || game.PlayerXUserId == myId)
+            .Select(each => each.GameName)
+            .ToList();
 
-        return games;
+        return gameNames;
     }
 
-    public Game GetSavedGameByIndex(int index, string userName)
+    public string GetSavedGameLastStateByIndex(int index, string userName)
     {
-
         var gamesImPartOf = GetGamesImPartOf(userName);
+        var correctGameName = gamesImPartOf[index];
+        var chosenGame = _database.Games
+            .Include(each => each.States)
+            .First(each => each.GameName == correctGameName);
 
-        var correctGame = gamesImPartOf[index];
+        
+        var lastState = chosenGame.States!
+            .OrderByDescending(state => state.StateId)
+            .First();
 
-        return correctGame;
-
+        return lastState.StateJson;
     }
 
-    public string? GetPlayerName(string nameOfTheGame, string player)
+    public string? GetPlayerName(string nameOfTheGame, string playerSign)
     {
-        if (player == "X")
+        if (playerSign == "X")
         {
             var correctGame = _database.Games.First(each => each.GameName == nameOfTheGame);
 
@@ -137,5 +144,10 @@ public class GameRepositoryDb : IGameRepository
             return playerO?.Username;
         }
 
+    }
+
+    public string GetChosenGameNameByIndex(int index, string userName)
+    {
+        return GetGamesImPartOf(userName)[index];
     }
 }

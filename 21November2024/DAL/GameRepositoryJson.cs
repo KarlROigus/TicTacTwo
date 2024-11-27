@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Domain;
+using GameBrain;
 
 namespace DAL;
 
@@ -8,8 +9,8 @@ public class GameRepositoryJson : IGameRepository
 {
     public void SaveGame(string jsonStateString, string savedGameName, string userName)
     {
+        
         var fileName = ConstantlyUsed.BasePath + savedGameName + ConstantlyUsed.GameExtension;
-
         var gameinfo = new GameInfoDto()
         {
             GameName = savedGameName,
@@ -38,7 +39,6 @@ public class GameRepositoryJson : IGameRepository
                 answer.Add(gameInfoDto.GameName);
             }
         }
-        
         return answer;
 
     }
@@ -68,18 +68,71 @@ public class GameRepositoryJson : IGameRepository
         }
     }
 
-    public List<Game> GetGamesImPartOf(string userName)
+    public List<string> GetGamesImPartOf(string userName)
     {
-        throw new NotImplementedException();
+        var runner = new List<string>();
+        
+        foreach (var fullFileName in Directory.GetFiles(ConstantlyUsed.BasePath, "*" + ConstantlyUsed.GameExtension)
+                     .ToList())
+        {
+            var fileData = File.ReadAllText(fullFileName);
+            var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
+
+            if (gameInfoDto.PlayerX == userName || gameInfoDto.PlayerO == userName)
+            {
+                runner.Add(gameInfoDto.GameName);
+            }
+            
+        }
+        
+        return runner;
     }
 
-    public Game GetSavedGameByIndex(int index, string userName)
+    public string GetSavedGameLastStateByIndex(int index, string userName)
     {
-        throw new NotImplementedException();
+        var gamesImPartOf = GetGamesImPartOf(userName);
+        var correctGameName = gamesImPartOf[index];
+        
+        foreach (var fullFileName in Directory.GetFiles(ConstantlyUsed.BasePath, "*" + ConstantlyUsed.GameExtension)
+                     .ToList())
+        {
+            var twoParts = Path.GetFileNameWithoutExtension(fullFileName);
+            var mainNamePart = Path.GetFileNameWithoutExtension(twoParts);
+            if (mainNamePart == correctGameName)
+            {
+                var fileData = File.ReadAllText(fullFileName);
+                var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
+                return gameInfoDto.GameStateJson;
+
+            }
+        }
+
+        return "-1"; //Should never happen
+
     }
 
     public string? GetPlayerName(string nameOfTheGame, string playerSign)
     {
-        throw new NotImplementedException();
+        foreach (var fullFileName in Directory.GetFiles(ConstantlyUsed.BasePath, "*" + ConstantlyUsed.GameExtension)
+                     .ToList())
+        {
+            var twoParts = Path.GetFileNameWithoutExtension(fullFileName);
+            var mainNamePart = Path.GetFileNameWithoutExtension(twoParts);
+            if (mainNamePart == nameOfTheGame)
+            {
+                var fileData = File.ReadAllText(fullFileName);
+                var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
+
+                return playerSign == "X" ? gameInfoDto.PlayerX : gameInfoDto.PlayerO;
+            }
+        }
+
+        return null; // Should never happen
+
+    }
+
+    public string GetChosenGameNameByIndex(int index, string userName)
+    {
+        return GetGamesImPartOf(userName)[index];
     }
 }

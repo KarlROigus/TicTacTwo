@@ -25,7 +25,7 @@ public class UserRepositoryJson
             Console.WriteLine("1) LOG IN");
             Console.WriteLine("2) CREATE NEW ACCOUNT");
             Console.Write("Please insert your choice: ");
-            userChoice = Console.ReadLine();
+            userChoice = Console.ReadLine()!;
 
             if (userChoice != "1" && userChoice != "2")
             {

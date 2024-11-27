@@ -7,7 +7,7 @@ public class UserRepositoryDb
 
     private readonly AppDbContext _database;
 
-    private string _userName;
+    private string _userName = default!;
     
     public UserRepositoryDb(AppDbContext ctx)
     {
@@ -30,7 +30,7 @@ public class UserRepositoryDb
             Console.WriteLine("1) LOG IN");
             Console.WriteLine("2) CREATE NEW ACCOUNT");
             Console.Write("Please insert your choice: ");
-            userChoice = Console.ReadLine();
+            userChoice = Console.ReadLine()!;
 
             if (userChoice != "1" && userChoice != "2")
             {

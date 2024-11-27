@@ -7,7 +7,7 @@ public class MenuController
 {
     
     private string _userName;
-    private static GameController _gameController;
+    private static GameController _gameController = default!;
 
     public MenuController(string userName)
     {

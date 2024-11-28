@@ -11,16 +11,41 @@ public class GameRepositoryJson : IGameRepository
     {
         
         var fileName = ConstantlyUsed.BasePath + savedGameName + ConstantlyUsed.GameExtension;
-        var gameinfo = new GameInfoDto()
+        if (File.Exists(fileName))
         {
-            GameName = savedGameName,
-            GameStateJson = jsonStateString,
-            PlayerX = userName,
-        };
+            var fullFileName = ConstantlyUsed.BasePath + savedGameName + ConstantlyUsed.GameExtension;
+            var fileData = File.ReadAllText(fullFileName);
+            var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
+            
+            if (gameInfoDto.PlayerO == null && userName != gameInfoDto.PlayerX)
+            {
+                gameInfoDto.PlayerO = userName;
+            }
 
-        var serializedGameinfo = JsonSerializer.Serialize(gameinfo);
+            var updatedGameInfoDto = new GameInfoDto()
+            {
+                GameName = savedGameName,
+                GameStateJson = jsonStateString,
+                PlayerX = gameInfoDto.PlayerX,
+                PlayerO = gameInfoDto.PlayerO
+            };
+            
+            File.WriteAllText(fileName, JsonSerializer.Serialize(updatedGameInfoDto));
+        }
+        else
+        {
+
+            var gameinfo = new GameInfoDto()
+            {
+                GameName = savedGameName,
+                GameStateJson = jsonStateString,
+                PlayerX = userName,
+            };
+            var serializedGameinfo = JsonSerializer.Serialize(gameinfo);
+            File.WriteAllText(fileName, serializedGameinfo);
+        }
         
-        File.WriteAllText(fileName, serializedGameinfo);
+       
         
     }
 
@@ -50,22 +75,15 @@ public class GameRepositoryJson : IGameRepository
 
     public void AddSecondPlayer(string userName, string gameName)
     {
-        foreach (var fullFileName in Directory.GetFiles(ConstantlyUsed.BasePath, "*" + ConstantlyUsed.GameExtension)
-                     .ToList())
-        {
-            var twoParts = Path.GetFileNameWithoutExtension(fullFileName);
-            var mainNamePart = Path.GetFileNameWithoutExtension(twoParts);
-            if (mainNamePart == gameName)
-            {
-                var fileData = File.ReadAllText(fullFileName);
-                var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
-                gameInfoDto.PlayerO = userName;
+        
+        var fullFileName = ConstantlyUsed.BasePath + gameName + ConstantlyUsed.GameExtension;
+        var fileData = File.ReadAllText(fullFileName);
+        var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
+        gameInfoDto.PlayerO = userName;
                 
-                var reSerialized = JsonSerializer.Serialize(gameInfoDto);
-                File.WriteAllText(fullFileName, reSerialized);
-                
-            }
-        }
+        var reSerialized = JsonSerializer.Serialize(gameInfoDto);
+        File.WriteAllText(fullFileName, reSerialized);
+        
     }
 
     public List<string> GetGamesImPartOf(string userName)
@@ -77,7 +95,7 @@ public class GameRepositoryJson : IGameRepository
         {
             var fileData = File.ReadAllText(fullFileName);
             var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
-
+            
             if (gameInfoDto.PlayerX == userName || gameInfoDto.PlayerO == userName)
             {
                 runner.Add(gameInfoDto.GameName);

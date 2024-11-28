@@ -19,5 +19,7 @@ var userName = userRepository.GetUserName();
 var menuController = new MenuController(userName);
 menuController.GetMainMenu().Run();
 
+//JSON saving does not keep the games in loaded games list but throws back to gamesThatCouldBeJoined
+
 
 

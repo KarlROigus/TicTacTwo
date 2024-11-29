@@ -72,5 +72,6 @@ html, body {
 .main-part-content-authentication-box {
     display: flex;
     flex-direction: column;
+    gap: 5px;
 }
 

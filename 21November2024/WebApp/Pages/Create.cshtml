@@ -10,7 +10,20 @@
 
 <div class="main-part-content">
     <div class="main-part-content-authentication-box">
-        THIS IS CREATE PAGE
+        <span>Please enter the username you would like to have!</span>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserName"class="control-label">Username:</label>
+                <input asp-for="UserName" class="form-control"/>
+                <button type="submit" class="btn btn-primary">Make account</button>
+            </div>
+
+        </form>
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <span>@Model.Error</span>
+        }
     </div>
 </div>
 

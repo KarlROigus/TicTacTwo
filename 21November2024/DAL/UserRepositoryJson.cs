@@ -1,6 +1,6 @@
 namespace DAL;
 
-public class UserRepositoryJson
+public class UserRepositoryJson : IUserRepository
 {
 
     private string _userName = default!;

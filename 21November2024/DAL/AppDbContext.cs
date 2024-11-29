@@ -19,17 +19,23 @@ public class AppDbContext : DbContext
     {
         // Configure the first relationship (PrimaryUser)
         modelBuilder.Entity<Game>()
-            .HasOne(c => c.PlayerX) // Navigation property in Config
-            .WithMany() // No navigation property in User
-            .HasForeignKey(c => c.PlayerXUserId) // Foreign key in Config
-            .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascade delete
+            .HasOne(c => c.PlayerX) 
+            .WithMany()
+            .HasForeignKey(c => c.PlayerXUserId)
+            .OnDelete(DeleteBehavior.Restrict); 
 
-        // Configure the second relationship (SecondaryUser)
+        
         modelBuilder.Entity<Game>()
-            .HasOne(c => c.PlayerO) // Navigation property in Config
-            .WithMany() // No navigation property in User
-            .HasForeignKey(c => c.PlayerOUserId) // Foreign key in Config
-            .OnDelete(DeleteBehavior.Restrict); // Optional: Prevent cascade delete
+            .HasOne(c => c.PlayerO)
+            .WithMany() 
+            .HasForeignKey(c => c.PlayerOUserId) 
+            .OnDelete(DeleteBehavior.Restrict); 
+        
+        modelBuilder.Entity<Config>()
+            .HasOne(c => c.User)
+            .WithMany() 
+            .HasForeignKey(c => c.UserId) 
+            .OnDelete(DeleteBehavior.Restrict); 
         
         modelBuilder.Entity<User>()
             .Ignore(u => u.Configs); 

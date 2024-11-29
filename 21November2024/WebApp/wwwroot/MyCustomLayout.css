@@ -46,10 +46,31 @@ html, body {
 .main-part {
     grid-column: 2/7;
     grid-row: 1/7;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 15% 85%;
 }
 
 .bigT {
     font-size: 30px;
     font-weight: bold;
+}
+
+.main-part-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-part-content {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-part-content-authentication-box {
+    display: flex;
+    flex-direction: column;
 }
 

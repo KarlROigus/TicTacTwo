@@ -1,7 +1,5 @@
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using Domain;
-using GameBrain;
+
 
 namespace DAL;
 
@@ -13,28 +11,10 @@ public class GameRepositoryJson : IGameRepository
         var fileName = ConstantlyUsed.BasePath + savedGameName + ConstantlyUsed.GameExtension;
         if (File.Exists(fileName))
         {
-            var fullFileName = ConstantlyUsed.BasePath + savedGameName + ConstantlyUsed.GameExtension;
-            var fileData = File.ReadAllText(fullFileName);
-            var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
-            
-            if (gameInfoDto.PlayerO == null && userName != gameInfoDto.PlayerX)
-            {
-                gameInfoDto.PlayerO = userName;
-            }
-
-            var updatedGameInfoDto = new GameInfoDto()
-            {
-                GameName = savedGameName,
-                GameStateJson = jsonStateString,
-                PlayerX = gameInfoDto.PlayerX,
-                PlayerO = gameInfoDto.PlayerO
-            };
-            
-            File.WriteAllText(fileName, JsonSerializer.Serialize(updatedGameInfoDto));
+            OverrideCurrentFile(jsonStateString, savedGameName, userName, fileName);
         }
         else
         {
-
             var gameinfo = new GameInfoDto()
             {
                 GameName = savedGameName,
@@ -45,8 +25,29 @@ public class GameRepositoryJson : IGameRepository
             File.WriteAllText(fileName, serializedGameinfo);
         }
         
-       
         
+    }
+
+    private static void OverrideCurrentFile(string jsonStateString, string savedGameName, string userName, string fileName)
+    {
+        var fullFileName = ConstantlyUsed.BasePath + savedGameName + ConstantlyUsed.GameExtension;
+        var fileData = File.ReadAllText(fullFileName);
+        var gameInfoDto = JsonSerializer.Deserialize<GameInfoDto>(fileData)!;
+            
+        if (gameInfoDto.PlayerO == null && userName != gameInfoDto.PlayerX)
+        {
+            gameInfoDto.PlayerO = userName;
+        }
+
+        var updatedGameInfoDto = new GameInfoDto()
+        {
+            GameName = savedGameName,
+            GameStateJson = jsonStateString,
+            PlayerX = gameInfoDto.PlayerX,
+            PlayerO = gameInfoDto.PlayerO
+        };
+            
+        File.WriteAllText(fileName, JsonSerializer.Serialize(updatedGameInfoDto));
     }
 
     public List<string> GetGamesThatCouldBeJoined(string username)

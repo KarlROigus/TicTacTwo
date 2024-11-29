@@ -10,8 +10,8 @@ var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
     .Options;
 using var context = new AppDbContext(contextOptions);
 
-// var userRepository = new UserRepositoryDb(context);
-var userRepository = new UserRepositoryJson();
+var userRepository = new UserRepositoryDb(context);
+// var userRepository = new UserRepositoryJson();
 
 userRepository.CreateUserOrLogin();
 var userName = userRepository.GetUserName();

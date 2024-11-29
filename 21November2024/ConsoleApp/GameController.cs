@@ -18,7 +18,7 @@ public class GameController
     public GameController(string username)
     {
        _configRepository = new ConfigRepositoryDb();
-       _gameRepository = new GameRepositoryJson();
+       _gameRepository = new GameRepositoryDb();
        _username = username;
        
     }
@@ -482,12 +482,12 @@ public class GameController
 
         var configMenuItems = new Dictionary<string, MenuItem>();
         
-        for (var i = 0; i < _configRepository.GetConfigurationNames().Count; i++)
+        for (var i = 0; i < _configRepository.GetConfigurationNames(_username).Count; i++)
         {
             var returnValue = i.ToString();
             configMenuItems.Add(returnValue, new MenuItem()
             {
-                Title = _configRepository.GetConfigurationNames()[i],
+                Title = _configRepository.GetConfigurationNames(_username)[i],
                 Shortcut = (i + 1).ToString(),
                 MenuItemAction = () => returnValue,
                 ShouldReturnByItself = true,
@@ -514,7 +514,7 @@ public class GameController
         {
             return;
         }
-        var chosenConfig = _configRepository.GetConfigurationByIndex(chosenShortcutIndex);
+        var chosenConfig = _configRepository.GetConfigurationByIndex(chosenShortcutIndex, _username);
 
         _currentGameConfiguration = chosenConfig;
         

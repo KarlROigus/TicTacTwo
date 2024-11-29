@@ -2,7 +2,7 @@ using Domain;
 
 namespace DAL;
 
-public class UserRepositoryDb
+public class UserRepositoryDb : IUserRepository
 {
 
     private readonly AppDbContext _database;

@@ -27,14 +27,14 @@ public class ConfigRepositoryHardCoded : IConfigRepository
 
     ];
 
-    public List<string> GetConfigurationNames()
+    public List<string> GetConfigurationNames(string userName)
     {
         return _gameConfigurations.Select
                 (config => config.Name)
             .ToList()!; 
     }
 
-    public GameConfiguration GetConfigurationByIndex(int index)
+    public GameConfiguration GetConfigurationByIndex(int index, string userName)
     {
 
         return _gameConfigurations[index];

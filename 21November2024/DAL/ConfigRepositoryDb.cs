@@ -13,7 +13,7 @@ public class ConfigRepositoryDb : IConfigRepository
 
     public ConfigRepositoryDb()
     {
-        var connectionString = $"Data Source=/Users/karlrudolf/Desktop/21novStart/app.db";
+        var connectionString = $"Data Source={ConstantlyUsed.BasePath}app.db";
         
         
         var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
@@ -26,19 +26,23 @@ public class ConfigRepositoryDb : IConfigRepository
         
     }
     
-    public List<string> GetConfigurationNames()
+    public List<string> GetConfigurationNames(string userName)
     {
-        if (!_database.Configs.Any())
-        {
-            InsertTwoInitialConfigurations();
-        }
-        
-        return _database.Configs.Select(config => config.ConfigName).ToList();
+
+        var correctPersonId = _database.Users.First(each => each.Username == userName).UserId;
+
+        var configsThatPersonHas = _database.Configs
+            .Where(each => each.UserId == correctPersonId)
+            .Select(each => each.ConfigName)
+            .ToList();
+
+        return configsThatPersonHas;
+
     }
 
-    public GameConfiguration GetConfigurationByIndex(int index)
+    public GameConfiguration GetConfigurationByIndex(int index, string userName)
     {
-        var allConfigNames = GetConfigurationNames();
+        var allConfigNames = GetConfigurationNames(userName);
         
         var correctConfigName = allConfigNames[index];
 
@@ -66,9 +70,10 @@ public class ConfigRepositoryDb : IConfigRepository
         _database.SaveChanges(); // CRUCIAL SENTENCE
     }
 
-    private void InsertTwoInitialConfigurations()
+    private void InsertTwoInitialConfigurations(string userName)
     {
         var runner = new ConfigRepositoryHardCoded();
+        var userId = _database.Users.First(each => each.Username == userName).UserId;
 
         var classicConfig = runner.GetClassicConfiguration();
         var defaultConfig = runner.GetDefaultConfiguration();
@@ -76,13 +81,15 @@ public class ConfigRepositoryDb : IConfigRepository
         _database.Configs.Add(new Config()
         {
             ConfigName = "Classical TIC-TAC-TOE",
-            ConfigJsonString = JsonSerializer.Serialize(classicConfig)
+            ConfigJsonString = JsonSerializer.Serialize(classicConfig),
+            UserId = userId
         });
         
         _database.Configs.Add(new Config()
         {
             ConfigName = "Default TIC-TAC-TWO",
-            ConfigJsonString = JsonSerializer.Serialize(defaultConfig)
+            ConfigJsonString = JsonSerializer.Serialize(defaultConfig),
+            UserId = userId
         });
 
         _database.SaveChanges(); // CRUCIAL SENTENCE

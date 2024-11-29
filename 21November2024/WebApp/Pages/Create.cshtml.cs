@@ -8,11 +8,11 @@ namespace WebApp.Pages;
 public class Create : PageModel
 {
 
-    private readonly AppDbContext _db;
+    private readonly IUserRepository _userRepository;
     
-    public Create(AppDbContext dbContext)
+    public Create(IUserRepository userRepository)
     {
-        _db = dbContext;
+        _userRepository = userRepository;
     }
     
     
@@ -30,17 +30,14 @@ public class Create : PageModel
             Error = "Cannot make an account with empty username!";
             return Page();
         }
-        
-        var user = _db.Users.FirstOrDefault(each => each.Username == UserName);
+
+        var user = _userRepository.FindUserByName(UserName);
 
         if (user == null)
         {
-            Console.WriteLine("HERE");
-            _db.Users.Add(new User()
-            {
-                Username = UserName
-            });
-            _db.SaveChanges();
+            _userRepository.CreateNewUser(UserName);
+            
+            
             return RedirectToPage("./Home", new { UserName = UserName });
         }
 

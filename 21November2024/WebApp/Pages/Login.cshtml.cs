@@ -6,12 +6,12 @@ namespace WebApp.Pages;
 
 public class Login : PageModel
 {
-
-    private readonly AppDbContext _db;
     
-    public Login(AppDbContext dbContext)
+    private readonly IUserRepository _userRepository;
+    
+    public Login( IUserRepository userRepository)
     {
-        _db = dbContext;
+        _userRepository = userRepository;
     }
     
 
@@ -30,9 +30,9 @@ public class Login : PageModel
             return Page();
         }
         
-        var user = _db.Users.FirstOrDefault(each => each.Username == UserName);
+        var userName = _userRepository.FindUserByName(UserName);
 
-        if (user != null)
+        if (userName != null)
         {
             return RedirectToPage("./Home", new { UserName = UserName});
         }

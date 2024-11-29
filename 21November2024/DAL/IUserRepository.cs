@@ -2,7 +2,9 @@ namespace DAL;
 
 public interface IUserRepository
 {
-    public void CreateUserOrLogin();
+    
+    public string? FindUserByName(string name);
 
-    public string GetUserName();
+    public void CreateNewUser(string userName);
+
 }

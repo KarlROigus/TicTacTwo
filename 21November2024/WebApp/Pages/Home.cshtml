@@ -1,5 +1,16 @@
 @page
 @model WebApp.Pages.Home
 
+@{
+    Layout = "~/Pages/Shared/_CustomLayout.cshtml";
+    ViewData["UserName"] = Model.Username;
+}
 
-YOU ARE HOME!
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+
+<div class="main-part-content">
+    <div class="main-part-content-authentication-box">
+        @Model.Username
+    </div>
+</div>

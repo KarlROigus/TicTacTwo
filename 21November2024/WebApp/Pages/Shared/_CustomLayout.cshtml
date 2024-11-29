@@ -23,7 +23,18 @@
         </div>
     </div>
     <nav class="nav">
-        All the links
+        @{
+            var userName = ViewData["UserName"] as string;
+            if (!string.IsNullOrEmpty(userName)) {
+                <ul class="navbar-list">
+                    <li><a href="/Profile?UserName=@userName">Options</a></li>
+                    <li><a href="/Game?UserName=@userName">Make new game</a></li>
+                    <li><a href="/Game?UserName=@userName">Load saved game</a></li>
+                    <li><a href="/Game?UserName=@userName">Join random game</a></li>
+                    <li><a href="/Game?UserName=@userName">Rules/Description</a></li>
+                </ul>
+            }
+        }
     </nav>
     <div class="main-part">
         @RenderBody()

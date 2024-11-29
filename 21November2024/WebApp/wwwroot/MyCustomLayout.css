@@ -8,6 +8,7 @@ html, body {
     justify-content: center;
     align-items: center;
     background: whitesmoke;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
 
@@ -21,6 +22,11 @@ html, body {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
 
 .nav {
     grid-column-start: 1;
@@ -28,6 +34,8 @@ html, body {
     grid-row-start: 2;
     grid-row-end: 7;
     background-color: lightblue;
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -74,4 +82,21 @@ html, body {
     flex-direction: column;
     gap: 5px;
 }
+
+.navbar-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+li {
+    font-size: 16px;
+}
+
+
 

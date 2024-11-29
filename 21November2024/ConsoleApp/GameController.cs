@@ -15,11 +15,11 @@ public class GameController
     private static GameConfiguration _currentGameConfiguration = new GameConfiguration();
     private static bool _gameIsPaused;
 
-    public GameController(string username)
+    public GameController(string username, IConfigRepository confRepo, IGameRepository gameRepo)
     {
-       _configRepository = new ConfigRepositoryDb();
-       _gameRepository = new GameRepositoryDb();
-       _username = username;
+        _username = username;
+        _configRepository = confRepo;
+        _gameRepository = gameRepo;
        
     }
 
@@ -103,7 +103,7 @@ public class GameController
     }
 
 
-    private GameState GetFreshGameState(GameConfiguration currentConfig)
+    public GameState GetFreshGameState(GameConfiguration currentConfig)
     {
         var grid = currentConfig.Grid;
         

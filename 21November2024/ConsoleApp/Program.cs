@@ -11,8 +11,17 @@ var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
     .Options;
 using var context = new AppDbContext(contextOptions);
 
+
+
 var userRepository = new UserRepositoryDb(context);
+var configRepository = new ConfigRepositoryDb(context);
+var gameRepository = new GameRepositoryDb(context);
+
 // var userRepository = new UserRepositoryJson();
+// var configRepository = new ConfigRepositoryJson();
+// var gameRepository = new GameRepositoryJson();
+
+
 
 
 string userChoice;
@@ -104,5 +113,5 @@ else // Login
 }
 
 
-var menu = new MenuController(loginUserName);
+var menu = new MenuController(loginUserName, configRepository, gameRepository);
 menu.GetMainMenu().Run();

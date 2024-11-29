@@ -5,7 +5,7 @@ namespace DAL;
 
 public interface IGameRepository
 {
-    public void SaveGame(string jsonStateString, string gameConfigName, string userName);
+    public void SaveGame(string jsonStateString, string savedGameName, string userName);
     
     public List<string> GetGamesThatCouldBeJoined(string username);
 
@@ -20,5 +20,7 @@ public interface IGameRepository
     public string? GetPlayerName(string nameOfTheGame, string playerSign);
 
     public string GetChosenGameNameByIndex(int index, string userName);
+
+    public string GetGameByName(string gameName);
 
 }

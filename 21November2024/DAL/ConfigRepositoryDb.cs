@@ -11,19 +11,9 @@ public class ConfigRepositoryDb : IConfigRepository
 
     public AppDbContext _database;
 
-    public ConfigRepositoryDb()
+    public ConfigRepositoryDb(AppDbContext ctx)
     {
-        var connectionString = $"Data Source={ConstantlyUsed.BasePath}app.db";
-        
-        
-        var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlite(connectionString)
-            .EnableDetailedErrors()
-            .EnableSensitiveDataLogging()
-            .Options;
-
-        _database = new AppDbContext(contextOptions);
-        
+        _database = ctx;
     }
     
     public List<string> GetConfigurationNames(string userName)

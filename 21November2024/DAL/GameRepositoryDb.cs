@@ -13,18 +13,9 @@ public class GameRepositoryDb : IGameRepository
     
     private AppDbContext _database;
 
-    public GameRepositoryDb()
+    public GameRepositoryDb(AppDbContext ctx)
     {
-        var connectionString = $"Data Source={ConstantlyUsed.BasePath}app.db";
-        
-        
-        var contextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlite(connectionString)
-            .EnableDetailedErrors()
-            .EnableSensitiveDataLogging()
-            .Options;
-
-        _database = new AppDbContext(contextOptions);
+        _database = ctx;
     }
     
     public void SaveGame(string jsonStateString, string savedGameName, string userName)
@@ -149,5 +140,20 @@ public class GameRepositoryDb : IGameRepository
     public string GetChosenGameNameByIndex(int index, string userName)
     {
         return GetGamesImPartOf(userName)[index];
+    }
+
+    public string GetGameByName(string gameName)
+    {
+        var correctGame = _database.Games
+            .Include(each => each.States)
+            .First(each => each.GameName == gameName);
+
+        var lastState = correctGame.States!
+            .OrderByDescending(state => state.StateId)
+            .First();
+
+
+        return lastState.StateJson;
+
     }
 }

@@ -6,13 +6,11 @@ namespace ConsoleApp;
 public class MenuController
 {
     
-    private string _userName;
     private static GameController _gameController = default!;
 
-    public MenuController(string userName)
+    public MenuController(string userName, IConfigRepository confRepo, IGameRepository gameRepo)
     {
-        _userName = userName;
-        _gameController = new GameController(_userName);
+        _gameController = new GameController(userName, confRepo, gameRepo);
     }
     
     public Menu GetMainMenu()

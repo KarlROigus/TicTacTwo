@@ -1,0 +1,29 @@
+@page
+@using GameBrain
+@model WebApp.Pages.GamePlay
+
+<div class="main-part-content">
+    <div class="main-part-content-authentication-box">
+        <table class="" border="1">
+            @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
+            {
+                <tr>
+                    @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
+                    {
+                        <td>
+                            @if (Model.TicTacTwoBrain.GameBoard[x][y].GetSpotValue() == EGamePiece.Empty)
+                            {
+                                <a asp-route-x="@x" asp-route-y="@y">XYZ</a>
+                            }
+                            else
+                            {
+                                @(Model.TicTacTwoBrain.GameBoard[x][y])
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+        Current one to move: @Model.CurrentOneToMove
+    </div>
+</div>

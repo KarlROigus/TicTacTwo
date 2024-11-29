@@ -1,0 +1,33 @@
+@page
+@using GameBrain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model WebApp.Pages.NewGame
+
+@{
+    ViewData["Title"] = "TIC-TAC-TWO";
+}
+
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+
+<div class="main-part-content">
+    <div class="main-part-content-authentication-box">
+
+        <span>Please select which game type would you like to make!</span>
+        <form action="" method="post">
+            <div class="form-group">
+                <label asp-for="GameType" class="control-label">Make your choice: </label>
+                <select class="form-select" asp-for="GameType" asp-items="Model.GameTypeSelectList"></select>
+
+                <label asp-for="GameName" class="control-label">Give the game a name: </label>
+                <input type="text" asp-for="GameName" class="form-control"/>
+
+                <input type="hidden" asp-for="@Model.UserName"/>
+
+                <input type="submit" value="Continue"/>
+            </div>
+        </form>
+        
+    </div>
+    
+</div>

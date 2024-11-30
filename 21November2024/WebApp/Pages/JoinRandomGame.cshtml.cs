@@ -45,6 +45,15 @@ public class JoinRandomGame : PageModel
         _gameRepository.AddSecondPlayer(UserName, UserChoice);
 
         SuccessMessage = "Game joined successfully! It is now in your LOAD GAMES list";
+        var openGameNames = _gameRepository.GetGamesThatCouldBeJoined(UserName);
+
+        var items = openGameNames
+            .Select(openGameName => new SelectListItem() 
+                { Text = openGameName, Value = openGameName })
+            .ToList();
+
+
+        RandomGameSelectList = new SelectList(items, "Value", "Text");
         
         
         return Page();

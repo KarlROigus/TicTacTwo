@@ -12,21 +12,28 @@
 
 <div class="main-part-content">
     <div class="main-part-content-authentication-box">
-        <span>Select a random game to join!</span>
-        <form action="" method="post">
-            <div class="form-group">
-                <label asp-for="UserChoice" class="control-label">Make your choice: </label>
-                <select class="form-select" asp-for="UserChoice" asp-items="Model.RandomGameSelectList"></select>
-                <input type="submit" value="Join"/>
-            </div>
-        </form>
+        @if (!Model.RandomGameSelectList.Any())
+        {
+            <span>There are currently no free games to join! Keep waiting..</span>
+        }
+        else
+        {
+            <span>Select a random game to join!</span>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label asp-for="UserChoice" class="control-label">Make your choice: </label>
+                    <select class="form-select" asp-for="UserChoice" asp-items="Model.RandomGameSelectList"></select>
+                    <input type="submit" value="Join"/>
+                </div>
+            </form>
+        }
         
-        @if (!string.IsNullOrEmpty(@Model.SuccessMessage)) 
+        @if (!string.IsNullOrEmpty(@Model.SuccessMessage))
         {
             <div class="alert alert-success" role="alert">
                 @Model.SuccessMessage
             </div>
         }
-        
+
     </div>
 </div>

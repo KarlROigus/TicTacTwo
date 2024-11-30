@@ -13,12 +13,10 @@ public class NewGame : PageModel
     
     private IGameRepository _gameRepo;
     private IConfigRepository _confRepo;
-    private AppDbContext _database;
 
-    public NewGame(IGameRepository gameRepo, IConfigRepository configRepo, AppDbContext ctx)
+    public NewGame(IGameRepository gameRepo, IConfigRepository configRepo)
     {
         _gameRepo = gameRepo;
-        _database = ctx;
         _confRepo = configRepo;
     }
     
@@ -26,8 +24,7 @@ public class NewGame : PageModel
     [BindProperty] public string GameType { get; set; } = default!;
     [BindProperty] public string GameName { get; set; } = default!;
     [BindProperty(SupportsGet = true)] public string UserName { get; set; } = default!;
-
-    public TicTacTwoBrain? GameBoard { get; set; }
+    
     
     public IActionResult OnGet()
     {

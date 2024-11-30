@@ -18,7 +18,7 @@ var configRepository = new ConfigRepositoryDb(context);
 var gameRepository = new GameRepositoryDb(context);
 
 // var userRepository = new UserRepositoryJson();
-// var configRepository = new ConfigRepositoryJson();
+// var configRepository = new ConfigRepositoryDb(context);
 // var gameRepository = new GameRepositoryJson();
 
 

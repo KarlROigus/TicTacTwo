@@ -22,7 +22,9 @@
         </form>
         @if (!string.IsNullOrEmpty(Model.Error))
         {
-            <span>@Model.Error</span>
+            <div class="alert alert-danger" role="alert">
+                @Model.Error
+            </div>
         }
     </div>
 </div>

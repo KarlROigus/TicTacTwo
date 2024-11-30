@@ -1,0 +1,32 @@
+@page
+@model WebApp.Pages.JoinRandomGame
+
+@{
+    ViewData["Title"] = "TIC-TAC-TWO";
+    Layout = "~/Pages/Shared/_CustomLayout.cshtml";
+    ViewData["UserName"] = Model.UserName;
+}
+
+
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+<div class="main-part-content">
+    <div class="main-part-content-authentication-box">
+        <span>Select a random game to join!</span>
+        <form action="" method="post">
+            <div class="form-group">
+                <label asp-for="UserChoice" class="control-label">Make your choice: </label>
+                <select class="form-select" asp-for="UserChoice" asp-items="Model.RandomGameSelectList"></select>
+                <input type="submit" value="Join"/>
+            </div>
+        </form>
+        
+        @if (!string.IsNullOrEmpty(@Model.SuccessMessage)) 
+        {
+            <div class="alert alert-success" role="alert">
+                @Model.SuccessMessage
+            </div>
+        }
+        
+    </div>
+</div>

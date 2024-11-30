@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241128190737_vol3")]
-    partial class vol3
+    [Migration("20241130074111_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,14 +38,9 @@ namespace DAL.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("ConfigId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Configs");
                 });
@@ -121,10 +116,6 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Domain.User", null)
-                        .WithMany("Configs")
-                        .HasForeignKey("UserId1");
-
                     b.Navigation("User");
                 });
 
@@ -160,11 +151,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Game", b =>
                 {
                     b.Navigation("States");
-                });
-
-            modelBuilder.Entity("Domain.User", b =>
-                {
-                    b.Navigation("Configs");
                 });
 #pragma warning restore 612, 618
         }

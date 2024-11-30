@@ -22,8 +22,10 @@ public class GamePlay : PageModel
     public string CurrentOneToMove { get; set; } = default!;
     public TicTacTwoBrain TicTacTwoBrain { get; set; } = default!;
     
-    public void OnGet()
+    public void OnGet(int? x, int? y)
     {
+        
+        
         var gameJsonString = _gameRepository.GetGameByName(GameName);
 
         var deSerializedGameState = JsonSerializer.Deserialize<GameState>(gameJsonString)!;
@@ -31,6 +33,25 @@ public class GamePlay : PageModel
         CurrentOneToMove = deSerializedGameState.CurrentOneToMove;
 
         TicTacTwoBrain = new TicTacTwoBrain(deSerializedGameState);
+        
+        if (x != null && y != null)
+        {
+            
+            var moveWasSuccessful = TicTacTwoBrain.MakeAMove(x.Value, y.Value);
+            if (moveWasSuccessful)
+            {
+                TicTacTwoBrain.ReducePieceCountForPlayer();
+                var playerXName = _gameRepository.GetPlayerName(GameName, "X");
+                var playerOName = _gameRepository.GetPlayerName(GameName, "O");
+                
+                TicTacTwoBrain.ToggleCurrentOneToMove(playerXName!, playerOName);
+
+                CurrentOneToMove = TicTacTwoBrain.GetCurrentOneToMove();
+                _gameRepository.SaveGame(TicTacTwoBrain.GetGameStateJson(), 
+                    GameName, UserName);
+            }
+            
+        }
     }
     
 }

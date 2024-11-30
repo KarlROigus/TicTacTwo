@@ -104,3 +104,43 @@ li {
 
 
 
+.main-part-content-box {
+    border: 1px solid black;
+    font-size: 23px;
+}
+
+.alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+
+.alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+button, input[type="submit"] {
+    background-color: lightblue;
+    border: 0.5px solid black;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+select, input[type="text"] {
+    padding: 2px 5px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+
+
+
+

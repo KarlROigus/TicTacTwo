@@ -24,20 +24,29 @@ public class GamePlay : PageModel
 
     public bool GameIsOver { get; set; } = false;
     
-    public void OnGet(int? x, int? y)
+    public IActionResult OnGet(int? x, int? y, bool continuousRequest = false)
     {
         
         
         var gameJsonString = _gameRepository.GetGameByName(GameName);
 
         var deSerializedGameState = JsonSerializer.Deserialize<GameState>(gameJsonString)!;
-        
 
         TicTacTwoBrain = new TicTacTwoBrain(deSerializedGameState);
+        
+        CurrentOneToMove = TicTacTwoBrain.GetCurrentOneToMove();
+        
+        if (TicTacTwoBrain.GetMovesMade() >=
+            deSerializedGameState.GameConfiguration.HowManyMovesTillAdvancedGameMoves * 2
+            && !continuousRequest && CurrentOneToMove == UserName)
+        {
+            return RedirectToPage("./Choice", new { UserName, GameName });
+        }
+        
 
         CurrentOneToMove = TicTacTwoBrain.GetCurrentOneToMove();
 
-        if (CurrentOneToMove == "")
+        if (CurrentOneToMove == "" && deSerializedGameState.LoginUser != UserName)
         {
             CurrentOneToMove = UserName;
         }
@@ -52,7 +61,7 @@ public class GamePlay : PageModel
                 if (TicTacTwoBrain.SomebodyHasWon())
                 {
                     GameIsOver = true;
-                    return;
+                    return Page();
                 }
                 
                 TicTacTwoBrain.ReducePieceCountForPlayer();
@@ -67,6 +76,8 @@ public class GamePlay : PageModel
             }
             
         }
+
+        return Page();
     }
     
 }

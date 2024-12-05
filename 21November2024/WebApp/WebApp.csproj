@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ConsoleApp\ConsoleApp.csproj" />
       <ProjectReference Include="..\DAL\DAL.csproj" />
+      <ProjectReference Include="..\WebUI\WebUI.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,30 @@
+@page
+@model WebApp.Pages.Choice
+
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+<div class="main-part-content">
+    
+    <div class="main-part-content-box">
+        <form action="" method="post">
+            <div class="form-group">
+                <label asp-for="UserChoice" class="control-label">Make your choice: </label>
+                <select class="form-select" asp-for="UserChoice" asp-items="Model.AdvancedOptionSelectList"></select>
+                <input type="submit" value="Select"/>
+            </div>
+        </form>
+        <table class="game-board-table">
+            @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
+            {
+                <tr >
+                    @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
+                    {
+                        <td class="table-data-box">
+                            @(Model.TicTacTwoBrain.GameBoard[y][x].Piece)
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+@page
+@model WebApp.Pages.MovePiece
+
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+<div class="main-part-content">
+    
+    <div class="main-part-content-box">
+        <span>Choose the piece to move!</span>
+        <table class="game-board-table">
+            @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
+            {
+                <tr >
+                    @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
+                    {
+                        <td >
+                            @(Model.TicTacTwoBrain.GameBoard[y][x].Piece)
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+
+    </div>
+</div>

@@ -95,9 +95,9 @@ public class GameController
         {
             _gameRepository.SaveGame(gameInstance.GetGameStateJson(),
                 nameForTheGame, _username);
+            CommonGameLoop(gameInstance, nameForTheGame);
         }
         
-        CommonGameLoop(gameInstance, nameForTheGame);
         
         return ConstantlyUsed.ReturnShortcut;
     }

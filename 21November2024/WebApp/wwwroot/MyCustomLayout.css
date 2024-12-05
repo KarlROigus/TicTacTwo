@@ -75,6 +75,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .main-part-content-authentication-box {
@@ -103,10 +104,12 @@ li {
 }
 
 
-
 .main-part-content-box {
     border: 1px solid black;
     font-size: 23px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .alert-danger {
@@ -138,6 +141,10 @@ button, input[type="submit"] {
 select, input[type="text"] {
     padding: 2px 5px;
     font-family: "Lucida Console", "Courier New", monospace;
+}
+
+td {
+    text-align: center;
 }
 
 

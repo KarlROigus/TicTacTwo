@@ -9,7 +9,12 @@
     <div class="main-part-content-box">
         <table class="game-board-table">
             
-            @if (@Model.CurrentOneToMove == Model.UserName)
+            @if (Model.GameIsOver)
+            {
+                <div>GAME IS OVER!</div>
+            }
+
+            @if (Model.CurrentOneToMove == Model.UserName)
             {
                 <p>Current one to move: @Model.CurrentOneToMove</p>
                 @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
@@ -48,6 +53,9 @@
                         }
                     </tr>
                 }
+
+                <a asp-page="/GamePlay" asp-route-UserName="@Model.UserName"
+                   asp-route-GameName="@Model.GameName">REFRESH PAGE</a>
             }
         </table>
         

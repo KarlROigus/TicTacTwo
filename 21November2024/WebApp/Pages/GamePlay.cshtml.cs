@@ -21,6 +21,8 @@ public class GamePlay : PageModel
 
     public string CurrentOneToMove { get; set; } = default!;
     public TicTacTwoBrain TicTacTwoBrain { get; set; } = default!;
+
+    public bool GameIsOver { get; set; } = false;
     
     public void OnGet(int? x, int? y)
     {
@@ -29,10 +31,16 @@ public class GamePlay : PageModel
         var gameJsonString = _gameRepository.GetGameByName(GameName);
 
         var deSerializedGameState = JsonSerializer.Deserialize<GameState>(gameJsonString)!;
-
-        CurrentOneToMove = deSerializedGameState.CurrentOneToMove;
+        
 
         TicTacTwoBrain = new TicTacTwoBrain(deSerializedGameState);
+
+        CurrentOneToMove = TicTacTwoBrain.GetCurrentOneToMove();
+
+        if (CurrentOneToMove == "")
+        {
+            CurrentOneToMove = UserName;
+        }
         
         if (x != null && y != null)
         {
@@ -40,6 +48,13 @@ public class GamePlay : PageModel
             var moveWasSuccessful = TicTacTwoBrain.MakeAMove(x.Value, y.Value);
             if (moveWasSuccessful)
             {
+
+                if (TicTacTwoBrain.SomebodyHasWon())
+                {
+                    GameIsOver = true;
+                    return;
+                }
+                
                 TicTacTwoBrain.ReducePieceCountForPlayer();
                 var playerXName = _gameRepository.GetPlayerName(GameName, "X");
                 var playerOName = _gameRepository.GetPlayerName(GameName, "O");

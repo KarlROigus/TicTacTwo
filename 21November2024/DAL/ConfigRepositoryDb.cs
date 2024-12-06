@@ -18,13 +18,22 @@ public class ConfigRepositoryDb : IConfigRepository
     
     public List<string> GetConfigurationNames(string userName)
     {
-
+        
         var correctPersonId = _database.Users.First(each => each.Username == userName).UserId;
 
         var configsThatPersonHas = _database.Configs
             .Where(each => each.UserId == correctPersonId)
             .Select(each => each.ConfigName)
             .ToList();
+
+        if (configsThatPersonHas.Count == 0)
+        {
+            InsertTwoInitialConfigurations(userName);
+            configsThatPersonHas = _database.Configs
+                .Where(each => each.UserId == correctPersonId)
+                .Select(each => each.ConfigName)
+                .ToList();
+        }
 
         return configsThatPersonHas;
 

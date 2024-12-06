@@ -169,6 +169,18 @@ table {
     border-color: #b6effb; 
 }
 
+/*.form-group {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    width: 100%;*/
+/*    gap: 6px;*/
+/*}*/
+
+/*#play {*/
+/*    width: 30%;*/
+/*    align-self: flex-end;*/
+/*}*/
+
 
 
 

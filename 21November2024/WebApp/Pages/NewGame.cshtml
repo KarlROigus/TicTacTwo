@@ -25,9 +25,12 @@
                 <label asp-for="GameName" class="control-label">Give the game a name: </label>
                 <input type="text" asp-for="GameName" class="form-control"/>
 
+                <label asp-for="ConfigName" class="control-label">Select configuration: </label>
+                <select class="form-select" asp-for="ConfigName" asp-items="Model.ConfigSelectList"></select>
+
                 <input type="hidden" asp-for="@Model.UserName"/>
 
-                <input type="submit" value="Play"/>
+                <input id="play" type="submit" value="Play"/>
             </div>
         </form>
         

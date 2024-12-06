@@ -19,10 +19,10 @@
                 <p>Current one to move: @Model.CurrentOneToMove</p>
                 @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
                 {
-                    <tr>
+                    <tr >
                         @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
                         {
-                            <td>
+                            <td class="@(Model.TicTacTwoBrain.GameBoard[y][x].IsPartOfGrid ? "td-partOfGrid" : "")">
                                 @if (Model.TicTacTwoBrain.GameBoard[y][x].GetSpotValue() == EGamePiece.Empty)
                                 {
                                     <a asp-route-x="@x" asp-route-y="@y"
@@ -41,15 +41,15 @@
             }
             else
             {
-                <p>IT'S NOT YOUR TURN! PLEASE WAIT</p>
+                <p class="info">IT'S NOT YOUR TURN! PLEASE WAIT</p>
                 @for (int y = 0; y < Model.TicTacTwoBrain.DimY; y++)
                 {
-                    <tr>
+                    <tr >
                         @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
                         {
-                            <td>
+                            <td class="@(Model.TicTacTwoBrain.GameBoard[y][x].IsPartOfGrid ? "td-partOfGrid" : "")">
                                 @if (Model.TicTacTwoBrain.GameBoard[y][x].GetSpotValue() == EGamePiece.Empty)
-                                {
+                                { 
                                     <span>-</span>
                                 }
                                 else
@@ -68,3 +68,5 @@
         
     </div>
 </div>
+
+

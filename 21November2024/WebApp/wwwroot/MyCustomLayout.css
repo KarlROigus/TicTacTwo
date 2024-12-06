@@ -16,7 +16,7 @@ html, body {
 
     box-shadow: 0px 0px 15px 10px rgba(169, 169, 169, 0.5);
     width: 80%;
-    height: 80%;
+    height: 85%;
     display: inline-grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -105,11 +105,11 @@ li {
 
 
 .main-part-content-box {
-    border: 1px solid black;
     font-size: 23px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    align-items: center;
 }
 
 .alert-danger {
@@ -145,8 +145,29 @@ select, input[type="text"] {
 
 td {
     text-align: center;
+    border: 1px solid black;
 }
 
+.td-partOfGrid {
+    background-color: lightcoral;
+}
+
+table {
+    border-collapse: collapse;
+    height: 400px;
+    width: 400px;
+    table-layout: fixed;
+    border-radius: 10px;
+}
+
+.info {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border-radius: 0.375rem;
+    color: #055160;
+    background-color: #cff4fc;
+    border-color: #b6effb; 
+}
 
 
 

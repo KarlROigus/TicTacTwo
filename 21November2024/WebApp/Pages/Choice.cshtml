@@ -1,4 +1,6 @@
 @page
+@using GameBrain
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model WebApp.Pages.Choice
 
 <h1 class="main-part-header">TIC-TAC-TWO</h1>
@@ -19,8 +21,15 @@
                 <tr >
                     @for (int x = 0; x < Model.TicTacTwoBrain.DimX; x++)
                     {
-                        <td class="table-data-box">
-                            @(Model.TicTacTwoBrain.GameBoard[y][x].Piece)
+                        <td class="@(Model.TicTacTwoBrain.GameBoard[y][x].IsPartOfGrid ? "td-partOfGrid" : "")">
+                            @if (Model.TicTacTwoBrain.GameBoard[y][x].GetSpotValue() == EGamePiece.Empty)
+                            { 
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @(Model.TicTacTwoBrain.GameBoard[y][x].Piece)
+                            }
                         </td>
                     }
                 </tr>

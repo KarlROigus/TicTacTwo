@@ -12,8 +12,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // builder.Services.AddScoped<IConfigRepository, ConfigRepositoryJson>();
 builder.Services.AddScoped<IConfigRepository, ConfigRepositoryDb>();
-builder.Services.AddScoped<IGameRepository, GameRepositoryDb>();
-builder.Services.AddScoped<IUserRepository, UserRepositoryDb>();
+builder.Services.AddScoped<IGameRepository, GameRepositoryJson>();
+builder.Services.AddScoped<IUserRepository, UserRepositoryJson>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();

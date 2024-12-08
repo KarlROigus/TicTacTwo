@@ -58,16 +58,53 @@ public class ConfigRepositoryDb : IConfigRepository
         throw new Exception("Should not happen"); // Should never happen
     }
 
-    public void AddNewConfiguration(GameConfiguration newConfig)
+    public void AddNewConfiguration(GameConfiguration newConfig, string userName)
     {
+        var userId = _database.Users.First(user => user.Username == userName).UserId;
+        
+        
         _database.Configs.Add(new Config()
         {
             ConfigName = newConfig.Name,
-            ConfigJsonString = JsonSerializer.Serialize(newConfig)
+            ConfigJsonString = JsonSerializer.Serialize(newConfig),
+            UserId = userId
         });
         
         _database.SaveChanges(); // CRUCIAL SENTENCE
     }
+
+    public GameConfiguration GetConfigurationByName(string confName, string userName)
+    {
+        var userId = _database.Users.First(each => each.Username == userName).UserId;
+
+
+        var userConfigs = _database.Configs.Where(each => each.UserId == userId);
+
+        var chosenConf = userConfigs.First(each => each.ConfigName == confName);
+        var jsonString = chosenConf.ConfigJsonString;
+
+        return JsonSerializer.Deserialize<GameConfiguration>(jsonString);
+
+    }
+
+    public List<GameConfiguration> GetUserConfigurations(string userName)
+    {
+        var userId = _database.Users.First(each => each.Username == userName).UserId;
+
+        var confsInDb = _database.Configs.Where(each => each.UserId == userId);
+
+        var answer = new List<GameConfiguration>();
+
+        foreach (var conf in confsInDb)
+        {
+            var deSerializedConf = JsonSerializer.Deserialize<GameConfiguration>(conf.ConfigJsonString);
+            answer.Add(deSerializedConf);
+        }
+
+        return answer;
+    }
+
+
 
     private void InsertTwoInitialConfigurations(string userName)
     {

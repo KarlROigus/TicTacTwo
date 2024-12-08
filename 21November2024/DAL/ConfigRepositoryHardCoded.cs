@@ -50,14 +50,18 @@ public class ConfigRepositoryHardCoded : IConfigRepository
         return _gameConfigurations[1];
     }
 
-    public void AddNewConfiguration(GameConfiguration newConfig)
+    public void AddNewConfiguration(GameConfiguration newConfig, string userName)
     {
         _gameConfigurations.Add(newConfig);
     }
 
-    
-    
-    
+    public GameConfiguration GetConfigurationByName(string confName, string userName)
+    {
+        throw new NotImplementedException();
+    }
 
-
+    public List<GameConfiguration> GetUserConfigurations(string userName)
+    {
+        throw new NotImplementedException();
+    }
 }

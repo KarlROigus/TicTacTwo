@@ -27,11 +27,12 @@
             var userName = ViewData["UserName"] as string;
             if (!string.IsNullOrEmpty(userName)) {
                 <ul class="navbar-list">
-                    <li><a asp-page="/Options" asp-route-UserName="@userName">Options</a></li>
+                    <li><a asp-page="/Configurations" asp-route-UserName="@userName">Configurations</a></li>
                     <li><a asp-page="/NewGame" asp-route-UserName="@userName">Make new game</a></li>
                     <li><a asp-page="/JoinRandomGame" asp-route-UserName="@userName">Join random game</a></li>
                     <li><a asp-page="/LoadGame" asp-route-UserName="@userName">Load game</a></li>
                     <li><a href="/Rules?UserName=@userName">Rules/Description</a></li>
+                    <li><a asp-page="/Index">Log out</a></li>
                 </ul>
             }
         }

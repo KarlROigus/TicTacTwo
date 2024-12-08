@@ -1,0 +1,80 @@
+@page
+@model WebApp.Pages.ConfigCreation
+
+
+@{
+    ViewData["Title"] = "TIC-TAC-TWO";
+    Layout = "~/Pages/Shared/_CustomLayout.cshtml";
+    ViewData["UserName"] = Model.UserName;
+}
+
+
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+<div class="main-part-content">
+    <div class="main-part-content-authentication-box">
+
+        <span>Please fill the form for new configuration!</span>
+        <form action="" method="post">
+            <div class="form-group">
+                <label asp-for="ConfigName" class="control-label">Config name: </label>
+                <input type="text" asp-for="ConfigName" class="form-control"/>
+
+                <label asp-for="BoardWidth" class="control-label">Board width: </label>
+                <select class="form-select" asp-for="BoardWidth">
+                    @for (int i = 5; i <= 49; i += 2)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+
+                <label asp-for="GridWidth" class="control-label">Grid width and win condition: </label>
+                <select class="form-select" asp-for="GridWidth">
+                    @for (int i = 5; i <= 49; i += 2)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+
+                <label asp-for="HowManyMovesTillAdvancedMoves" class="control-label">
+                    How many moves till advanced options:
+                </label>
+                <select class="form-select" asp-for="HowManyMovesTillAdvancedMoves">
+                    @for (int i = 0; i <= 49; i += 1)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+
+                <label asp-for="PiecesPerPlayer" class="control-label">
+                    Pieces per player:
+                </label>
+                <select class="form-select" asp-for="PiecesPerPlayer">
+                    @for (int i = 3; i <= 49; i += 1)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+                
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <span class="alert alert-danger" role="alert">@Model.ErrorMessage</span>
+                }
+                
+                
+                
+                <input type="hidden" asp-for="@Model.UserName"/>
+
+                <input id="playButton" type="submit" value="Create"/>
+            </div>
+        </form>
+        @if (!string.IsNullOrEmpty(@Model.SuccessMessage))
+        {
+            <div class="alert alert-success" role="alert">
+                @Model.SuccessMessage
+            </div>
+        }
+
+    </div>
+
+</div>

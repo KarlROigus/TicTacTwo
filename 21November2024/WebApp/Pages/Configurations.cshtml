@@ -1,0 +1,41 @@
+@page
+@model WebApp.Pages.Configurations
+
+
+@{
+    ViewData["Title"] = "TIC-TAC-TWO";
+    Layout = "~/Pages/Shared/_CustomLayout.cshtml";
+    ViewData["UserName"] = Model.UserName;
+}
+
+
+<h1 class="main-part-header">TIC-TAC-TWO</h1>
+
+
+<div class="main-part-content">
+    <span id="focused">
+        <a asp-page="/ConfigCreation" asp-route-UserName="@Model.UserName">
+            CLICK ON ME TO CREATE CUSTOM CONFIGURATION
+        </a>
+    </span>
+    <table id="conf table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Win Condition</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var config in Model.Configs)
+        {
+            <tr>
+                <td>@config.Name</td>
+                <td>@config.WinCondition</td>
+                <td>X</td>
+            </tr>
+
+        }
+        </tbody>
+    </table>
+</div>

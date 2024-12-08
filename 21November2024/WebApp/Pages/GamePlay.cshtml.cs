@@ -38,7 +38,8 @@ public class GamePlay : PageModel
         
         if (TicTacTwoBrain.GetMovesMade() >=
             deSerializedGameState.GameConfiguration.HowManyMovesTillAdvancedGameMoves * 2
-            && !continuousRequest && CurrentOneToMove == UserName)
+            && !continuousRequest && CurrentOneToMove == UserName 
+            && deSerializedGameState.GameConfiguration.HowManyMovesTillAdvancedGameMoves != ConstantlyUsed.ClassicalGame)
         {
             return RedirectToPage("./Choice", new { UserName, GameName });
         }

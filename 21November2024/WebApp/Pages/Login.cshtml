@@ -17,16 +17,17 @@
                 <label asp-for="UserName"class="control-label">Username:</label>
                 <input asp-for="UserName" class="form-control"/>
                 <button type="submit" >Login</button>
+                @if (!string.IsNullOrEmpty(Model.Error))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @Model.Error
+                    </div>
+                }
             </div>
 
         </form>
 
-       @if (!string.IsNullOrEmpty(Model.Error))
-        {
-            <div class="alert alert-danger" role="alert">
-                @Model.Error
-            </div>
-        }
+       
 
     </div>
 </div>

@@ -76,12 +76,13 @@ a {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    gap: 25px;
 }
 
 .main-part-content-authentication-box {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 15px;
 }
 
 .navbar-list {
@@ -99,7 +100,7 @@ li {
     font-size: 16px;
 }
 
-#name {
+#focused {
     font-weight: bold;
 }
 
@@ -110,6 +111,9 @@ li {
     flex-direction: column;
     gap: 20px;
     align-items: center;
+    height: 500px;
+    width: 500px;
+    overflow: auto;
 }
 
 .alert-danger {
@@ -141,6 +145,7 @@ button, input[type="submit"] {
 select, input[type="text"] {
     padding: 2px 5px;
     font-family: "Lucida Console", "Courier New", monospace;
+    width: 250px;
 }
 
 td {
@@ -154,10 +159,16 @@ td {
 
 table {
     border-collapse: collapse;
-    height: 400px;
-    width: 400px;
+    height: 100%;
+    width: 100%;
     table-layout: fixed;
     border-radius: 10px;
+}
+
+td, th {
+    word-wrap: break-word; /* Ensures text wraps within cells */
+    overflow: hidden; /* Prevents content overflow */
+    text-overflow: ellipsis; /* Adds ellipsis if text overflows */
 }
 
 .info {
@@ -169,17 +180,37 @@ table {
     border-color: #b6effb; 
 }
 
-/*.form-group {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    width: 100%;*/
-/*    gap: 6px;*/
-/*}*/
 
-/*#play {*/
-/*    width: 30%;*/
-/*    align-self: flex-end;*/
-/*}*/
+#conf\ table {
+    width: 75%;
+    border-spacing: 0px 5px;
+    height: auto;
+    min-height: unset;
+}
+
+tr {
+    max-height: 50px;
+    border: none;
+    
+}
+
+.emptytr {
+    
+    height: 5px; 
+    background-color: transparent;"
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    align-items: center;
+    
+}
+
+#playButton {
+    width: 25%;
+}
 
 
 

@@ -546,7 +546,7 @@ public class GameController
 
         };
 
-        _configRepository.AddNewConfiguration(newGameConfiguration);
+        _configRepository.AddNewConfiguration(newGameConfiguration, _username);
         
         ConsoleUI.Visualizer.AnnounceNewConfigAddedSuccess();
         return ConstantlyUsed.ReturnShortcut;

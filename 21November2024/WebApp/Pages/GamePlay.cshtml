@@ -2,6 +2,12 @@
 @using GameBrain
 @model WebApp.Pages.GamePlay
 
+@{
+    ViewData["Title"] = "TIC-TAC-TWO";
+    Layout = "~/Pages/Shared/_CustomLayout.cshtml";
+    ViewData["UserName"] = Model.UserName;
+}
+
 
 <h1 class="main-part-header">TIC-TAC-TWO</h1>
 

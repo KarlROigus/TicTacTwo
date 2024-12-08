@@ -44,8 +44,6 @@ public class NewGame : PageModel
         GameTypeSelectList = new SelectList(types, "Value", "Text");
 
         var configNames = _confRepo.GetConfigurationNames(UserName);
-
-        Console.WriteLine(configNames.Count);
         
         var configs = configNames
             .Select(configName => new SelectListItem()
@@ -59,12 +57,12 @@ public class NewGame : PageModel
 
     public IActionResult OnPost()
     {
-        
-        //Get the conf from backend by its name
+
+        var config = _confRepo.GetConfigurationByName(ConfigName, UserName);
         
         var gameController = new GameController(UserName, _confRepo, _gameRepo);
 
-        var freshGameState = gameController.GetFreshGameState(new GameConfiguration());
+        var freshGameState = gameController.GetFreshGameState(config);
 
         var ticTacTwoBrain = new TicTacTwoBrain(freshGameState);
 

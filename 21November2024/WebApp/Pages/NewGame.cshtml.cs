@@ -29,6 +29,8 @@ public class NewGame : PageModel
     public string ConfigName { get; set; } = default!;
     
     public SelectList ConfigSelectList { get; set; } = default!;
+
+    public string ErrorMessage { get; set; } = default!;
     
     
     public IActionResult OnGet()
@@ -58,6 +60,14 @@ public class NewGame : PageModel
     public IActionResult OnPost()
     {
 
+        var searchIfGameNameAlreadyExists = _gameRepo.GetGameByName(GameName);
+
+        if (searchIfGameNameAlreadyExists != null)
+        {
+            ErrorMessage = "The game with the given name already exists!";
+            return Page();
+        }
+
         var config = _confRepo.GetConfigurationByName(ConfigName, UserName);
         
         var gameController = new GameController(UserName, _confRepo, _gameRepo);
@@ -69,6 +79,6 @@ public class NewGame : PageModel
         _gameRepo.SaveGame(ticTacTwoBrain.GetGameStateJson(), GameName, UserName);
         
 
-        return RedirectToPage("./GamePlay", new {UserName = UserName, GameName = GameName});
+        return RedirectToPage("./GamePlay", new {UserName, GameName});
     }
 }

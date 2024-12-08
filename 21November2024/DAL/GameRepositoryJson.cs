@@ -155,7 +155,7 @@ public class GameRepositoryJson : IGameRepository
         return GetGamesImPartOf(userName)[index];
     }
 
-    public string GetGameByName(string gameName)
+    public string? GetGameByName(string gameName)
     {
         throw new NotImplementedException();
     }

@@ -19,6 +19,13 @@
         <span>Please select which game type would you like to make!</span>
         <form action="" method="post">
             <div class="form-group">
+                @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @Model.ErrorMessage
+                    </div>
+                }
+                
                 <label asp-for="GameType" class="control-label">Game type: </label>
                 <select class="form-select" asp-for="GameType" asp-items="Model.GameTypeSelectList"></select>
 
@@ -27,7 +34,7 @@
 
                 <label asp-for="GameName" class="control-label">Give the game a name: </label>
                 <input type="text" asp-for="GameName" class="form-control"/>
-                
+
 
                 <input type="hidden" asp-for="@Model.UserName"/>
 

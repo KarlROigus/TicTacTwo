@@ -142,11 +142,16 @@ public class GameRepositoryDb : IGameRepository
         return GetGamesImPartOf(userName)[index];
     }
 
-    public string GetGameByName(string gameName)
+    public string? GetGameByName(string gameName)
     {
         var correctGame = _database.Games
             .Include(each => each.States)
-            .First(each => each.GameName == gameName);
+            .FirstOrDefault(each => each.GameName == gameName);
+
+        if (correctGame == null)
+        {
+            return null;
+        }
 
         var lastState = correctGame.States!
             .OrderByDescending(state => state.StateId)

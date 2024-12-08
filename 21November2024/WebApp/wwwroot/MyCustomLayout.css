@@ -140,6 +140,7 @@ button, input[type="submit"] {
     cursor: pointer;
     font-weight: bold;
     border-radius: 5px;
+    width: 80px;
 }
 
 select, input[type="text"] {
@@ -203,9 +204,7 @@ tr {
 .form-group {
     display: flex;
     flex-direction: column;
-    gap:5px;
-    align-items: center;
-    
+    gap:10px;
 }
 
 #playButton {

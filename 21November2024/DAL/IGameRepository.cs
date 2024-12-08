@@ -21,6 +21,6 @@ public interface IGameRepository
 
     public string GetChosenGameNameByIndex(int index, string userName);
 
-    public string GetGameByName(string gameName);
+    public string? GetGameByName(string gameName);
 
 }
